@@ -1,0 +1,8 @@
+defaults:
+  validation: audit
+  background: false
+policies:
+  - name: disallow-externalips
+    parameters: 
+      - 192.168.1.1
+      - 192.168.1.2

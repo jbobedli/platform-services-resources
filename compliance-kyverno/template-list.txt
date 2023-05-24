@@ -1,0 +1,17 @@
+disallow-latesttag
+disallow-nodeport
+require-probes
+require-requestlimit
+add-imagepullsecret
+allowed-signedimages
+add-nstomemberroll
+disallow-externalips
+disallow-loadbalancer
+disallow-deprecatedapis
+limit-replicacount
+refresh-secretchanged
+require-qos
+disallow-execbynamespace
+disallow-privilegedpod
+disallow-manualtaskrun
+limit-pipelineruns

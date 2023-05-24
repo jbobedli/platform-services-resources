@@ -1,0 +1,7 @@
+defaults:
+  validation: audit
+  background: false
+policies:
+  - name: require-requestlimit
+    validation: enforce
+    background: true

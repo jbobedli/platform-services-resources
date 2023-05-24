@@ -1,0 +1,25 @@
+{
+  "default": [
+    {
+      "type": "insecureAcceptAnything"
+    }
+  ],
+  "transports": {
+    "docker": {
+      "harbor.false": [
+        {
+          "type": "signedBy",
+          "keyType": "GPGKeys",
+          "keyPath": "/etc/pki/developers/harbor-signer-key.pub"
+        }
+      ]
+    },
+    "docker-daemon": {
+      "": [
+        {
+          "type": "insecureAcceptAnything"
+        }
+      ]
+    }
+  }
+}
