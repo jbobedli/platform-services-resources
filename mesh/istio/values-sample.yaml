@@ -1,0 +1,27 @@
+
+clusterMesh:
+  - namespace: istio-system
+    destinationRules:
+      - name: disable-tls-jaeger # disable deshabilita tls
+        enabled: true
+        host: host1
+        namespace: pipelines
+
+#      - name: disabe-tls-jaeger-2
+#        host: host2
+#        enabled: true
+
+    serviceMeshMemberRoll: # si hay varias mesh en un cluster -> un member roll por cada. istio-system es el default namespace
+    - name: default
+      #namespace: istio-system default
+      members:
+        - des-nttd
+        - pre-nttd
+        - pipelines-nttd
+
+    serviceEntry:
+      namespaces:
+        des-nttd:
+        - host: hostExterno1.algo
+        pre-nttd:
+        - host: hostExterno2.otro

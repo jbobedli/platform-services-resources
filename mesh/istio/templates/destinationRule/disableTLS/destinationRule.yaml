@@ -1,0 +1,19 @@
+{{- range $mesh := .Values.clusterMesh }}
+{{- range $dRule := $mesh.destinationRules }}
+apiVersion: networking.istio.io/v1beta1
+kind: DestinationRule
+metadata:
+  name: {{ $dRule.name }}
+  namespace: {{ default "istio-system" $dRule.namespace }}
+spec:
+  host: {{ $dRule.host }}
+  {{- if regexMatch (printf "^%s.*" "disable-") $dRule.name }} # SI EMPIEZA POR DISABLE
+  trafficPolicy:
+    tls:
+      mode: DISABLE
+  {{- end }}
+  {{- if $dRule.workLoadSelector }}
+  workloadSelector: {{ $dRule.workloadSelector | toYaml }}
+  {{ end }}
+{{- end }}
+{{- end }}

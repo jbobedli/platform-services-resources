@@ -1,8 +1,0 @@
-namespaces:
-  des:
-    - name: hostexterno1
-
-  pre:
-    - name: hostexterno1
-      protocol: HTTP # default TLS
-      resolution: DNS # default
