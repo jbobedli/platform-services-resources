@@ -1,0 +1,27 @@
+{{- range $mesh := .Values.clusterMesh }}
+{{- if and $mesh.serviceEntry $mesh.gateways.namespaces  }}
+{{- range $namespace, $selist := $mesh.gateways.namespaces }}
+{{- range $gw:= $selist }}
+apiVersion: networking.istio.io/v1beta1
+kind: Gateway
+metadata:
+  name: "{{ lower ( replace "." "-" (printf "gw-%s" $gw.host) ) }}"
+  namespace: "{{- $namespace }}"
+spec:
+  selector:
+    istio: ingressgateway
+  servers:
+    - hosts:
+        - "{{ $gw.host }}"
+      port:
+        name: https
+        number: 443
+        protocol: HTTPS
+      tls:
+        credentialName: "{{ default "istio-system" $gw.credentialname  }}"
+        mode: SIMPLE
+{{- end }}
+{{- end }}
+{{- end }}
+{{- end }}
+

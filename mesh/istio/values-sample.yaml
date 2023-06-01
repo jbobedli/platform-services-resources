@@ -25,3 +25,11 @@ clusterMesh:
         - host: hostExterno1.algo
         pre-nttd:
         - host: hostExterno2.otro
+
+    gateways:
+      namespaces:
+        des-nttd:
+          - host: gateway-hostExterno1.algo
+        pre-nttd:
+          - host: gateway-hostExterno2.algo
+
