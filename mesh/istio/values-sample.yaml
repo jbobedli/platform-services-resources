@@ -33,3 +33,11 @@ clusterMesh:
         pre-nttd:
           - host: gateway-hostExterno2.algo
 
+
+    peerauth:
+      namespaces:
+        des-nttd:
+          - mode: PERMISSIVE
+            app: nttd
+        pre-nttd:
+          - app: nttd

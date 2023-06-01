@@ -1,0 +1,22 @@
+{{- range $mesh := .Values.clusterMesh }}
+{{- if and $mesh.peerauth $mesh.peerauth.namespaces  }}
+{{- range $namespace, $palist := $mesh.peerauth.namespaces }}
+{{- range $pa := $palist }}
+apiVersion: security.istio.io/v1beta1
+kind: PeerAuthentication
+metadata:
+  name:  "{{ lower ( replace "." "-" (printf "pa-%s" $namespace) ) }}"
+  namespace: $namespace
+spec:
+  mtls:
+    mode: {{ default "STRICT" $pa.mode }}
+  portLevelMtls:
+    '8081':
+      mode: DISABLE
+  selector:
+    matchLabels:
+      app: "{{- $pa.app }}"
+{{- end }}
+{{- end }}
+{{- end }}
+{{- end }}
