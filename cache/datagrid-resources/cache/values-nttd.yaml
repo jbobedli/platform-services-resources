@@ -1,0 +1,20 @@
+
+#adminAuthSecret: none
+defaultClusterName: example-infinispan
+
+defaultTemplate: |-
+  <infinispan><cache-container><distributed-cache name="mycache" mode="SYNC"><persistence><file-store/></persistence></distributed-cache></cache-container></infinispan>
+
+caches:
+- name:  cache1
+  templateName: template1
+  namespace: des-nttd # overrides
+- name:  cache2
+  template: |-
+    <infinispan><cache-container><distributed-cache name="mycache" mode="SYNC"><persistence><file-store/></persistence></distributed-cache></cache-container></infinispan>
+- name:  cache2
+  clusterName: cache3
+  template: |-
+    <infinispan><cache-container><distributed-cache name="mycache" mode="SYNC"><persistence><file-store/></persistence></distributed-cache></cache-container></infinispan>
+- name:  cache4
+
