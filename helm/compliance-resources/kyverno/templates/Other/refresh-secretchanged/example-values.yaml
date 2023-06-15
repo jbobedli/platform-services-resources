@@ -1,0 +1,5 @@
+defaults:
+  validation: audit
+  background: false
+policies:
+  - name: refresh-secretchanged

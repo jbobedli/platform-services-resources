@@ -1,0 +1,7 @@
+defaults:
+  validation: audit
+  background: false
+policies:
+  - name: disallow-loadbalancer
+    validation: enforce
+    background: true   

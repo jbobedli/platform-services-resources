@@ -1,0 +1,5 @@
+general:
+  namespaces:
+    - des-cudc
+    - val-cudc
+    - cicd

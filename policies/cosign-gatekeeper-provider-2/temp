@@ -1,0 +1,199 @@
+// Copyright The Sigstore Authors.
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+package main
+
+import 	(
+
+	"crypto/x509"
+
+	"crypto/tls"
+	"encoding/json"
+	"fmt"
+	"io/ioutil"
+	"net/http"
+	"time"
+    "os"
+    "context"
+    "path/filepath"
+
+	"github.com/google/go-containerregistry/pkg/name"
+	"github.com/open-policy-agent/frameworks/constraint/pkg/externaldata"
+
+	"github.com/sigstore/cosign/cmd/cosign/cli/fulcio"
+	"github.com/sigstore/cosign/cmd/cosign/cli/options"
+	"github.com/sigstore/cosign/cmd/cosign/cli/rekor"
+	"github.com/sigstore/cosign/pkg/cosign"
+	"github.com/sigstore/rekor/pkg/generated/client"
+
+    "github.com/julienschmidt/httprouter"
+    "github.com/google/go-containerregistry/pkg/authn"
+    "github.com/google/go-containerregistry/pkg/v1/remote"
+)
+
+type ImageVerificationReq struct {
+	Image string
+}
+
+type ImageVerificationResp struct {
+	Verified            bool   `json:"verified"`
+	VerificationMessage string `json:"verification_message"`
+}
+
+const (
+	apiVersion = "externaldata.gatekeeper.sh/v1beta1"
+)
+
+func sendResponse(results *[]externaldata.Item, resultsFailedImgs []string, systemErr string, w http.ResponseWriter) {
+	response := externaldata.ProviderResponse{
+		APIVersion: apiVersion,
+		Kind:       "ProviderResponse",
+		}
+
+	if results != nil {
+		response.Response.Items = *results
+	} else {
+		response.Response.SystemError = systemErr
+	}
+
+	w.WriteHeader(http.StatusOK)
+	if err := json.NewEncoder(w).Encode(response); err != nil {
+		panic(err)
+	}
+}
+
+
+func Verify(w http.ResponseWriter, req *http.Request, ps httprouter.Params) {
+
+	requestBody, err := ioutil.ReadAll(req.Body)
+	fmt.Println(requestBody)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		sendResponse(nil,[]string{}, fmt.Sprintf("unable to read request body: %v", err), w)
+		return
+	}
+
+	var providerRequest externaldata.ProviderRequest
+	err = json.Unmarshal(requestBody, &providerRequest)
+	fmt.Println(providerRequest)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		sendResponse(nil,[]string{}, fmt.Sprintf("unable to unmarshal request body: %v", err), w)
+		return
+	}
+
+	results := make([]externaldata.Item, 0)
+	resultsFailedImgs := make([]string, 0)
+
+	ctx := context.TODO()
+
+	wDir, err := os.Getwd()
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+    // Load cosign's public key which will be used to verify signatures
+	pub, err := cosign.LoadPublicKey(ctx, filepath.Join(wDir, "cosign.pub"))
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+  regUsernameByte, err := ioutil.ReadFile("/etc/registry-secret/username")
+  if err != nil {
+    http.Error(w, err.Error(), http.StatusInternalServerError)
+    return
+  }
+  regPasswordByte, err := ioutil.ReadFile("/etc/registry-secret/password")
+  if err != nil {
+    http.Error(w, err.Error(), http.StatusInternalServerError)
+    return
+  }
+
+  regUsername := string(regUsernameByte)
+  regPassword := string(regPasswordByte)
+
+
+  // Authenticate to our registry by getting user/pswd from the container environment variable
+	co := &cosign.CheckOpts{
+		SigVerifier: pub,
+		RegistryClientOpts: []remote.Option{
+			remote.WithAuth(&authn.Basic{
+			Username: regUsername,
+			Password: regPassword,
+			}),
+		},
+	}
+
+	for _, key := range providerRequest.Request.Keys {
+		ref, err := name.ParseReference(key)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+
+		if _, err = cosign.Verify(ctx, ref, co); err != nil {
+			results = append(results, externaldata.Item{
+				Key:   key,
+				Error: key + "_invalid", // You can customize the error message here in case of failure
+			})
+			resultsFailedImgs = append(resultsFailedImgs, key)
+			fmt.Println("error: ", err)
+		} else {
+
+			results = append(results, externaldata.Item{
+				Key:   key,
+				Value: key + "_valid", // You can customize the message here in case of validation
+			})
+		}
+
+		fmt.Println("result: ", results)
+	}
+	sendResponse(&results, resultsFailedImgs, "", w)
+}
+
+
+func main() {
+    caCert, err := ioutil.ReadFile("/etc/cabundles/ca.crt")
+    if err != nil {
+      panic(err)
+    }
+
+    clientCAs := x509.NewCertPool()
+    clientCAs.AppendCertsFromPEM(caCert)
+
+    // Configurar certificados TLS
+    cert, err := tls.LoadX509KeyPair("/etc/cabundles/server.crt", "/etc/cabundles/server.key")
+    if err != nil {
+      panic(err)
+    }
+
+    // Crear servidor HTTPS
+    server := &http.Server{
+      Addr: ":8090",
+      TLSConfig: &tls.Config{
+        Certificates: []tls.Certificate{cert},
+        ClientAuth:   tls.RequireAndVerifyClientCert,
+        ClientCAs:    clientCAs,
+        MinVersion:   tls.VersionTLS13,
+      },
+    }
+
+    // Crear enrutador HTTP
+    router := httprouter.New()
+    router.POST("/validate", Verify)
+
+    // Iniciar servidor HTTPS
+    log.Fatal(server.ListenAndServeTLS("", ""))
+}

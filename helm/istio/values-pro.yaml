@@ -1,0 +1,89 @@
+env: pro 
+
+tenants:
+  cudc:
+    name: cudc
+    gateway:
+      #name: cudc-gateway chcnged to applabel-gateway 
+      credentialname: madrid-cert-pro
+      host: apps.oca.cudc.aws.comunidad.madrid
+      istioselector: ingressgateway
+    ra:
+      enabled: false
+      name: cudc-ra-pro
+      jwtRules:
+        # issuer: https://keycloak-iam.apps.c1-ocp.cudc.local/auth/realms/cudc-realm
+        issuer: https://keycloak.iam.svc:8443/auth/realms/cudc-realm
+        jwks: '{"keys":[{"kid":"kTd1zrsp1GbrU6aB8P6YiffxAEaupe0wsrDQhPXBoZE","kty":"RSA","alg":"RS256","use":"sig","n":"ho0cFdJK3HF629wjmpCiFAcRrJNtvK_fOKGPlm-NVzAyWHEOnm7iB_Slg1tu2xmYHbG0wAZ9fUbmIcJDgx6scYkSpNU6Ubc0yXqspvQecjR4x4IzhPUyMP-z3NMTpYfLpIys8t6yhsXe471_l8yLccKkvIcOtvDzNvo7aEM0ydyc2XTmYINPLpyQhSXeg0g2UkZyjwPP8ntibHxvJzAewawA5VHRrK1aU1GPVEquiBbxj5P9V_Jj0YJzeC2w5XSjC_FKo9mar3tBw-dBcrAt0e4rGYtaf89w8rVei-O0XYzIxp8UrziL7-HUa0L3WqmztJsLkRYTUKTyAqFf6k2V2Q","e":"AQAB","x5c":["MIICoTCCAYkCBgGEDfoFijANBgkqhkiG9w0BAQsFADAUMRIwEAYDVQQDDAljbnAtcmVhbG0wHhcNMjIxMDI1MDcwODIwWhcNMzIxMDI1MDcxMDAwWjAUMRIwEAYDVQQDDAljbnAtcmVhbG0wggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCGjRwV0krccXrb3COakKIUBxGsk228r984oY+Wb41XMDJYcQ6ebuIH9KWDW27bGZgdsbTABn19RuYhwkODHqxxiRKk1TpRtzTJeqym9B5yNHjHgjOE9TIw/7Pc0xOlh8ukjKzy3rKGxd7jvX+XzItxwqS8hw628PM2+jtoQzTJ3JzZdOZgg08unJCFJd6DSDZSRnKPA8/ye2JsfG8nMB7BrADlUdGsrVpTUY9USq6IFvGPk/1X8mPRgnN4LbDldKML8Uqj2Zqve0HD50FysC3R7isZi1p/z3DytV6L47RdjMjGnxSvOIvv4dRrQvdaqbO0mwuRFhNQpPICoV/qTZXZAgMBAAEwDQYJKoZIhvcNAQELBQADggEBAE6LRLvULGpyAcwpPu43/OiP1nEyYGKLHRp1ZhUowPSJ8E0bghT26s38wfuUD56pPUGH5LVNPSAY35Lgp7ddhO4WI4DISv0pSALNSY08gwfVLbUVS11fO0IrOyjthurpZ47fEg34ki4lw/6aedQLMI/1FDp1ZQkzk9c1PInteCDFZvH34JcGMPKvOuaNZavaewyuoBksvkstRp9ihoha1jjZe7yxLh7YjAgpAL+YFVkj4oQXviPyAn+U2CDOcA4gQHASZ8TRlQfGiHF/Y0Vmi0vu6X95TIC3qAaDOkcvJOrJ5wGS4qeq/3gChBOAl5Tx5ZervPSCt27Ms4ekb1/xQIA="],"x5t":"4QCPHLI0hCWC-n1v9OdjzRd_wVo","x5t#S256":"OJboKxDRuHtXdCosLVmPneSuSwII7RXil-2kvIW7v9Y"},{"kid":"ey4qbhw9rb-AMLePm5r7ZV6rVjpd3QnXXS28--3CnAk","kty":"RSA","alg":"RS256","use":"enc","n":"pnGzVsJkj3qb9rhmnTLfI8oVLyh2fm62KRyouaIzbzOSVtj5EmfrPwVlFpnuPWd65ATiw6kzSgZx0okx2GPEvKycSDkdpkSGc_G30-uUXdACjBIAPI0m8KawG2qAuZvrSGThjptkvXHpUp8BVIDscoyC3pIrlxELVTlE9zi6PO5q_jUW7oXUrljH3ygxJjjGXbh0zfMZrUzgww1TrSs1l5jSZIiaIkub8D_a3KMv_JNGyP-xV61nKstb6TBhsuanhj7LySLTYTJKE36vfsN8eHarSw2TPg-ygMIJrUuJHD1iT4Cw2YnRwHHPb-FAX5ayPtOi1_oQahSasrIgJjopSQ","e":"AQAB","x5c":["MIICoTCCAYkCBgGEDfoFVjANBgkqhkiG9w0BAQsFADAUMRIwEAYDVQQDDAljbnAtcmVhbG0wHhcNMjIxMDI1MDcwODIwWhcNMzIxMDI1MDcxMDAwWjAUMRIwEAYDVQQDDAljbnAtcmVhbG0wggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCmcbNWwmSPepv2uGadMt8jyhUvKHZ+brYpHKi5ojNvM5JW2PkSZ+s/BWUWme49Z3rkBOLDqTNKBnHSiTHYY8S8rJxIOR2mRIZz8bfT65Rd0AKMEgA8jSbwprAbaoC5m+tIZOGOm2S9celSnwFUgOxyjILekiuXEQtVOUT3OLo87mr+NRbuhdSuWMffKDEmOMZduHTN8xmtTODDDVOtKzWXmNJkiJoiS5vwP9rcoy/8k0bI/7FXrWcqy1vpMGGy5qeGPsvJItNhMkoTfq9+w3x4dqtLDZM+D7KAwgmtS4kcPWJPgLDZidHAcc9v4UBflrI+06LX+hBqFJqysiAmOilJAgMBAAEwDQYJKoZIhvcNAQELBQADggEBAErrBGV53BzHeTmBU3LU34uSfscTH/3qUAAsW1D3uSLCLOEWjJjUN4t7xUeGM30q5jR3PxgvXdFiQBu2+E+2aFNvAKJzNlp0Rbe7eTxGzrRG/n8G8dmJ2CCw6RKbbA7JWcYUKoNR2DpR2JhlOpXDI3kKxFsIQx0Fh9jukyIszpulNVagXk8vJZxq6oYQ5yp77kLwAD5K0wqYg7MnVVKopIqXXV+U4cGahsltXjDhF9d8Ra8B9b2ZpSMkt/8431Psh4kXcRUPRfpWdAOHPpHq3TrcqKVXAE+YZYW97bKh5itY3uznVYX2fuPrrXxcXLYIQdc4nn7OA67OW/q+aQ3ZDAE="],"x5t":"W25qHzUjOdWUKDrotdzm_Vmh41k","x5t#S256":"JEQJ1tFPm95DsjR0-4Ke4qvqYuivrwpyTloBvd0gwy8"}]}'
+      matchLabels:
+        app: cudc
+    peerauth:
+      mtlsmode: STRICT
+      matchLabels:
+        app: cudc
+    namespaces:
+      - name: pro-cudc
+        gatewayprefix: cudc
+  hsum:
+    name: hsum
+    ra:
+      enabled: false
+      name: hsum-ra-pro
+      jwtRules:
+        # issuer: https://keycloak-iam.apps.c1-ocp.cudc.local/auth/realms/cudc-realm
+        issuer: https://keycloak.iam.svc:8443/auth/realms/hsum-realm
+        jwks: '{"keys":[{"kid":"kTd1zrsp1GbrU6aB8P6YiffxAEaupe0wsrDQhPXBoZE","kty":"RSA","alg":"RS256","use":"sig","n":"ho0cFdJK3HF629wjmpCiFAcRrJNtvK_fOKGPlm-NVzAyWHEOnm7iB_Slg1tu2xmYHbG0wAZ9fUbmIcJDgx6scYkSpNU6Ubc0yXqspvQecjR4x4IzhPUyMP-z3NMTpYfLpIys8t6yhsXe471_l8yLccKkvIcOtvDzNvo7aEM0ydyc2XTmYINPLpyQhSXeg0g2UkZyjwPP8ntibHxvJzAewawA5VHRrK1aU1GPVEquiBbxj5P9V_Jj0YJzeC2w5XSjC_FKo9mar3tBw-dBcrAt0e4rGYtaf89w8rVei-O0XYzIxp8UrziL7-HUa0L3WqmztJsLkRYTUKTyAqFf6k2V2Q","e":"AQAB","x5c":["MIICoTCCAYkCBgGEDfoFijANBgkqhkiG9w0BAQsFADAUMRIwEAYDVQQDDAljbnAtcmVhbG0wHhcNMjIxMDI1MDcwODIwWhcNMzIxMDI1MDcxMDAwWjAUMRIwEAYDVQQDDAljbnAtcmVhbG0wggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCGjRwV0krccXrb3COakKIUBxGsk228r984oY+Wb41XMDJYcQ6ebuIH9KWDW27bGZgdsbTABn19RuYhwkODHqxxiRKk1TpRtzTJeqym9B5yNHjHgjOE9TIw/7Pc0xOlh8ukjKzy3rKGxd7jvX+XzItxwqS8hw628PM2+jtoQzTJ3JzZdOZgg08unJCFJd6DSDZSRnKPA8/ye2JsfG8nMB7BrADlUdGsrVpTUY9USq6IFvGPk/1X8mPRgnN4LbDldKML8Uqj2Zqve0HD50FysC3R7isZi1p/z3DytV6L47RdjMjGnxSvOIvv4dRrQvdaqbO0mwuRFhNQpPICoV/qTZXZAgMBAAEwDQYJKoZIhvcNAQELBQADggEBAE6LRLvULGpyAcwpPu43/OiP1nEyYGKLHRp1ZhUowPSJ8E0bghT26s38wfuUD56pPUGH5LVNPSAY35Lgp7ddhO4WI4DISv0pSALNSY08gwfVLbUVS11fO0IrOyjthurpZ47fEg34ki4lw/6aedQLMI/1FDp1ZQkzk9c1PInteCDFZvH34JcGMPKvOuaNZavaewyuoBksvkstRp9ihoha1jjZe7yxLh7YjAgpAL+YFVkj4oQXviPyAn+U2CDOcA4gQHASZ8TRlQfGiHF/Y0Vmi0vu6X95TIC3qAaDOkcvJOrJ5wGS4qeq/3gChBOAl5Tx5ZervPSCt27Ms4ekb1/xQIA="],"x5t":"4QCPHLI0hCWC-n1v9OdjzRd_wVo","x5t#S256":"OJboKxDRuHtXdCosLVmPneSuSwII7RXil-2kvIW7v9Y"},{"kid":"ey4qbhw9rb-AMLePm5r7ZV6rVjpd3QnXXS28--3CnAk","kty":"RSA","alg":"RS256","use":"enc","n":"pnGzVsJkj3qb9rhmnTLfI8oVLyh2fm62KRyouaIzbzOSVtj5EmfrPwVlFpnuPWd65ATiw6kzSgZx0okx2GPEvKycSDkdpkSGc_G30-uUXdACjBIAPI0m8KawG2qAuZvrSGThjptkvXHpUp8BVIDscoyC3pIrlxELVTlE9zi6PO5q_jUW7oXUrljH3ygxJjjGXbh0zfMZrUzgww1TrSs1l5jSZIiaIkub8D_a3KMv_JNGyP-xV61nKstb6TBhsuanhj7LySLTYTJKE36vfsN8eHarSw2TPg-ygMIJrUuJHD1iT4Cw2YnRwHHPb-FAX5ayPtOi1_oQahSasrIgJjopSQ","e":"AQAB","x5c":["MIICoTCCAYkCBgGEDfoFVjANBgkqhkiG9w0BAQsFADAUMRIwEAYDVQQDDAljbnAtcmVhbG0wHhcNMjIxMDI1MDcwODIwWhcNMzIxMDI1MDcxMDAwWjAUMRIwEAYDVQQDDAljbnAtcmVhbG0wggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCmcbNWwmSPepv2uGadMt8jyhUvKHZ+brYpHKi5ojNvM5JW2PkSZ+s/BWUWme49Z3rkBOLDqTNKBnHSiTHYY8S8rJxIOR2mRIZz8bfT65Rd0AKMEgA8jSbwprAbaoC5m+tIZOGOm2S9celSnwFUgOxyjILekiuXEQtVOUT3OLo87mr+NRbuhdSuWMffKDEmOMZduHTN8xmtTODDDVOtKzWXmNJkiJoiS5vwP9rcoy/8k0bI/7FXrWcqy1vpMGGy5qeGPsvJItNhMkoTfq9+w3x4dqtLDZM+D7KAwgmtS4kcPWJPgLDZidHAcc9v4UBflrI+06LX+hBqFJqysiAmOilJAgMBAAEwDQYJKoZIhvcNAQELBQADggEBAErrBGV53BzHeTmBU3LU34uSfscTH/3qUAAsW1D3uSLCLOEWjJjUN4t7xUeGM30q5jR3PxgvXdFiQBu2+E+2aFNvAKJzNlp0Rbe7eTxGzrRG/n8G8dmJ2CCw6RKbbA7JWcYUKoNR2DpR2JhlOpXDI3kKxFsIQx0Fh9jukyIszpulNVagXk8vJZxq6oYQ5yp77kLwAD5K0wqYg7MnVVKopIqXXV+U4cGahsltXjDhF9d8Ra8B9b2ZpSMkt/8431Psh4kXcRUPRfpWdAOHPpHq3TrcqKVXAE+YZYW97bKh5itY3uznVYX2fuPrrXxcXLYIQdc4nn7OA67OW/q+aQ3ZDAE="],"x5t":"W25qHzUjOdWUKDrotdzm_Vmh41k","x5t#S256":"JEQJ1tFPm95DsjR0-4Ke4qvqYuivrwpyTloBvd0gwy8"}]}'
+      matchLabels:
+        app: hsum
+    peerauth:
+      mtlsmode: STRICT
+      matchLabels:
+        app: hsum
+    gateway:
+      #name: cudc-gateway chcnged to applabel-gateway
+      credentialname: madrid-cert-pro
+      host: apps.oca.hsum.aws.comunidad.madrid
+      istioselector: ingressgateway
+    namespaces:
+      - name: pro-hsum
+        gatewayprefix: hsum
+
+controlplane:
+  memberroll:
+    name: default
+  namespace: istio-system
+  name: mesh-cudc-cp
+  loglevel: warn
+  mtls: true
+  jaegertracing: 10000 # cambiar este valor en otros entornos. Es el porcentaje en enteros de 0.01% de trazas analizadas
+  addons:
+    grafana:
+      enabled: true
+    jaeger:
+      install:
+        storage:
+          type: Memory
+    kiali:
+      enabled: true
+    prometheus:
+      enabled: true
+  gateways:
+    egress:
+      enabled: false
+      runtime:
+        deployment:
+          replicas: 0
+    ingress:
+      enabled: true
+      runtime:
+        deployment:
+          replicas: 2
+  replicas: 2
+  resources:
+    requests:
+      cpu: 10m
+      memory: 128Mi
+    limits:
+      cpu: 2000m
+      memory: 1024Mi
+  version: v2.3

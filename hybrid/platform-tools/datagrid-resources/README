@@ -1,0 +1,5 @@
+Unicamente se incluyen opcionalmente si procede (previa instalacion del operador datagrid)
+
+de los ficheros cache.yaml templatizados
+
+nttd hace de tenant/client y la separacion a nivel de cluster/tenant

@@ -1,0 +1,24 @@
+{{- range $key, $value := .Values.tenants }}
+{{- range $clave, $valor := $value.namespaces }}
+{{- if $value.ra.enabled}}
+apiVersion: security.istio.io/v1beta1
+kind: RequestAuthentication
+metadata:
+  name: {{ $value.ra.name }}
+  namespace: {{ $valor.name }}
+spec:
+  jwtRules:
+    - forwardOriginalToken: true
+      issuer: >-
+        {{ $value.ra.jwtRules.issuer }}
+      jwks: >-
+        {{ $value.ra.jwtRules.jwks  }}
+  selector:
+    matchLabels:
+      {{- range $k,$v := $value.ra.matchLabels }}
+      {{ $k }}: {{ $v }}
+      {{- end }}
+---
+{{- end}}
+{{- end}}
+{{- end}}

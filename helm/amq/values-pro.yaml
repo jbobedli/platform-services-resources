@@ -1,0 +1,24 @@
+appName: amq-md
+clustered: true
+brokers:
+  replicaCount: 2
+  namespace: amq
+  resources:
+    limits:
+      cpu: '1'
+      memory: 5Gi
+    requests:
+      cpu: 100m
+      memory: 2Gi
+  ssl:
+    console:
+      enabled: false
+      #sslSecret: md-amqp-console-secret
+    acceptors:
+      enabled: true
+      sslSecret: md-amq-tls-secret
+pvcs:
+  size: 2Gi
+  storageClassName:
+    enabled: false
+    # value: ocs-storagecluster-cephfs

@@ -1,0 +1,21 @@
+{{- if .Values.project.enabled.val }}
+apiVersion: argoproj.io/v1alpha1
+kind: AppProject
+metadata:
+  name: val-hsum
+  namespace: openshift-gitops
+spec:
+  description: group for application deployment
+  destinations:
+    - name: in-cluster
+      namespace: val-hsum
+      server: 'https://kubernetes.default.svc'
+    - name: in-cluster
+      namespace: openshift-gitops
+      server: 'https://kubernetes.default.svc'
+    - name: in-cluster
+      namespace: pipelines-hsum
+      server: 'https://kubernetes.default.svc'
+  sourceRepos:
+  - 'https://git-codecommit.eu-west-1.amazonaws.com/v1/repos/devops.git'
+{{- end }}

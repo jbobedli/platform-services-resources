@@ -1,0 +1,50 @@
+{{- $policyname := "allowed-signedimages" }}
+{{- $defaults := .Values.defaults }}
+{{- $secret_ns := default "kyverno" .Values.verifyImages.secret_namespace }}
+{{- range $policy := .Values.policies}}
+{{- if (eq $policy.name $policyname) }}
+apiVersion: kyverno.io/v1
+kind: {{- template "clusterOrNot" (dict "policy" $policy) }}
+metadata:
+{{- template "getNamespace" (dict "policy" $policy) }}
+  name: {{ default $policyname $policy.custom_name }}
+  annotations:
+    dar.kyverno.template/file: {{$policyname}}
+    dar.kyverno.policy/suitableforproduction: 'true'
+    dar.kyverno.policy/category: Images
+    kyverno.io/kyverno-version: 1.6.0
+    kyverno.io/kubernetes-version: "1.24"
+    dar.kyverno.policy/subject: Pod
+    dar.kyverno.policy/description: >-
+      Los pods solamente hacen pull de imagenes que estén firmadas.     
+    dar.kyverno.template/parameters: 'true'
+    dar.kyverno.template/filter: 'false'  
+     
+spec:
+  background: {{ default $defaults.background $policy.background }}
+  failurePolicy: Fail
+  rules:
+    - match:
+        any:
+          - resources:
+              kinds:
+                - Pod
+      name: check-image
+      verifyImages:
+        - attestors:
+            - count: 1
+              entries:
+                - keys:
+                    publicKeys: "k8s://{{ $secret_ns }}/cosign-public-key"
+                    signatureAlgorithm: sha256
+          imageReferences:
+          {{- range $policy.parameters }}
+            - {{ . }}
+          {{- end }}
+          mutateDigest: true
+          required: true
+          verifyDigest: true
+  validationFailureAction: {{ default $defaults.validation $policy.validation }}
+  webhookTimeoutSeconds: 30
+  {{- end }}
+{{- end }}

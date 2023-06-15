@@ -1,0 +1,27 @@
+{{- if .Values.project.enabled.des }}
+apiVersion: argoproj.io/v1alpha1
+kind: AppProject
+metadata:
+  name: commons-apptoapps
+  namespace: openshift-gitops
+spec:
+  description: group for application deployment
+  destinations:
+    - name: in-cluster
+      namespace: pro-cudc
+      server: 'https://kubernetes.default.svc'
+    - name: in-cluster
+      namespace: openshift-gitops
+      server: 'https://kubernetes.default.svc'
+    - name: in-cluster
+      namespace: pipelines-cudc
+      server: 'https://kubernetes.default.svc'
+    - name: in-cluster
+      namespace: pipelines-hsum
+      server: 'https://kubernetes.default.svc'
+    - name: in-cluster
+      namespace: testing
+      server: 'https://kubernetes.default.svc'
+  sourceRepos:
+  - 'https://git-codecommit.eu-west-1.amazonaws.com/v1/repos/devops.git'
+{{- end }}

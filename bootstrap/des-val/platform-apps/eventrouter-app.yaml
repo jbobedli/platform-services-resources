@@ -1,0 +1,17 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: event-router
+  namespace: openshift-gitops
+spec:
+  project: platform-gitops
+  source:
+    repoURL: 'https://git-codecommit.eu-west-1.amazonaws.com/v1/repos/plataforma'
+    targetRevision: main
+    path: helm/logging/eventrouter
+    helm:
+      valueFiles:
+        - values-des-val.yaml
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: openshift-logging

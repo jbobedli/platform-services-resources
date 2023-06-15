@@ -1,0 +1,58 @@
+verifyImages: 
+  enabled: false
+defaults:
+  validation: audit
+  background: true
+policies:
+- name: allowed-signedimages
+  namespace: val-hsum
+  parameters:
+  - harbor.cudc.aws.comunidad.madrid*
+- name: limit-replicacount
+  namespace: testing
+  parameters:
+  - ">3"
+  filter: "HA"
+- name: disallow-latesttag
+  namespace: testing
+- name: disallow-nodeport
+  namespace: testing
+- name: require-probes
+  namespace: testing
+- name: require-requestlimit
+  namespace: testing
+- name: add-imagepullsecret
+  namespace: testing
+  parameters:
+  - secretoharbor
+  filter: "registryconcreto/*" 
+- name: allow-signedimages
+  namespace: testing
+- name: disallow-externalips
+  namespace: testing
+- name: disallow-loadbalancer
+  namespace: testing
+- name: disallow-deprecatedapis
+  namespace: testing
+  parameters:
+  - authorization.openshift.io/v1/ClusterRole
+- name: refresh-secretchanged
+  namespace: testing
+- name: require-qos
+  namespace: testing
+  filter: "qos"   
+  resources:
+  - Pod
+- name: disallow-execbynamespace
+  namespace: testing
+  custom_name: disallow-exec-on-testing
+  parameters: 
+  - testing
+- name: disallow-privilegedpod
+  namespace: testing
+- name: disallow-manualtaskrun
+  namespace: testing
+- name: limit-pipelineruns
+  namespace: testing
+  parameters:
+  - 3

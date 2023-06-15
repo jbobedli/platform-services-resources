@@ -1,0 +1,48 @@
+{{- $policyname := "limit-pipelineruns" }}
+{{- $defaults := .Values.defaults }}
+{{- range $policy := .Values.policies}}
+{{- if (eq $policy.name $policyname) }}
+apiVersion: kyverno.io/v1
+kind: {{- template "clusterOrNot" (dict "policy" $policy) }}
+metadata:
+{{- template "getNamespace" (dict "policy" $policy) }}
+  name: {{ default $policyname $policy.custom_name }}
+  annotations:
+    dar.kyverno.template/file: {{$policyname}}
+    dar.kyverno.policy/suitableforproduction: 'false'
+    dar.kyverno.policy/category: Tekton
+    kyverno.io/minversion: 1.6.0
+    dar.kyverno.policy/subject: PipelineRun
+    dar.kyverno.policy/description: Limitamos las pipelineruns en un namespace.   
+    dar.kyverno.template/parameters: 'true'
+    dar.kyverno.template/filter: 'false'  
+     
+spec:
+  background: {{ default $defaults.background $policy.background }}
+  rules:
+    - context:
+        - apiCall:
+            jmesPath: 'items[?status.conditions[?reason==''Running'']]'
+            urlPath: >-
+              "{{ printf "/apis/tekton.dev/v1beta1/namespaces/{{request.namespace}}/pipelineruns" | toString }}"
+          name: pr
+      match:
+        resources:
+          kinds:
+            - PipelineRun
+      name: check-pipelinerun-limit
+      preconditions:
+        all:
+          - key: "{{ printf "{{request.operation || BACKGROUND}}" | toString }}"
+            operator: NotEquals
+            value: DELETE
+      validate:
+        deny:
+          conditions:
+            any:
+              - key: "{{ printf "{{pr | length(@)}}" | toString }}"
+                operator: GreaterThan
+                value: {{ first $policy.parameters }}
+  validationFailureAction: {{ default $defaults.validation $policy.validation }}
+  {{- end }}
+{{- end }}  

@@ -1,0 +1,7 @@
+sa:
+  namespace: pipelines
+  namespace_default: des-cudc
+
+appsnamespace: 
+  - des-cudc
+  - val-cudc

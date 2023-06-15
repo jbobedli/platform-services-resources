@@ -1,0 +1,8 @@
+defaults:
+  validation: audit
+  background: false
+policies:
+  - name: add-nstomemberroll
+    filter: ^(des-|pre-).*
+
+#Regex para filtrar solamente los namespaces que empiecen por "des-" o "pre-"

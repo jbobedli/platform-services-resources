@@ -1,0 +1,1 @@
+subjectAltName=DNS:node-cosign-provider.gatekeeper-system

@@ -1,0 +1,22 @@
+{{- if .Values.amqinterconnect.enabled}}
+#{{ .Values.amqinterconnect.approvalPlan | default .Values.global.approvalPlan }}
+{{ $approvalPlan :=  .Values.amqinterconnect.approvalPlan  |  default .Values.global.approvalPlan }}
+#{{ $approvalPlanGlobal :=  .Values.global.approvalPlan }}
+apiVersion: v1
+kind: List
+items:
+  {{- range $namespace := .Values.amqinterconnect.namespaces }}
+  - apiVersion: operators.coreos.com/v1alpha1
+    kind: Subscription
+    metadata:
+      name: amq7-interconnect-operator
+      namespace: {{ $namespace | default "openshift-operators" }}
+    spec:
+      channel: 1.10.x
+      installPlanApproval: {{ $approvalPlan }}
+      name: amq7-interconnect-operator
+      source: redhat-operators
+      sourceNamespace: openshift-marketplace
+      startingCSV: amq7-interconnect-operator.v1.10.6
+  {{- end}}
+{{- end}}

@@ -1,0 +1,28 @@
+kind: ClusterRole
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: argocd-create-policies
+  uid: 565f3147-e584-4402-a086-0ef53460acd2
+  resourceVersion: '412122576'
+  creationTimestamp: '2023-05-19T12:13:57Z'
+  managedFields:
+    - manager: Mozilla
+      operation: Update
+      apiVersion: rbac.authorization.k8s.io/v1
+      time: '2023-05-19T12:13:57Z'
+      fieldsType: FieldsV1
+      fieldsV1:
+        'f:rules': {}
+rules:
+  - verbs:
+      - get
+      - watch
+      - list
+      - create
+      - patch
+      - delete
+      - update
+    apiGroups:
+      - kyverno.io
+    resources:
+      - policies

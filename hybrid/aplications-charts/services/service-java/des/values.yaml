@@ -1,0 +1,24 @@
+commons-chart:
+  global:
+    name: servicio-java
+  dc:
+    image:
+      repository: harbor.fake/fake/fake:1.0.0
+      tag: 1.29.0
+    env_vars:
+      enabled: true
+      data:
+        - name: JAVA_OPTS
+          value: -Dspring.profiles.active=desarrollo -Dspring.config.additional-location=file:///config/application-desarrollo.yaml
+  vs:
+    operationPaths:
+      - /gatewayentry/*
+  configmap:
+    enabled: true
+  imagePullSecrets: harbor-auth
+  configmaps:
+    app:
+      mountPath: /config/application-desarrollo.yaml
+      subPath: application-desarrollo.yaml
+      data:
+        application-desarrollo.yaml: |-

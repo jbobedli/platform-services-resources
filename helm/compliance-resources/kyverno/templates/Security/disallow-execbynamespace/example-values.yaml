@@ -1,0 +1,13 @@
+defaults:
+  validation: enforce
+  background: false
+policies:
+  - name: disallow-execbynamespace
+    validation: audit
+    custom_name: disallow-exec-on-pre
+    parameters: 
+      - pre-apps
+  - name: disallow-execbynamespace
+    custom_name: disallow-exec-on-des
+    parameters: 
+      - des-apps

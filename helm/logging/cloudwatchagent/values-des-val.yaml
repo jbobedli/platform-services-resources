@@ -1,0 +1,225 @@
+unused: |
+  {
+  "notused":[
+    {
+       "source_labels": ["job"],
+       "label_matcher": "^kubernetes-containers",
+       "dimensions": [["ClusterName","Network"]],
+       "metric_selectors": [
+         "^container_network_receive_errors_total$",
+         "^container_network_transmit_errors_total$",
+         "^container_network_receive_packets_total$",
+         "^container_network_transmit_packets_total$"
+       ]
+     },
+
+  ]}
+
+cwagentconfig: |
+  {
+    "agent": {
+      "region": "eu-west-1",
+      "debug": true
+    },
+    "logs": {
+      "metrics_collected": {
+        "prometheus": {
+          "cluster_name": "cm-rosa-pre",
+          "log_group_name": "/aws/containerinsights/cm-rosa-pre/prometheus",
+          "prometheus_config_path": "/etc/prometheusconfig/prometheus.yaml",
+          "emf_processor": {
+            "metric_declaration": [
+              {
+                "source_labels": [
+                  "job",
+                  "resource"
+                ],
+                "label_matcher": "^kubernetes-apiservers;(services|daemonsets.apps|deployments.apps|configmaps|endpoints|secrets|serviceaccounts|replicasets.apps)",
+                "dimensions": [
+                  [
+                    "ClusterName",
+                    "Service",
+                    "resource"
+                  ]
+                ],
+                "metric_selectors": [
+                  "^etcd_object_counts$"
+                ]
+              },
+              {
+                "source_labels": [
+                  "job",
+                  "name"
+                ],
+                "label_matcher": "^kubernetes-apiservers;APIServiceRegistrationController$",
+                "dimensions": [
+                  [
+                    "ClusterName",
+                    "Service",
+                    "name"
+                  ]
+                ],
+                "metric_selectors": [
+                  "^workqueue_depth$",
+                  "^workqueue_adds_total$",
+                  "^workqueue_retries_total$"
+                ]
+              },
+              {
+                "source_labels": [
+                  "job",
+                  "pod",
+                  "namespace"
+                ],
+                "label_matcher": "^openshift-monitoring",
+                "dimensions": [
+                  [
+                    "ClusterName",
+                    "reason",
+                    "namespace"
+                  ]
+                ],
+                "metric_selectors": [
+                  "^kube_pod_status_reason$"
+                ]
+              },
+              {
+                "source_labels": [
+                  "job",
+                  "namespace"
+                ],
+                "label_matcher": "^openshift-monitoring-application;(des-cudc|val-cudc|pro-cudc|des-hsum|val-hsum|pro-hsum)",
+                "dimensions": [
+                  [
+                    "ClusterName",
+                    "pod",
+                    "namespace"
+                  ]
+                ],
+                "metric_selectors": [
+                  "^kube_pod_status_reason$"
+                ]
+              }
+            ]
+          }
+        }
+      },
+      "force_flush_interval": 10
+    }
+  }
+
+prometheusconfig: |
+  global:
+    scrape_interval: 1m
+    scrape_timeout: 10s
+  scrape_configs:
+    - job_name: 'kubernetes-apiservers'
+      kubernetes_sd_configs:
+        - role: endpoints
+          namespaces:
+            names:
+              - default
+      scheme: https
+      tls_config:
+        ca_file: /var/run/secrets/kubernetes.io/serviceaccount/ca.crt
+        insecure_skip_verify: true
+      bearer_token_file: /var/run/secrets/kubernetes.io/serviceaccount/token
+      relabel_configs:
+        - source_labels: [__meta_kubernetes_service_name, __meta_kubernetes_endpoint_port_name]
+          action: keep
+          regex: kubernetes;https
+        - action: replace
+          source_labels:
+            - __meta_kubernetes_namespace
+          target_label: Namespace
+        - action: replace
+          source_labels:
+            - __meta_kubernetes_service_name
+          target_label: Service
+    - job_name: 'openshift-monitoring'
+      kubernetes_sd_configs:
+        - role: endpoints
+          namespaces:
+            names:
+              - openshift-monitoring
+      scheme: https
+      tls_config:
+        ca_file: /var/run/secrets/kubernetes.io/serviceaccount/ca.crt
+        insecure_skip_verify: true
+      bearer_token_file: /var/run/secrets/kubernetes.io/serviceaccount/token
+    - job_name: 'multus_route'
+      kubernetes_sd_configs:
+        - role: endpoints
+          namespaces:
+            names:
+              - openshift-route-controller-manager
+              - openshift-multus
+      scheme: https
+      tls_config:
+        ca_file: /var/run/secrets/kubernetes.io/serviceaccount/ca.crt
+        insecure_skip_verify: true
+      bearer_token_file: /var/run/secrets/kubernetes.io/serviceaccount/token
+    - job_name: 'machine-metrics'
+      kubernetes_sd_configs:
+        - role: endpoints
+          namespaces:
+            names:
+              - openshift-machine-api
+      scheme: https
+      tls_config:
+        ca_file: /var/run/secrets/kubernetes.io/serviceaccount/ca.crt
+        insecure_skip_verify: true
+      bearer_token_file: /var/run/secrets/kubernetes.io/serviceaccount/token
+    - job_name: 'ingress-metrics'
+      kubernetes_sd_configs:
+        - role: endpoints
+          namespaces:
+            names:
+              - openshift-ingress
+      scheme: https
+      tls_config:
+        ca_file: /var/run/secrets/kubernetes.io/serviceaccount/ca.crt
+        insecure_skip_verify: true
+      bearer_token_file: /var/run/secrets/kubernetes.io/serviceaccount/token
+    - job_name: 'openshift-cluster-csi-drivers'
+      kubernetes_sd_configs:
+        - role: endpoints
+          namespaces:
+            names:
+              - openshift-cluster-csi-drivers
+      scheme: https
+      tls_config:
+        ca_file: /var/run/secrets/kubernetes.io/serviceaccount/ca.crt
+        insecure_skip_verify: true
+      bearer_token_file: /var/run/secrets/kubernetes.io/serviceaccount/token
+    - job_name: 'kube-system'
+      kubernetes_sd_configs:
+        - role: endpoints
+          namespaces:
+            names:
+              - kube-system
+      scheme: https
+      tls_config:
+        ca_file: /var/run/secrets/kubernetes.io/serviceaccount/ca.crt
+        insecure_skip_verify: true
+      bearer_token_file: /var/run/secrets/kubernetes.io/serviceaccount/token
+    - job_name: 'application-metrics'
+      kubernetes_sd_configs:
+        - role: endpoints
+          namespaces:
+            names:
+              - des-cudc
+              - val-cudc
+              - pro-cudc
+              - pipelines-cudc
+              - des-hsum
+              - val-hsum
+              - pro-hsum
+              - pipelines-cudc
+      scheme: https
+      tls_config:
+        ca_file: /var/run/secrets/kubernetes.io/serviceaccount/ca.crt
+        insecure_skip_verify: true
+      bearer_token_file: /var/run/secrets/kubernetes.io/serviceaccount/token
+
+image: amazon/cloudwatch-agent:1.247359.1b252618

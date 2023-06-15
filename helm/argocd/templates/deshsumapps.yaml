@@ -1,0 +1,16 @@
+{{- if .Values.project.enabled.des }}
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: des-hsum-apps
+  namespace: openshift-gitops
+spec:
+  project: hsum-apptoapps
+  source:
+    repoURL: 'https://git-codecommit.eu-west-1.amazonaws.com/v1/repos/devops.git'
+    targetRevision: HEAD
+    path: 'argo-config/hsum/des/'
+  destination:
+    server: 'https://kubernetes.default.svc'
+    namespace: des-hsum
+{{- end }}

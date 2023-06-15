@@ -1,0 +1,31 @@
+kind: ClusterRole
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: openshift-gitops-openshift-gitops-argocd-application-controller-additional
+  annotations:
+    argocds.argoproj.io/name: openshift-gitops
+    argocds.argoproj.io/namespace: openshift-gitops
+rules:
+  - verbs:
+      - '*'
+    apiGroups:
+      - maistra.io
+      - networking.istio.io
+      - security.istio.io
+    resources:
+      - servicemeshmemberrolls
+      - servicemeshcontrolplanes
+      - gateways
+      - peerauthentications
+  - verbs:
+      - '*'
+    apiGroups:
+      - networking.istio.io
+    resources:
+      - gateways
+  - verbs:
+      - '*'
+    apiGroups:
+      - security.istio.io
+    resources:
+      - peerauthentications

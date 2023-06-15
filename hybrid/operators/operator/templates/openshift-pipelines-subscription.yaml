@@ -1,0 +1,13 @@
+{{- if .Values.pipelines.enabled}}
+apiVersion: operators.coreos.com/v1alpha1
+kind: Subscription
+metadata:
+  name: openshift-pipelines-operator-rh
+  namespace: openshift-operators
+spec:
+  channel:  {{ .Values.pipelines.channel | default "stable" }}
+  installPlanApproval: {{ .Values.pipelines.approvalPlan | default .Values.global.approvalPlan }}
+  name: openshift-pipelines-operator-rh
+  source: redhat-operators
+  sourceNamespace: openshift-marketplace
+{{- end}}

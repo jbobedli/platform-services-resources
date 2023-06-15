@@ -1,0 +1,153 @@
+#argocd-cr:
+#  yaml:
+apiVersion: argoproj.io/v1alpha1
+kind: ArgoCD
+metadata:
+  name: openshift-gitops
+  namespace: openshift-gitops
+  finalizers:
+    - argoproj.io/finalizer
+spec:
+  server:
+    autoscale:
+      enabled: false
+    grpc:
+      ingress:
+        enabled: false
+    ingress:
+      enabled: false
+    resources:
+      limits:
+        cpu: 500m
+        memory: 256Mi
+      requests:
+        cpu: 125m
+        memory: 128Mi
+    route:
+      enabled: true
+    service:
+      type: ''
+  grafana:
+    enabled: false
+    ingress:
+      enabled: false
+    resources:
+      limits:
+        cpu: 500m
+        memory: 256Mi
+      requests:
+        cpu: 250m
+        memory: 128Mi
+    route:
+      enabled: false
+  prometheus:
+    enabled: false
+    ingress:
+      enabled: false
+    route:
+      enabled: false
+  initialSSHKnownHosts: {}
+  applicationSet:
+    resources:
+      limits:
+        cpu: '2'
+        memory: 1Gi
+      requests:
+        cpu: 250m
+        memory: 512Mi
+  rbac:
+    policy: |
+      p, role:role-develop, applications, get, {{ .Values.project.name }}/*, allow
+      p, role:role-develop, applications, delete, {{ .Values.project.name }}/*, allow
+      p, role:role-develop, applications, action, {{ .Values.project.name }}/*, allow
+      p, role:role-develop, applications, create, {{ .Values.project.name }}/*, allow
+      p, role:role-develop, applications, update, {{ .Values.project.name }}/*, allow
+      p, role:role-develop, applications, override, {{ .Values.project.name }}/*, allow
+      p, role:role-develop, applications, sync, {{ .Values.project.name }}/*, allow
+      p, role:role-test, applications, get, {{ .Values.project.name }}/*, allow
+      p, role:role-test, applications, creaate, {{ .Values.project.name }}/*, allow
+      p, role:role-test, applications, update, {{ .Values.project.name }}/*, allow
+      p, role:role-test, applications, override, {{ .Values.project.name }}/*, allow
+      p, role:role-test, applications, sync, {{ .Values.project.name }}/*, allow
+      p, role:role-test, applications, get, {{ .Values.project.name }}/*, allow
+      p, role:role-test, applications, sync, {{ .Values.project.name }}/*, allow
+      p, role:role-test, applications, get, default/*, allow
+      p, role:role-test, applications, sync, default/pipelines, allow
+      p, role:role-test, applications, sync, default/pipelines-cudc, allow
+      g, devops, role:role-test
+      g, developer, role:role-develop
+      g, cluster-admins, role:admin
+    scopes: '[groups]'
+  repo:
+    resources:
+      limits:
+        cpu: '1'
+        memory: 1Gi
+      requests:
+        cpu: 250m
+        memory: 256Mi
+    verifytls: false
+  resourceExclusions: |
+    - apiGroups:
+      - tekton.dev
+      clusters:
+      - '*'
+      kinds:
+      - TaskRun
+      - PipelineRun
+    - apiGroups:
+      - '*'
+      clusters:
+      - '*'
+      kinds:
+      - ClusterServiceVersion
+{{- if or .Values.project.enabled.des .Values.project.enabled.val }}  
+  sso:
+    provider: dex
+    dex:
+      openShiftOAuth: true
+      resources:
+        limits:
+          cpu: 500m
+          memory: 256Mi
+        requests:
+          cpu: 250m
+          memory: 128Mi
+{{- end }}
+  ha:
+    enabled: false
+    resources:
+      limits:
+        cpu: 500m
+        memory: 256Mi
+      requests:
+        cpu: 250m
+        memory: 128Mi
+  tls:
+    ca: {}
+  redis:
+    resources:
+      limits:
+        cpu: 500m
+        memory: 256Mi
+      requests:
+        cpu: 250m
+        memory: 128Mi
+  controller:
+    processors: {}
+    resources:
+      limits:
+        cpu: '2'
+        memory: 5Gi
+      requests:
+        cpu: 250m
+        memory: 1Gi
+    sharding: {}
+  configManagementPlugins: |
+    - name: kustomized-helm
+      init:
+        command: ["/bin/sh", "-c"]
+        args: ["helm dependency build || true"]
+      generate:
+        command: ["/bin/sh", "-c"]
+        args: ["helm template ../../helm_base --name-template $ARGOCD_APP_NAME --include-crds > ../../helm_base/all.yml && kustomize build"]

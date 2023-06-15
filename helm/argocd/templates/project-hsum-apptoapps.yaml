@@ -1,0 +1,25 @@
+apiVersion: argoproj.io/v1alpha1
+kind: AppProject
+metadata:
+  name: hsum-apptoapps
+  namespace: openshift-gitops
+spec:
+  destinations:
+    - name: in-cluster
+      namespace: testing
+      server: 'https://kubernetes.default.svc'
+    - name: in-cluster
+      namespace: pro-hsum
+      server: 'https://kubernetes.default.svc'
+    - name: in-cluster
+      namespace: des-hsum
+      server: 'https://kubernetes.default.svc'
+    - name: in-cluster
+      namespace: val-hsum
+      server: 'https://kubernetes.default.svc'
+    - name: in-cluster
+      namespace: openshift-gitops
+      server: 'https://kubernetes.default.svc'
+  sourceRepos:
+    - 'https://git-codecommit.eu-west-1.amazonaws.com/v1/repos/devops.git'
+status: {}

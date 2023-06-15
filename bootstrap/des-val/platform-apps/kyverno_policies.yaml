@@ -1,0 +1,18 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: kyverno-policies
+  namespace: openshift-gitops
+spec:
+  project: platform-gitops
+  source:
+    repoURL: 'https://git-codecommit.eu-west-1.amazonaws.com/v1/repos/plataforma'
+    targetRevision: main
+    path: helm/compliance-resources/kyverno
+    helm:
+      valueFiles:
+        - values.yaml
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: testing
+    

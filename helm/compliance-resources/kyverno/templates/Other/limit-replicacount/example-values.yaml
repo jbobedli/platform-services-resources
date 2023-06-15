@@ -1,0 +1,8 @@
+defaults:
+  validation: audit
+  background: false
+policies:
+  - name: limit-replicacount
+    parameters:
+      - ">3"
+    filter: "HA"    

@@ -1,0 +1,32 @@
+amq:
+  enabled: false
+  namespace: openshift-operators
+  watchnamespace: 'des-cudc,val-cudc'
+amqinterconnect:
+  enabled: false
+  approvalPlan: Automatic
+  namespaces:
+  - amqinterconnect2
+datagrid:
+  enabled: false
+  namespace: bookinfo
+rhsso:
+  enabled: false
+  namespace: iam
+pipelines:
+  enabled: false
+  channel: pipelines-1.8
+elasticsearch:
+  enabled: false
+istio:
+  enabled: false
+microcks:
+  enabled: false
+webterminal:
+  enabled: false
+kiali:
+  enabled: false
+jaegger:
+  enabled: false
+global:
+  approvalPlan: Manual
