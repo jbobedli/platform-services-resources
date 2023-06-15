@@ -1,6 +1,4 @@
 cluster:
   name: pro
-project:
-  name: pro-cudc
 source:
   repourl: 'https://gitlab.pro.portal.ss/migration/argo-platform'
