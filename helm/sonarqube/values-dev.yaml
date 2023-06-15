@@ -6,7 +6,7 @@
 gateway:
   host: apps.oca-pre.cudc.aws.comunidad.madrid
 
-environment: des-val
+environment: dev
 
 serviceAccount:
   create: true

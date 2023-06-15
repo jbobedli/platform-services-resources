@@ -2,7 +2,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: des-val-commons
+  name: dev-commons
   namespace: openshift-gitops
 spec:
   project: commons-apptoapps

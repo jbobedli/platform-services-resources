@@ -8,7 +8,7 @@ metadata:
   name: {{ $key  }}-istio-peers
   namespace: {{ $valor.name }}
   labels:
-    app.kubernetes.io/instance: istio-des-val
+    app.kubernetes.io/instance: istio-dev
 spec:
   selector:
     matchLabels:

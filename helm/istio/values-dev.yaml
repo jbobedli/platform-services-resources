@@ -1,4 +1,4 @@
-env: des-val
+env: dev
 
 tenants:
   cudc:

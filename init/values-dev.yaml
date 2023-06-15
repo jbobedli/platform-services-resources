@@ -1,4 +1,4 @@
 cluster:
-  name: des-val
+  name: dev
 source:
   repourl: 'https://gitlab.pro.portal.ss/migration/argo-platform'

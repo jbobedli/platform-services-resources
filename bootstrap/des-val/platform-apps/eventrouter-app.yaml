@@ -11,7 +11,7 @@ spec:
     path: helm/logging/eventrouter
     helm:
       valueFiles:
-        - values-des-val.yaml
+        - values-dev.yaml
   destination:
     server: https://kubernetes.default.svc
     namespace: openshift-logging
