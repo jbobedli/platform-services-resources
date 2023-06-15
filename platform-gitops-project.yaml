@@ -17,4 +17,4 @@ spec:
       namespace: '*'
       server: 'https://kubernetes.default.svc'
   sourceRepos:
-    - 'https://git-codecommit.eu-west-1.amazonaws.com/v1/repos/plataforma'
+    - 'https://gitlab.pro.portal.ss/migration/argo-platform'

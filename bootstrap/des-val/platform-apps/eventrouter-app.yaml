@@ -6,7 +6,7 @@ metadata:
 spec:
   project: platform-gitops
   source:
-    repoURL: 'https://git-codecommit.eu-west-1.amazonaws.com/v1/repos/plataforma'
+    repoURL: 'https://gitlab.pro.portal.ss/migration/argo-platform'
     targetRevision: main
     path: helm/logging/eventrouter
     helm:

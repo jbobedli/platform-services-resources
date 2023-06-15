@@ -9,7 +9,7 @@ spec:
         elements:
           - cluster: des-val
             url: https://kubernetes.default.svc
-            repoURL: 'https://git-codecommit.eu-west-1.amazonaws.com/v1/repos/plataforma'
+            repoURL: 'https://gitlab.pro.portal.ss/migration/argo-platform'
             appName: network-policy
             project: platform-gitops
   template:
