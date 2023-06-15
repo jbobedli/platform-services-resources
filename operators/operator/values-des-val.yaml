@@ -1,12 +1,3 @@
-amq:
-  enabled: false
-  namespace: openshift-operators
-  watchnamespace: 'des-cudc,val-cudc'
-amqinterconnect:
-  enabled: false
-  approvalPlan: Automatic
-  namespaces:
-  - amqinterconnect2
 datagrid:
   enabled: false
   namespace: bookinfo
