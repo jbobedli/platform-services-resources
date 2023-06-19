@@ -1,24 +1,27 @@
 {{- range $key, $value := .Values.tenants }}
 # Por cada tenant, recorremos sus ns
 {{- range $clave, $valor := $value.namespaces }}
+# Por cada namespace, recorremos sus gateways
+{{- range $gateway, $gatewayValue := $valor.gateways }}
 kind: Gateway
 apiVersion: networking.istio.io/v1alpha3
 metadata:
-  name: {{ $key }}-gateway
+  name: {{ $key }}-{{ $gatewayValue.namePrefix }}
   namespace: {{ $valor.name }}
 spec:
   servers:
     - hosts:
-        - {{ $valor.gatewayprefix }}.{{ $value.gateway.host }} # generify to list
+        - {{ $gatewayValue.host }}
       port:
         name: https
         number: 443
         protocol: HTTPS
       tls:
-        credentialName: {{ $value.gateway.credentialname }}
+        credentialName: {{ $gatewayValue.credentialname }}
         mode: SIMPLE
   selector:
-    istio: {{ $value.gateway.istioselector }}
+    istio: {{ $gatewayValue.istioselector }}
 ---
+{{- end}}
 {{- end}}
 {{- end}}
