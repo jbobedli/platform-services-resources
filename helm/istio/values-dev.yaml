@@ -5,10 +5,6 @@ tenants:
       mtlsmode: STRICT
       matchLabels:
         app: prueba
-    gateway:
-      credentialname: madrid-cert-pre
-      host: imv-dev.giss-inss.local
-      istioselector: ingressgateway
     namespaces:
       - name: des-prueba
         gateways:
