@@ -1,0 +1,32 @@
+secret:
+  name: gitlabbasicauth
+  data:
+    username: QlpDUjY2NTEK
+    password: elQ5ZWt5eVJlWEQ5aXc5RGJuUXkK
+
+tenants:
+  prueba:
+    namespaces:
+      - name: des-prueba
+        displayName: Entorno de DES prueba
+        limitRange:
+          enabled: true
+          limits:
+            - type: Container
+              max:
+                cpu: '7'
+                memory: 50Gi
+              default:
+                cpu: 300m
+                memory: 400Mi
+              defaultRequest:
+                cpu: 300m
+                memory: 400Mi
+      - name: pre-prueba
+        displayName: Entorno de PRE prueba
+        limitRange:
+          enabled: false
+      - name: uat-prueba
+        displayName: Entorno de UAT prueba
+        limitRange:
+          enabled: false

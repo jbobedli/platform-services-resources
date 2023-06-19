@@ -1,0 +1,14 @@
+{{- range $key, $value := .Values.tenants }}
+# Por cada tenant, recorremos sus ns
+{{- range $clave, $valor := $value.namespaces }}
+{{- if $valor.limitRange.enabled }}
+kind: LimitRange
+apiVersion: v1
+metadata:
+  namespace: {{ $valor.name }}
+spec:
+  {{- toYaml $valor.limitRange.limits | nindent 2 }}
+---
+{{- end}}
+{{- end}}
+{{- end}}
