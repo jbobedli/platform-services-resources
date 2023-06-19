@@ -12,7 +12,7 @@ metadata:
 spec:
   selector:
     matchLabels:
-      {{- range $k,$v := $value.ra.matchLabels }}
+      {{- range $k,$v := $value.peerauth.matchLabels }}
       {{ $k }}: {{ $v }}
       {{- end }}
   mtls:
