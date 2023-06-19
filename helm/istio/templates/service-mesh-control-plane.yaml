@@ -1,3 +1,4 @@
+{{- if .Values.controlplane.enabled -}}
 apiVersion: maistra.io/v2
 kind: ServiceMeshControlPlane
 metadata:
@@ -37,3 +38,4 @@ spec:
   telemetry:
     type: Istiod
   version: {{ .Values.controlplane.version }}
+{{- end}}

@@ -49,6 +49,7 @@ tenants:
         gatewayprefix: hsum
 
 controlplane:
+  enabled: false
   memberroll:
     name: default
   namespace: istio-system
