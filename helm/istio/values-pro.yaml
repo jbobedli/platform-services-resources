@@ -1,5 +1,3 @@
-env: pro 
-
 tenants:
   cudc:
     name: cudc
