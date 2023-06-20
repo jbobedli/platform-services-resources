@@ -9,6 +9,6 @@ metadata:
 spec:
   {{- toYaml $valor.limitRange.limits | nindent 2 }}
 ---
-{{- end}}
-{{- end}}
-{{- end}}
+{{- end }}
+{{- end }}
+{{- end }}
