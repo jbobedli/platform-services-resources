@@ -5,27 +5,22 @@ metadata:
   annotations:
     argocds.argoproj.io/name: openshift-gitops
     argocds.argoproj.io/namespace: openshift-gitops
+    argocd.argoproj.io/sync-wave: "3"
 rules:
   - verbs:
       - '*'
     apiGroups:
-      - maistra.io
+      - authentication.istio.io
+      - config.istio.io
       - networking.istio.io
+      - rbac.istio.io
       - security.istio.io
+      - authentication.maistra.io
+      - rbac.maistra.io
     resources:
       - servicemeshmemberrolls
       - servicemeshcontrolplanes
+      - servicemeshextensions
       - gateways
       - peerauthentications
-  - verbs:
-      - '*'
-    apiGroups:
-      - networking.istio.io
-    resources:
-      - gateways
-  - verbs:
-      - '*'
-    apiGroups:
-      - security.istio.io
-    resources:
-      - peerauthentications
+      - requestauthentication

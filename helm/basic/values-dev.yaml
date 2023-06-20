@@ -1,7 +1,9 @@
 sa:
-  namespace: pipelines
-  namespace_default: des-cudc
-
-appsnamespace: 
-  - des-cudc
-  - val-cudc
+  argo:
+    namespaces:
+      - cicd
+      - istio-system
+      - prueba-pipelines
+  pipelines:
+    namespaces:
+      - prueba-pipelines

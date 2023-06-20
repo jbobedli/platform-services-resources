@@ -1,6 +1,0 @@
-sa:
-  namespace: pipelines-cudc
-  namespace_default: pro-cudc
-
-appsnamespace: 
-  - pro-cudc

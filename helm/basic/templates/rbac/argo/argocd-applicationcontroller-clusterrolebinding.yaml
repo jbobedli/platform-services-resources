@@ -2,6 +2,8 @@ apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
   name: argocd-application-controller-crolebinding
+  annotations:
+    argocd.argoproj.io/sync-wave: "4"
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
@@ -12,22 +14,9 @@ subjects:
     namespace: openshift-gitops
   - kind: ServiceAccount
     name: openshift-gitops-argocd-application-controller
-    namespace: des-cudc
-  - kind: ServiceAccount
-    name: openshift-gitops-argocd-application-controller
-    namespace: cicd
-  - kind: ServiceAccount
-    name: openshift-gitops-argocd-application-controller
     namespace: openshift-operators
+  {{- range $k, $v := .Values.sa.argo.namespaces }}
   - kind: ServiceAccount
     name: openshift-gitops-argocd-application-controller
-    namespace: val-cudc
-  - kind: ServiceAccount
-    name: openshift-gitops-argocd-application-controller
-    namespace: istio-system
-  - kind: ServiceAccount
-    name: openshift-gitops-argocd-application-controller
-    namespace: pipelines
-  - kind: ServiceAccount
-    name: openshift-gitops-argocd-application-controller
-    namespace: pipelines-cudc
+    namespace: {{ $v }}
+  {{- end }}
