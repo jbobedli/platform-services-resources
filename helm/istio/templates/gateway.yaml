@@ -20,7 +20,7 @@ spec:
         credentialName: {{ $gatewayValue.credentialname }}
         mode: SIMPLE
   selector:
-    istio: {{ $gatewayValue.istioselector }}
+    istio: {{ $gatewayValue.istioselector | default "ingressgateway" }}
 ---
 {{- end}}
 {{- end}}

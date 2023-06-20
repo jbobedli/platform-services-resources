@@ -11,15 +11,12 @@ tenants:
           - namePrefix: api-gateway
             host: services-prueba-des.pub.imv-dev.giss-inss.local
             credentialname: router-certs-public
-            istioselector: ingressgateway
           - namePrefix: private-api-gateway
             host: services-prueba-des.pri.imv-dev.giss-inss.local
             credentialname: router-certs-private
-            istioselector: ingressgateway
           - namePrefix: front-gateway
             host: prueba-des.pub.imv-dev.giss-inss.local
             credentialname: router-certs-public
-            istioselector: ingressgateway
         requestAuth:
           enabled: true
           name: jwt-prueba
@@ -33,15 +30,12 @@ tenants:
           - namePrefix: api-gateway
             host: services-prueba-pre.pub.imv-dev.giss-inss.local
             credentialname: router-certs-public
-            istioselector: ingressgateway
           - namePrefix: private-api-gateway
             host: services-prueba-pre.pri.imv-dev.giss-inss.local
             credentialname: router-certs-private
-            istioselector: ingressgateway
           - namePrefix: front-gateway
             host: prueba-pre.pub.imv-dev.giss-inss.local
             credentialname: router-certs-public
-            istioselector: ingressgateway
         requestAuth:
           enabled: true
           name: jwt-prueba
@@ -55,15 +49,12 @@ tenants:
           - namePrefix: api-gateway
             host: services-prueba-uat.pub.imv-dev.giss-inss.local
             credentialname: router-certs-public
-            istioselector: ingressgateway
           - namePrefix: private-api-gateway
             host: services-prueba-uat.pri.imv-dev.giss-inss.local
             credentialname: router-certs-private
-            istioselector: ingressgateway
           - namePrefix: front-gateway
             host: prueba-uat.pub.imv-dev.giss-inss.local
             credentialname: router-certs-public
-            istioselector: ingressgateway
         requestAuth:
           enabled: true
           name: jwt-prueba
