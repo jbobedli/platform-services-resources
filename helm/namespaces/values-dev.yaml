@@ -1,8 +1,9 @@
 secret:
-  name: gitlabbasicauth
+  name: token-tekton-pipe
   data:
-    username: QlpDUjY2NTEK
-    password: elQ5ZWt5eVJlWEQ5aXc5RGJuUXkK
+    pass: bjgtb3NYZU55QVdQXzI0eWFmcVg=
+    token: QlpDUjY2NTE6bjgtb3NYZU55QVdQXzI0eWFmcVg=
+    user: QlpDUjY2NTE=
 
 tenants:
   prueba:
