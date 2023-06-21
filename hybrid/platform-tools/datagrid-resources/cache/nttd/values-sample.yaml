@@ -1,6 +1,0 @@
-caches:
-  - name: getCiudades
-    namespace: namespaceexplicito
-    pars: |-
-      xml incluido
-  - name: getCiudadesDefault    # pars por defecto //namespace indicado por argo

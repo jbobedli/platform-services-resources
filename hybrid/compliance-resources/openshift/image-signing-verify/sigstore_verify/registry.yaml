@@ -1,3 +1,0 @@
-docker:
-  harbor.domain.false:
-    sigstore: https://harbor.domain.false
