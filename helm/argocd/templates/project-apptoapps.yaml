@@ -1,0 +1,26 @@
+{{- range $key, $value := .Values.tenants }}
+{{- if $value.createApplications }}
+# Por cada tenant, recorremos sus projects
+{{- range $clave, $valor := $value.projects }}
+kind: AppProject
+apiVersion: argoproj.io/v1alpha1
+metadata:
+  name: {{ $valor.name }}
+  namespace: openshift-gitops
+spec:
+  description: group for application deployment
+  destinations:
+    - name: in-cluster
+      namespace: openshift-gitops
+      server: 'https://kubernetes.default.svc'
+{{- range $namespace, $namespaceValue := $valor.namespaces }}
+    - name: in-cluster
+      namespace: {{ $namespaceValue }}
+      server: 'https://kubernetes.default.svc'
+{{- end }}
+  sourceRepos:
+  - 'https://gitlab.pro.portal.ss/migration/argo-applications.git'
+---
+{{- end }}
+{{- end }}
+{{- end }}

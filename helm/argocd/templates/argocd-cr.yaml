@@ -57,13 +57,15 @@ spec:
         memory: 512Mi
   rbac:
     policy: |
-      p, role:role-develop, applications, get, {{ .Values.project.name }}/*, allow
-      p, role:role-develop, applications, delete, {{ .Values.project.name }}/*, allow
-      p, role:role-develop, applications, action, {{ .Values.project.name }}/*, allow
-      p, role:role-develop, applications, create, {{ .Values.project.name }}/*, allow
-      p, role:role-develop, applications, update, {{ .Values.project.name }}/*, allow
-      p, role:role-develop, applications, override, {{ .Values.project.name }}/*, allow
-      p, role:role-develop, applications, sync, {{ .Values.project.name }}/*, allow
+      {{- range $key, $value := .Values.rbacPolicy.projects }}      
+      p, role:role-develop, applications, get, {{ $value }}/*, allow
+      p, role:role-develop, applications, delete, {{ $value }}/*, allow
+      p, role:role-develop, applications, action, {{ $value }}/*, allow
+      p, role:role-develop, applications, create, {{ $value }}/*, allow
+      p, role:role-develop, applications, update, {{ $value }}/*, allow
+      p, role:role-develop, applications, override, {{ $value }}/*, allow
+      p, role:role-develop, applications, sync, {{ $value }}/*, allow
+      {{- end }}
       g, backend, role:role-develop
       g, frontend, role:role-develop
       g, framework, role:role-develop

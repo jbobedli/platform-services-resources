@@ -1,0 +1,24 @@
+{{- range $key, $value := .Values.tenants }}
+{{- if $value.createApplications }}
+# Por cada tenant, recorremos sus apps
+{{- range $clave, $valor := $value.projects }}
+{{- range $app, $appValue := $valor.apps }}
+kind: Application
+apiVersion: argoproj.io/v1alpha1
+metadata:
+  name: {{ $appValue.name }}
+  namespace: openshift-gitops
+spec:
+  project: {{ $valor.name }}
+  source:
+    repoURL: 'https://gitlab.pro.portal.ss/migration/argo-applications.git'
+    targetRevision: HEAD
+    path: '{{ $appValue.folder }}'
+  destination:
+    server: 'https://kubernetes.default.svc'
+    namespace: {{ $appValue.namespace }}
+---
+{{- end }}
+{{- end }}
+{{- end }}
+{{- end }}
