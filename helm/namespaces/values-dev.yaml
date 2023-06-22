@@ -33,3 +33,5 @@ tenants:
           enabled: false
       - name: prueba-pipelines
         displayName: Pipelines para el entorno de prueba
+        limitRange:
+          enabled: false
