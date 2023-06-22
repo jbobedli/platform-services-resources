@@ -18,7 +18,7 @@ spec:
       project: platform-gitops
       source:
         repoURL: '{{repoURL}}'
-        targetRevision: HEAD
+        targetRevision: master
         path: 'operators/operator/'
         helm:
           releaseName: otherops

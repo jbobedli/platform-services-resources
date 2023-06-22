@@ -26,7 +26,7 @@ spec:
       project: '{{"{{project}}"}}'
       source:
         repoURL: '{{"{{repoURL}}"}}'
-        targetRevision: HEAD
+        targetRevision: master
         path: 'bootstrap/{{"{{cluster}}"}}/{{"{{appName}}"}}'
       destination:
         server: 'https://kubernetes.default.svc'

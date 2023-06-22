@@ -12,7 +12,7 @@ spec:
   project: {{ $valor.name }}
   source:
     repoURL: 'https://gitlab.pro.portal.ss/migration/argo-applications.git'
-    targetRevision: HEAD
+    targetRevision: master
     path: '{{ $appValue.folder }}'
   destination:
     server: 'https://kubernetes.default.svc'

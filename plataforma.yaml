@@ -23,7 +23,7 @@ spec:
       project: '{{project}}'
       source:
         repoURL: '{{repoURL}}'
-        targetRevision: HEAD
+        targetRevision: master
         path: 'init/'
         helm:
           valueFiles:
