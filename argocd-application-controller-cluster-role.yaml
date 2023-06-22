@@ -149,7 +149,7 @@ rules:
 - apiGroups:
     - project.openshift.io
   resources:
-    - project
+    - projects
   verbs:
     - create
     - update
