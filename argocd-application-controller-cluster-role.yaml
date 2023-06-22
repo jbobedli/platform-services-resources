@@ -146,3 +146,12 @@ rules:
     - cronjobs
   verbs:
     - '*'
+- apiGroups:
+    - project.openshift.io
+  resources:
+    - project
+  verbs:
+    - create
+    - update
+    - patch
+    - delete
