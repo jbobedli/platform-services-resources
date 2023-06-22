@@ -5,6 +5,7 @@
 kind: LimitRange
 apiVersion: v1
 metadata:
+  name: limitRange
   namespace: {{ $valor.name }}
 spec:
   limits:
