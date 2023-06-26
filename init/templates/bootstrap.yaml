@@ -1,3 +1,4 @@
+{{- if $value.createApplications }}
 apiVersion: argoproj.io/v1alpha1
 kind: ApplicationSet
 metadata:
@@ -30,3 +31,4 @@ spec:
         path: 'bootstrap/{{"{{cluster}}"}}/{{"{{appName}}"}}'
       destination:
         server: 'https://kubernetes.default.svc'
+{{- end }}
