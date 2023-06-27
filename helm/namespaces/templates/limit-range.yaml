@@ -1,7 +1,7 @@
 {{- range $key, $value := .Values.tenants }}
 # Por cada tenant, recorremos sus ns
 {{- range $clave, $valor := $value.namespaces }}
-{{- if $valor.limitRange.enabled }}
+{{- if $valor.limitRange }}
 kind: LimitRange
 apiVersion: v1
 metadata:

@@ -6,6 +6,14 @@ secret:
     user: QlpDUjY2NTE=
 
 tenants:
+  iam:
+    namespaces:
+      - name: des-prueba-iam
+        displayName: Entorno de DES IAM prueba
+      - name: pre-prueba-iam
+        displayName: Entorno de PRE IAM prueba
+      - name: uat-prueba-iam
+        displayName: Entorno de UAT IAM prueba
   prueba:
     namespaces:
       - name: des-prueba
@@ -25,13 +33,7 @@ tenants:
                 memory: 400Mi
       - name: pre-prueba
         displayName: Entorno de PRE prueba
-        limitRange:
-          enabled: false
       - name: uat-prueba
         displayName: Entorno de UAT prueba
-        limitRange:
-          enabled: false
       - name: prueba-pipelines
         displayName: Pipelines para el entorno de prueba
-        limitRange:
-          enabled: false
