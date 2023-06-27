@@ -24,3 +24,12 @@ rules:
       - gateways
       - peerauthentications
       - requestauthentication
+  - verbs:
+      - '*'
+    apiGroups:
+      - keycloak.org
+    resources:
+      - keycloak
+      - keycloakrealm
+      - keycloakclient
+      - keycloakuser
