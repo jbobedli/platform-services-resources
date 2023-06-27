@@ -1,10 +1,14 @@
+{{- if .Values.rhsso.enabled}}
+{{- range $key, $value := .Values.rhsso.namespaces }}
 apiVersion: operators.coreos.com/v1
 kind: OperatorGroup
 metadata:
   annotations:
     argocd.argoproj.io/sync-wave: "0"
-  name: {{ .Values.rhsso.namespace | default "iam" }}-rhsso
-  namespace: {{ .Values.rhsso.namespace | default "iam" }}
+  name: {{ $value }}-rhsso
+  namespace: {{ $value }}
 spec:
   targetNamespaces:
-    - {{ .Values.rhsso.namespace | default "iam" }}
+    - {{ $value }}
+{{- end}}
+{{- end}}
