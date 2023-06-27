@@ -161,8 +161,8 @@ rules:
     - keycloak.org
   resources:
     - keycloaks
-    - keycloakrealm
-    - keycloakclient
-    - keycloakuser
+    - keycloakrealms
+    - keycloakclients
+    - keycloakusers
   verbs:
     - '*'
