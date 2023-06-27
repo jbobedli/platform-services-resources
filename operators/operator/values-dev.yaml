@@ -2,8 +2,8 @@ datagrid:
   enabled: false
   namespace: bookinfo
 rhsso:
-  enabled: false
-  namespace: iam
+  enabled: true
+  namespace: des-prueba-iam
 pipelines:
   enabled: false
   channel: pipelines-1.8
