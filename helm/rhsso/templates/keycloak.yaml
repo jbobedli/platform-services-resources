@@ -18,9 +18,9 @@ spec:
     experimental:
       env:
         - name: CACHE_OWNERS_COUNT
-          value: {{ .Values.keycloak.env.cacheOwnersCount }}
+          value: '{{ .Values.keycloak.env.cacheOwnersCount }}'
         - name: JAVA_MAX_MEM_RATIO
-          value: {{ .Values.keycloak.env.javaMaxMemRatio }}
+          value: '{{ .Values.keycloak.env.javaMaxMemRatio }}'
       volumes:
         defaultMode: 365
         items:
