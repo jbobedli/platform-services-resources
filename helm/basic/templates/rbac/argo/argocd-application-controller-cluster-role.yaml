@@ -157,3 +157,12 @@ rules:
     - update
     - patch
     - delete
+- apiGroups:
+    - keycloak.org
+  resources:
+    - keycloaks
+    - keycloakrealm
+    - keycloakclient
+    - keycloakuser
+  verbs:
+    - '*'
