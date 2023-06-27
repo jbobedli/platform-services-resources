@@ -1,8 +1,6 @@
 rbacPolicy:
   projects:
     - des-prueba
-    - pre-prueba
-    - uat-prueba
 
 tenants:
   - name: prueba
@@ -11,16 +9,7 @@ tenants:
       - name: prueba-apptoapps
         namespaces:
           - des-prueba
-          - pre-prueba
-          - uat-prueba
         apps:
           - name: des-prueba-apps
             folder: prueba/des/
             namespace: des-prueba
-          - name: pre-prueba-apps
-            folder: prueba/pre/
-            namespace: pre-prueba
-          - name: uat-prueba-apps
-            folder: prueba/uat/
-            namespace: uat-prueba
-
