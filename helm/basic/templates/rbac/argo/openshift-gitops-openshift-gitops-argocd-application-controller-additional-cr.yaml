@@ -29,7 +29,7 @@ rules:
     apiGroups:
       - keycloak.org
     resources:
-      - keycloak
+      - keycloaks
       - keycloakrealm
       - keycloakclient
       - keycloakuser
