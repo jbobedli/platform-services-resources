@@ -1,3 +1,4 @@
+{{- if .Values.keycloak }}
 kind: ConfigMap
 apiVersion: v1
 metadata:
@@ -18,3 +19,4 @@ data:
     /home/jboss/.m2/repository/ >> /tmp/preconfigure.log 2>&1
 
     ls -al /home/jboss/.m2/repository >> /tmp/preconfigure.log 2>&1
+{{- end }}
