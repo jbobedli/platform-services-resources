@@ -1,0 +1,502 @@
+selectorApp: sso
+#Configuracion del realm
+realm:
+  id: tbdp
+  name: tbdp
+  displayName: Tbdp Realm
+  enabled: true
+  roles:
+    - id: App
+      name: App
+#Configuracion de clientes
+clients:
+  - clientId: tbdp-appian
+    name: tbdp-appian
+    rootUrl: http://localhost
+    baseUrl: http://localhost
+    surrogateAuthRequired: false
+    enabled: true
+    clientAuthenticatorType: client-secret
+    secret: 5a67458e-0610-4562-8530-122cd2cd1a45
+    redirectUris:
+        - http://localhost/*
+    webOrigins:
+        - http://localhost
+    notBefore: 0
+    bearerOnly: false
+    consentRequired: false
+    standardFlowEnabled: true
+    implicitFlowEnabled: false
+    directAccessGrantsEnabled: true
+    serviceAccountsEnabled: false
+    publicClient: false
+    #  description:  Keycloak client
+    frontchannelLogout: false
+    protocol: openid-connect
+    attributes:
+        access.token.lifespan: '"79200"'
+        use.refresh.tokens: '"true"'
+        backchannel.logout.session.required: '"true"'
+        client.session.max.lifespan: '"79200"'
+        client.session.idle.timeout: '"79200"'
+    fullScopeAllowed: true
+    nodeReRegistrationTimeout: -1
+    protocolMappers:
+      - name: giss-tenant
+        protocol: openid-connect
+        protocolMapper: oidc-hardcoded-claim-mapper
+        consentRequired: false
+        config:
+          claim.value: tbdp
+          userinfo.token.claim: '"true"'
+          id.token.claim: '"true"'
+          access.token.claim: '"true"'
+          claim.name: tenant
+          jsonType.label: String
+          access.tokenResponse.claim: '"false"'
+      - name: giss-audit
+        protocol: openid-connect
+        protocolMapper: oidc-usermodel-attribute-mapper
+        consentRequired: false
+        config:
+          userinfo.token.claim: '"true"'
+          user.attribute: audit-data
+          id.token.claim: '"true"'
+          access.token.claim: '"true"'
+          claim.name: audit
+          jsonType.label: String
+      - name: giss-type
+        protocol: openid-connect
+        protocolMapper: oidc-usermodel-attribute-mapper
+        consentRequired: false
+        config:
+          userinfo.token.claim: '"true"'
+          user.attribute: giss-type
+          id.token.claim: '"true"'
+          access.token.claim: '"true"'
+          claim.name: giss-type
+          jsonType.label: String
+      - name: giss-roles
+        protocol: openid-connect
+        protocolMapper: oidc-usermodel-realm-role-mapper
+        consentRequired: false
+        config:
+          multivalued: '"true"'
+          userinfo.token.claim: '"true"'
+          id.token.claim: '"true"'
+          access.token.claim: '"true"'
+          claim.name: roles
+          jsonType.label: String
+      - name: giss-proteccionespecial
+        protocol: openid-connect
+        protocolMapper: oidc-usermodel-attribute-mapper
+        consentRequired: false
+        config:
+          userinfo.token.claim: '"true"'
+          user.attribute: proteccionEspecial
+          id.token.claim: '"true"'
+          access.token.claim: '"true"'
+          claim.name: proteccionEspecial
+          jsonType.label: String
+      - name: giss-ambitos
+        protocol: openid-connect
+        protocolMapper: oidc-usermodel-attribute-mapper
+        consentRequired: false
+        config:
+          userinfo.token.claim: '"true"'
+          user.attribute: ambitos
+          id.token.claim: '"true"'
+          access.token.claim: '"true"'
+          claim.name: ambitos
+          jsonType.label: String 
+    defaultClientScopes:
+      - email
+      - profile
+      - roles
+      - web-origins
+    optionalClientScopes:
+      - address
+      - microprofile-jwt
+      - offline_access
+      - phone
+  - clientId: tbdp-apps
+    name: tbdp-apps
+    rootUrl: http://localhost
+    baseUrl: http://localhost
+    surrogateAuthRequired: false
+    enabled: true
+    clientAuthenticatorType: client-secret
+    secret: ae5513f8-771d-43f3-9e59-bcef2bbfea01
+    redirectUris:
+      - http://localhost/*
+    webOrigins:
+      - http://localhost
+    notBefore: 0
+    bearerOnly: false
+    consentRequired: false
+    standardFlowEnabled: true
+    implicitFlowEnabled: false
+    directAccessGrantsEnabled: true
+    serviceAccountsEnabled: false
+    publicClient: false
+    #  description:  Keycloak client
+    frontchannelLogout: false
+    protocol: openid-connect
+    attributes:
+      access.token.lifespan: '"1800"'
+      use.refresh.tokens: '"true"'
+      backchannel.logout.session.required: '"true"'
+      client.session.max.lifespan: '"1800"'
+      client.session.idle.timeout: '"1800"'
+    fullScopeAllowed: true
+    nodeReRegistrationTimeout: -1
+    protocolMappers:
+      - name: giss-tenant
+        protocol: openid-connect
+        protocolMapper: oidc-hardcoded-claim-mapper
+        consentRequired: false
+        config:
+          claim.value: tbdp
+          userinfo.token.claim: '"true"'
+          id.token.claim: '"true"'
+          access.token.claim: '"true"'
+          claim.name: tenant
+          jsonType.label: String
+          access.tokenResponse.claim: '"false"'
+      - name: giss-audit
+        protocol: openid-connect
+        protocolMapper: oidc-usermodel-attribute-mapper
+        consentRequired: false
+        config:
+          userinfo.token.claim: '"true"'
+          user.attribute: audit-data
+          id.token.claim: '"true"'
+          access.token.claim: '"true"'
+          claim.name: audit
+          jsonType.label: String
+      - name: giss-type
+        protocol: openid-connect
+        protocolMapper: oidc-usermodel-attribute-mapper
+        consentRequired: false
+        config:
+          userinfo.token.claim: '"true"'
+          user.attribute: giss-type
+          id.token.claim: '"true"'
+          access.token.claim: '"true"'
+          claim.name: giss-type
+          jsonType.label: String
+      - name: giss-roles
+        protocol: openid-connect
+        protocolMapper: oidc-usermodel-realm-role-mapper
+        consentRequired: false
+        config:
+          multivalued: '"true"'
+          userinfo.token.claim: '"true"'
+          id.token.claim: '"true"'
+          access.token.claim: '"true"'
+          claim.name: roles
+          jsonType.label: String
+    defaultClientScopes:
+      - email
+      - profile
+      - roles
+      - web-origins
+    optionalClientScopes:
+      - address
+      - microprofile-jwt
+      - offline_access
+      - phone
+  - clientId: tbdp-batch
+    name: tbdp-batch
+    rootUrl: http://localhost
+    baseUrl: http://localhost
+    surrogateAuthRequired: false
+    enabled: true
+    clientAuthenticatorType: client-secret
+    secret: add2e184-a929-4d4f-9497-602488b5b72a
+    redirectUris:
+      - http://localhost/*
+    webOrigins:
+      - http://localhost
+    notBefore: 0
+    bearerOnly: false
+    consentRequired: false
+    standardFlowEnabled: true
+    implicitFlowEnabled: false
+    directAccessGrantsEnabled: true
+    serviceAccountsEnabled: false
+    publicClient: false
+    #  description:  Keycloak client
+    frontchannelLogout: false
+    protocol: openid-connect
+    attributes:
+      access.token.lifespan: '"28800"'
+      use.refresh.tokens: '"true"'
+      backchannel.logout.session.required: '"true"'
+      client.session.max.lifespan: '"28800"'
+      client.session.idle.timeout: '"28800"'
+    fullScopeAllowed: true
+    nodeReRegistrationTimeout: -1
+    protocolMappers:
+      - name: proteccionEspecial
+        protocol: openid-connect
+        protocolMapper: oidc-hardcoded-claim-mapper
+        consentRequired: false
+        config:
+          user.attribute: proteccionEspecial
+          userinfo.token.claim: '"true"'
+          id.token.claim: '"true"'
+          access.token.claim: '"true"'
+          claim.name: proteccionEspecial
+          jsonType.label: String
+      - name: giss-tenant
+        protocol: openid-connect
+        protocolMapper: oidc-hardcoded-claim-mapper
+        consentRequired: false
+        config:
+          claim.value: tbdp
+          userinfo.token.claim: '"true"'
+          id.token.claim: '"true"'
+          access.token.claim: '"true"'
+          claim.name: tenant
+          jsonType.label: String
+          access.tokenResponse.claim: '"false"'
+      - name: giss-audit
+        protocol: openid-connect
+        protocolMapper: oidc-usermodel-attribute-mapper
+        consentRequired: false
+        config:
+          userinfo.token.claim: '"true"'
+          user.attribute: audit-data
+          id.token.claim: '"true"'
+          access.token.claim: '"true"'
+          claim.name: audit
+          jsonType.label: String
+      - name: giss-type
+        protocol: openid-connect
+        protocolMapper: oidc-usermodel-attribute-mapper
+        consentRequired: false
+        config:
+          userinfo.token.claim: '"true"'
+          user.attribute: giss-type
+          id.token.claim: '"true"'
+          access.token.claim: '"true"'
+          claim.name: giss-type
+          jsonType.label: String
+      - name: giss-roles
+        protocol: openid-connect
+        protocolMapper: oidc-usermodel-realm-role-mapper
+        consentRequired: false
+        config:
+          multivalued: '"true"'
+          userinfo.token.claim: '"true"'
+          id.token.claim: '"true"'
+          access.token.claim: '"true"'
+          claim.name: roles
+          jsonType.label: String
+    defaultClientScopes:
+      - email
+      - profile
+      - roles
+      - web-origins
+    optionalClientScopes:
+      - address
+      - microprofile-jwt
+      - offline_access
+      - phone
+  - clientId: tbdp-ciudadano
+    name: tbdp-ciudadano
+    rootUrl: http://localhost
+    baseUrl: http://localhost
+    surrogateAuthRequired: false
+    enabled: true
+    clientAuthenticatorType: client-secret
+    secret: b26fc14a-080c-4ff1-a5e5-4202946a717b
+    redirectUris:
+      - http://localhost/*
+    webOrigins:
+      - http://localhost
+    notBefore: 0
+    bearerOnly: false
+    consentRequired: false
+    standardFlowEnabled: true
+    implicitFlowEnabled: false
+    directAccessGrantsEnabled: true
+    serviceAccountsEnabled: false
+    publicClient: false
+    #  description:  Keycloak client
+    frontchannelLogout: false
+    protocol: openid-connect
+    attributes:
+      access.token.lifespan: '"7200"'
+      use.refresh.tokens: '"true"'
+      backchannel.logout.session.required: '"true"'
+      client.session.max.lifespan: '"7200"'
+      client.session.idle.timeout: '"7200"'
+    fullScopeAllowed: true
+    nodeReRegistrationTimeout: -1
+    protocolMappers:
+      - name: giss-tenant
+        protocol: openid-connect
+        protocolMapper: oidc-hardcoded-claim-mapper
+        consentRequired: false
+        config:
+          claim.value: tbdp
+          userinfo.token.claim: '"true"'
+          id.token.claim: '"true"'
+          access.token.claim: '"true"'
+          claim.name: tenant
+          jsonType.label: String
+          access.tokenResponse.claim: '"false"'
+      - name: giss-audit
+        protocol: openid-connect
+        protocolMapper: oidc-usermodel-attribute-mapper
+        consentRequired: false
+        config:
+          userinfo.token.claim: '"true"'
+          user.attribute: audit-data
+          id.token.claim: '"true"'
+          access.token.claim: '"true"'
+          claim.name: audit
+          jsonType.label: String
+      - name: giss-type
+        protocol: openid-connect
+        protocolMapper: oidc-usermodel-attribute-mapper
+        consentRequired: false
+        config:
+          userinfo.token.claim: '"true"'
+          user.attribute: giss-type
+          id.token.claim: '"true"'
+          access.token.claim: '"true"'
+          claim.name: giss-type
+          jsonType.label: String
+      - name: giss-roles-saml
+        protocol: openid-connect
+        protocolMapper: oidc-usermodel-attribute-mapper
+        consentRequired: false
+        config:
+          userinfo.token.claim: '"true"'
+          user.attribute: saml-roles
+          id.token.claim: '"true"'
+          access.token.claim: '"true"'
+          claim.name: saml-roles
+          jsonType.label: String            
+      - name: giss-roles
+        protocol: openid-connect
+        protocolMapper: oidc-usermodel-realm-role-mapper
+        consentRequired: false
+        config:
+          multivalued: '"true"'
+          userinfo.token.claim: '"true"'
+          id.token.claim: '"true"'
+          access.token.claim: '"true"'
+          claim.name: roles
+          jsonType.label: String
+    defaultClientScopes:
+      - email
+      - profile
+      - roles
+      - web-origins
+    optionalClientScopes:
+      - address
+      - microprofile-jwt
+      - offline_access
+      - phone
+  - clientId: tbdp-pentaho
+    name: tbdp-pentaho
+    rootUrl: http://localhost
+    baseUrl: http://localhost
+    surrogateAuthRequired: false
+    enabled: true
+    clientAuthenticatorType: client-secret
+    secret: bf0fdb2e-6c98-4df5-b099-607f49d72546
+    redirectUris:
+      - http://localhost/*
+    webOrigins:
+      - http://localhost
+    notBefore: 0
+    bearerOnly: false
+    consentRequired: false
+    standardFlowEnabled: true
+    implicitFlowEnabled: false
+    directAccessGrantsEnabled: true
+    serviceAccountsEnabled: false
+    publicClient: false
+    #  description:  Keycloak client
+    frontchannelLogout: false
+    protocol: openid-connect
+    attributes:
+      access.token.lifespan: '"28800"'
+      use.refresh.tokens: '"true"'
+      backchannel.logout.session.required: '"true"'
+      client.session.max.lifespan: '"28800"'
+      client.session.idle.timeout: '"28800"'
+    fullScopeAllowed: true
+    nodeReRegistrationTimeout: -1
+    protocolMappers:
+      - name: proteccionEspecial
+        protocol: openid-connect
+        protocolMapper: oidc-hardcoded-claim-mapper
+        consentRequired: false
+        config:
+          user.attribute: proteccionEspecial
+          userinfo.token.claim: '"true"'
+          id.token.claim: '"true"'
+          access.token.claim: '"true"'
+          claim.name: proteccionEspecial
+          jsonType.label: String
+      - name: giss-tenant
+        protocol: openid-connect
+        protocolMapper: oidc-hardcoded-claim-mapper
+        consentRequired: false
+        config:
+          claim.value: tbdp
+          userinfo.token.claim: '"true"'
+          id.token.claim: '"true"'
+          access.token.claim: '"true"'
+          claim.name: tenant
+          jsonType.label: String
+          access.tokenResponse.claim: '"false"'
+      - name: giss-audit
+        protocol: openid-connect
+        protocolMapper: oidc-usermodel-attribute-mapper
+        consentRequired: false
+        config:
+          userinfo.token.claim: '"true"'
+          user.attribute: audit-data
+          id.token.claim: '"true"'
+          access.token.claim: '"true"'
+          claim.name: audit
+          jsonType.label: String
+      - name: giss-type
+        protocol: openid-connect
+        protocolMapper: oidc-usermodel-attribute-mapper
+        consentRequired: false
+        config:
+          userinfo.token.claim: '"true"'
+          user.attribute: giss-type
+          id.token.claim: '"true"'
+          access.token.claim: '"true"'
+          claim.name: giss-type
+          jsonType.label: String
+      - name: giss-roles
+        protocol: openid-connect
+        protocolMapper: oidc-usermodel-realm-role-mapper
+        consentRequired: false
+        config:
+          multivalued: '"true"'
+          userinfo.token.claim: '"true"'
+          id.token.claim: '"true"'
+          access.token.claim: '"true"'
+          claim.name: roles
+          jsonType.label: String
+    defaultClientScopes:
+      - email
+      - profile
+      - roles
+      - web-origins
+    optionalClientScopes:
+      - address
+      - microprofile-jwt
+      - offline_access
+      - phone

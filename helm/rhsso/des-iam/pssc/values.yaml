@@ -1,0 +1,519 @@
+selectorApp: sso
+#Configuracion del realm
+realm:
+  id: pssc
+  name: pssc
+  displayName: Pssc Realm
+  enabled: true
+  roles:
+    - id: App
+      name: App
+#Configuracion de clientes
+clients:
+  - clientId: pssc-appian
+    name: pssc-appian
+    rootUrl: http://localhost
+    baseUrl: http://localhost
+    surrogateAuthRequired: false
+    enabled: true
+    clientAuthenticatorType: client-secret
+    secret: 7b3758fb-c383-4e3f-b8fc-f0207a571d46
+    redirectUris:
+        - http://localhost/*
+    webOrigins:
+        - http://localhost
+    notBefore: 0
+    bearerOnly: false
+    consentRequired: false
+    standardFlowEnabled: true
+    implicitFlowEnabled: false
+    directAccessGrantsEnabled: true
+    serviceAccountsEnabled: false
+    publicClient: false
+    #  description:  Keycloak client
+    frontchannelLogout: false
+    protocol: openid-connect
+    attributes:
+        access.token.lifespan: '"79200"'
+        use.refresh.tokens: '"true"'
+        backchannel.logout.session.required: '"true"'
+        client.session.max.lifespan: '"79200"'
+        client.session.idle.timeout: '"79200"'
+    fullScopeAllowed: true
+    nodeReRegistrationTimeout: -1
+    protocolMappers:
+      - name: giss-tenant
+        protocol: openid-connect
+        protocolMapper: oidc-hardcoded-claim-mapper
+        consentRequired: false
+        config:
+          claim.value: pssc
+          userinfo.token.claim: '"true"'
+          id.token.claim: '"true"'
+          access.token.claim: '"true"'
+          claim.name: tenant
+          jsonType.label: String
+          access.tokenResponse.claim: '"false"'
+      - name: giss-audit
+        protocol: openid-connect
+        protocolMapper: oidc-usermodel-attribute-mapper
+        consentRequired: false
+        config:
+          userinfo.token.claim: '"true"'
+          user.attribute: audit-data
+          id.token.claim: '"true"'
+          access.token.claim: '"true"'
+          claim.name: audit
+          jsonType.label: String
+      - name: giss-type
+        protocol: openid-connect
+        protocolMapper: oidc-usermodel-attribute-mapper
+        consentRequired: false
+        config:
+          userinfo.token.claim: '"true"'
+          user.attribute: giss-type
+          id.token.claim: '"true"'
+          access.token.claim: '"true"'
+          claim.name: giss-type
+          jsonType.label: String
+      - name: giss-roles
+        protocol: openid-connect
+        protocolMapper: oidc-usermodel-realm-role-mapper
+        consentRequired: false
+        config:
+          multivalued: '"true"'
+          userinfo.token.claim: '"true"'
+          id.token.claim: '"true"'
+          access.token.claim: '"true"'
+          claim.name: roles
+          jsonType.label: String
+      - name: giss-proteccionespecial
+        protocol: openid-connect
+        protocolMapper: oidc-usermodel-attribute-mapper
+        consentRequired: false
+        config:
+          userinfo.token.claim: '"true"'
+          user.attribute: proteccionEspecial
+          id.token.claim: '"true"'
+          access.token.claim: '"true"'
+          claim.name: proteccionEspecial
+          jsonType.label: String
+      - name: giss-ambitos
+        protocol: openid-connect
+        protocolMapper: oidc-usermodel-attribute-mapper
+        consentRequired: false
+        config:
+          userinfo.token.claim: '"true"'
+          user.attribute: ambitos
+          id.token.claim: '"true"'
+          access.token.claim: '"true"'
+          claim.name: ambitos
+          jsonType.label: String 
+    defaultClientScopes:
+      - email
+      - profile
+      - roles
+      - web-origins
+    optionalClientScopes:
+      - address
+      - microprofile-jwt
+      - offline_access
+      - phone
+  - clientId: pssc-apps
+    name: pssc-apps
+    rootUrl: http://localhost
+    baseUrl: http://localhost
+    surrogateAuthRequired: false
+    enabled: true
+    clientAuthenticatorType: client-secret
+    secret: 7b8baca1-e98c-436a-ae1b-1e48dfb1bdb9
+    redirectUris:
+      - http://localhost/*
+    webOrigins:
+      - http://localhost
+    notBefore: 0
+    bearerOnly: false
+    consentRequired: false
+    standardFlowEnabled: true
+    implicitFlowEnabled: false
+    directAccessGrantsEnabled: true
+    serviceAccountsEnabled: false
+    publicClient: false
+    #  description:  Keycloak client
+    frontchannelLogout: false
+    protocol: openid-connect
+    attributes:
+      access.token.lifespan: '"1800"'
+      use.refresh.tokens: '"true"'
+      backchannel.logout.session.required: '"true"'
+      client.session.max.lifespan: '"1800"'
+      client.session.idle.timeout: '"1800"'
+    fullScopeAllowed: true
+    nodeReRegistrationTimeout: -1
+    protocolMappers:
+      - name: giss-tenant
+        protocol: openid-connect
+        protocolMapper: oidc-hardcoded-claim-mapper
+        consentRequired: false
+        config:
+          claim.value: pssc
+          userinfo.token.claim: '"true"'
+          id.token.claim: '"true"'
+          access.token.claim: '"true"'
+          claim.name: tenant
+          jsonType.label: String
+          access.tokenResponse.claim: '"false"'
+      - name: giss-audit
+        protocol: openid-connect
+        protocolMapper: oidc-usermodel-attribute-mapper
+        consentRequired: false
+        config:
+          userinfo.token.claim: '"true"'
+          user.attribute: audit-data
+          id.token.claim: '"true"'
+          access.token.claim: '"true"'
+          claim.name: audit
+          jsonType.label: String
+      - name: giss-type
+        protocol: openid-connect
+        protocolMapper: oidc-usermodel-attribute-mapper
+        consentRequired: false
+        config:
+          userinfo.token.claim: '"true"'
+          user.attribute: giss-type
+          id.token.claim: '"true"'
+          access.token.claim: '"true"'
+          claim.name: giss-type
+          jsonType.label: String
+      - name: giss-roles
+        protocol: openid-connect
+        protocolMapper: oidc-usermodel-realm-role-mapper
+        consentRequired: false
+        config:
+          multivalued: '"true"'
+          userinfo.token.claim: '"true"'
+          id.token.claim: '"true"'
+          access.token.claim: '"true"'
+          claim.name: roles
+          jsonType.label: String
+    defaultClientScopes:
+      - email
+      - profile
+      - roles
+      - web-origins
+    optionalClientScopes:
+      - address
+      - microprofile-jwt
+      - offline_access
+      - phone
+  - clientId: pssc-batch
+    name: pssc-batch
+    rootUrl: http://localhost
+    baseUrl: http://localhost
+    surrogateAuthRequired: false
+    enabled: true
+    clientAuthenticatorType: client-secret
+    secret: 84088560-6405-4259-8cb7-99cfbe6226d0
+    redirectUris:
+      - http://localhost/*
+    webOrigins:
+      - http://localhost
+    notBefore: 0
+    bearerOnly: false
+    consentRequired: false
+    standardFlowEnabled: true
+    implicitFlowEnabled: false
+    directAccessGrantsEnabled: true
+    serviceAccountsEnabled: false
+    publicClient: false
+    #  description:  Keycloak client
+    frontchannelLogout: false
+    protocol: openid-connect
+    attributes:
+      access.token.lifespan: '"28800"'
+      use.refresh.tokens: '"true"'
+      backchannel.logout.session.required: '"true"'
+      client.session.max.lifespan: '"28800"'
+      client.session.idle.timeout: '"28800"'
+    fullScopeAllowed: true
+    nodeReRegistrationTimeout: -1
+    protocolMappers:
+      - name: proteccionEspecial
+        protocol: openid-connect
+        protocolMapper: oidc-hardcoded-claim-mapper
+        consentRequired: false
+        config:
+          user.attribute: proteccionEspecial
+          userinfo.token.claim: '"true"'
+          id.token.claim: '"true"'
+          access.token.claim: '"true"'
+          claim.name: proteccionEspecial
+          jsonType.label: String
+      - name: giss-tenant
+        protocol: openid-connect
+        protocolMapper: oidc-hardcoded-claim-mapper
+        consentRequired: false
+        config:
+          claim.value: pssc
+          userinfo.token.claim: '"true"'
+          id.token.claim: '"true"'
+          access.token.claim: '"true"'
+          claim.name: tenant
+          jsonType.label: String
+          access.tokenResponse.claim: '"false"'
+      - name: giss-audit
+        protocol: openid-connect
+        protocolMapper: oidc-usermodel-attribute-mapper
+        consentRequired: false
+        config:
+          userinfo.token.claim: '"true"'
+          user.attribute: audit-data
+          id.token.claim: '"true"'
+          access.token.claim: '"true"'
+          claim.name: audit
+          jsonType.label: String
+      - name: giss-type
+        protocol: openid-connect
+        protocolMapper: oidc-usermodel-attribute-mapper
+        consentRequired: false
+        config:
+          userinfo.token.claim: '"true"'
+          user.attribute: giss-type
+          id.token.claim: '"true"'
+          access.token.claim: '"true"'
+          claim.name: giss-type
+          jsonType.label: String
+      - name: giss-roles
+        protocol: openid-connect
+        protocolMapper: oidc-usermodel-realm-role-mapper
+        consentRequired: false
+        config:
+          multivalued: '"true"'
+          userinfo.token.claim: '"true"'
+          id.token.claim: '"true"'
+          access.token.claim: '"true"'
+          claim.name: roles
+          jsonType.label: String
+    defaultClientScopes:
+      - email
+      - profile
+      - roles
+      - web-origins
+    optionalClientScopes:
+      - address
+      - microprofile-jwt
+      - offline_access
+      - phone
+  - clientId: pssc-ciudadano
+    name: pssc-ciudadano
+    rootUrl: http://localhost
+    baseUrl: http://localhost
+    surrogateAuthRequired: false
+    enabled: true
+    clientAuthenticatorType: client-secret
+    secret: d45cea62-c971-4884-a637-7ec39d74dd1b
+    redirectUris:
+      - http://localhost/*
+    webOrigins:
+      - http://localhost
+    notBefore: 0
+    bearerOnly: false
+    consentRequired: false
+    standardFlowEnabled: true
+    implicitFlowEnabled: false
+    directAccessGrantsEnabled: true
+    serviceAccountsEnabled: false
+    publicClient: false
+    #  description:  Keycloak client
+    frontchannelLogout: false
+    protocol: openid-connect
+    attributes:
+      access.token.lifespan: '"7200"'
+      use.refresh.tokens: '"true"'
+      backchannel.logout.session.required: '"true"'
+      client.session.max.lifespan: '"7200"'
+      client.session.idle.timeout: '"7200"'
+    fullScopeAllowed: true
+    nodeReRegistrationTimeout: -1
+    protocolMappers:
+      - name: giss-tenant
+        protocol: openid-connect
+        protocolMapper: oidc-hardcoded-claim-mapper
+        consentRequired: false
+        config:
+          claim.value: pssc
+          userinfo.token.claim: '"true"'
+          id.token.claim: '"true"'
+          access.token.claim: '"true"'
+          claim.name: tenant
+          jsonType.label: String
+          access.tokenResponse.claim: '"false"'
+      - name: giss-audit
+        protocol: openid-connect
+        protocolMapper: oidc-usermodel-attribute-mapper
+        consentRequired: false
+        config:
+          userinfo.token.claim: '"true"'
+          user.attribute: audit-data
+          id.token.claim: '"true"'
+          access.token.claim: '"true"'
+          claim.name: audit
+          jsonType.label: String
+      - name: giss-type
+        protocol: openid-connect
+        protocolMapper: oidc-usermodel-attribute-mapper
+        consentRequired: false
+        config:
+          userinfo.token.claim: '"true"'
+          user.attribute: giss-type
+          id.token.claim: '"true"'
+          access.token.claim: '"true"'
+          claim.name: giss-type
+          jsonType.label: String
+      - name: giss-roles-saml
+        protocol: openid-connect
+        protocolMapper: oidc-usermodel-attribute-mapper
+        consentRequired: false
+        config:
+          userinfo.token.claim: '"true"'
+          user.attribute: saml-roles
+          id.token.claim: '"true"'
+          access.token.claim: '"true"'
+          claim.name: saml-roles
+          jsonType.label: String            
+      - name: giss-roles
+        protocol: openid-connect
+        protocolMapper: oidc-usermodel-realm-role-mapper
+        consentRequired: false
+        config:
+          multivalued: '"true"'
+          userinfo.token.claim: '"true"'
+          id.token.claim: '"true"'
+          access.token.claim: '"true"'
+          claim.name: roles
+          jsonType.label: String
+    defaultClientScopes:
+      - email
+      - profile
+      - roles
+      - web-origins
+    optionalClientScopes:
+      - address
+      - microprofile-jwt
+      - offline_access
+      - phone
+  - clientId: pssc-pentaho
+    name: pssc-pentaho
+    rootUrl: http://localhost
+    baseUrl: http://localhost
+    surrogateAuthRequired: false
+    enabled: true
+    clientAuthenticatorType: client-secret
+    secret: 26415ba7-53f9-45c3-b5d4-1bae30de409a
+    redirectUris:
+      - http://localhost/*
+    webOrigins:
+      - http://localhost
+    notBefore: 0
+    bearerOnly: false
+    consentRequired: false
+    standardFlowEnabled: true
+    implicitFlowEnabled: false
+    directAccessGrantsEnabled: true
+    serviceAccountsEnabled: false
+    publicClient: false
+    #  description:  Keycloak client
+    frontchannelLogout: false
+    protocol: openid-connect
+    attributes:
+      access.token.lifespan: '"28800"'
+      use.refresh.tokens: '"true"'
+      backchannel.logout.session.required: '"true"'
+      client.session.max.lifespan: '"28800"'
+      client.session.idle.timeout: '"28800"'
+    fullScopeAllowed: true
+    nodeReRegistrationTimeout: -1
+    protocolMappers:
+      - name: proteccionEspecial
+        protocol: openid-connect
+        protocolMapper: oidc-hardcoded-claim-mapper
+        consentRequired: false
+        config:
+          user.attribute: proteccionEspecial
+          userinfo.token.claim: '"true"'
+          id.token.claim: '"true"'
+          access.token.claim: '"true"'
+          claim.name: proteccionEspecial
+          jsonType.label: String
+      - name: giss-tenant
+        protocol: openid-connect
+        protocolMapper: oidc-hardcoded-claim-mapper
+        consentRequired: false
+        config:
+          claim.value: pssc
+          userinfo.token.claim: '"true"'
+          id.token.claim: '"true"'
+          access.token.claim: '"true"'
+          claim.name: tenant
+          jsonType.label: String
+          access.tokenResponse.claim: '"false"'
+      - name: giss-audit
+        protocol: openid-connect
+        protocolMapper: oidc-usermodel-attribute-mapper
+        consentRequired: false
+        config:
+          userinfo.token.claim: '"true"'
+          user.attribute: audit-data
+          id.token.claim: '"true"'
+          access.token.claim: '"true"'
+          claim.name: audit
+          jsonType.label: String
+      - name: giss-type
+        protocol: openid-connect
+        protocolMapper: oidc-usermodel-attribute-mapper
+        consentRequired: false
+        config:
+          userinfo.token.claim: '"true"'
+          user.attribute: giss-type
+          id.token.claim: '"true"'
+          access.token.claim: '"true"'
+          claim.name: giss-type
+          jsonType.label: String
+      - name: giss-roles
+        protocol: openid-connect
+        protocolMapper: oidc-usermodel-realm-role-mapper
+        consentRequired: false
+        config:
+          multivalued: '"true"'
+          userinfo.token.claim: '"true"'
+          id.token.claim: '"true"'
+          access.token.claim: '"true"'
+          claim.name: roles
+          jsonType.label: String
+    defaultClientScopes:
+      - email
+      - profile
+      - roles
+      - web-origins
+    optionalClientScopes:
+      - address
+      - microprofile-jwt
+      - offline_access
+      - phone
+#Configuracion de usuarios
+users:
+  - username: pssc-pssccore
+    enabled: true
+    emailVerified: false
+    attributes:
+      audit-data:
+        - '{"ip":"127.0.0.1","dni":"pssc-pssccore","departamento":"AppAuth","idCiudadano":"null","tipoToken":"APLICATIVO"}'
+      roles: 
+        - '"null"'
+    credentials:
+      type: password
+      value: pssc-pssccore
+      temporary: false
+    roles:
+      - App
+  

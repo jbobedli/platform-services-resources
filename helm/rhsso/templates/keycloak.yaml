@@ -1,0 +1,35 @@
+{{- if .Values.keycloak }}
+kind: Keycloak
+apiVersion: keycloak.org/v1alpha1
+metadata:
+  name: {{ .Values.keycloak.name }}
+  labels:
+    app: {{ .Values.keycloak.app }}
+  annotations:
+    argocd.argoproj.io/sync-wave: "1"
+spec:
+  extensions:
+    - >-
+      https://github.com/aerogear/keycloak-metrics-spi/releases/download/1.0.4/keycloak-metrics-spi-1.0.4.jar
+  externalAccess:
+    enabled: {{ .Values.keycloak.externalAccess }}
+  instances: {{ .Values.keycloak.instances }}
+  keycloakDeploymentSpec:
+    experimental:
+      env:
+        - name: CACHE_OWNERS_COUNT
+          value: {{ .Values.keycloak.env.cacheOwnersCount }}
+        - name: JAVA_MAX_MEM_RATIO
+          value: {{ .Values.keycloak.env.javaMaxMemRatio }}
+      volumes:
+        defaultMode: 365
+        items:
+          - configMaps:
+              - extensions-script
+            mountPath: /opt/eap/extensions
+            name: extensions-script
+    imagePullPolicy: Always
+    resources:
+      {{- toYaml .Values.keycloak.resources | nindent 6 }}
+  profile: {{ .Values.keycloak.profile }}
+{{- end }}
