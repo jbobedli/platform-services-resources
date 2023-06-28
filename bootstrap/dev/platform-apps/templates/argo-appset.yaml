@@ -5,23 +5,32 @@ metadata:
   name: argocd-appset
   namespace: openshift-gitops
 spec:
+  generators:
+    - list:
+        elements:
+          - cluster: dev
+            url: https://kubernetes.default.svc
+            repoURL: 'https://gitlab.pro.portal.ss/migration/argo-platform'
+            appName: argocd
+            targetNamespace: openshift-gitops
+            project: platform-gitops
   template:
     metadata:
-      name: argocd-dev
+      name: '{{"{{appName}}"}}-{{"{{cluster}}"}}'
     spec:
       #      syncPolicy:
       #        automated:
       #          prune: true
       #          selfHeal: true
-      project: platform-gitops
+      project: '{{"{{project}}"}}'
       source:
-        repoURL: https://gitlab.pro.portal.ss/migration/argo-platform
+        repoURL: '{{"{{repoURL}}"}}'
         targetRevision: master
-        path: helm/argocd/
+        path: 'helm/{{"{{appName}}"}}/'
         helm:
           valueFiles:
-            - values-dev.yaml
+            - values-{{"{{cluster}}"}}.yaml
       destination:
-        namespace: openshift-gitops
-        server: https://kubernetes.default.svc
-{{- end}}
+        namespace: '{{"{{targetNamespace}}"}}'
+        server: '{{"{{url}}"}}'
+{{- end }}

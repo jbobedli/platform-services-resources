@@ -42,19 +42,19 @@ spec:
 
   template:
     metadata:
-      name: {{ print "'{{appName}}'" }}
+      name: '{{"{{appName}}"}}'
     spec:
       destination:
-        namespace: {{ print "'{{targetNamespace}}'" }}
-        server: {{ print "'{{url}}'" }}
-      project: {{ print "'{{project}}'" }}
+        namespace: '{{"{{targetNamespace}}"}}'
+        server: '{{"{{url}}"}}'
+      project: '{{"{{project}}"}}'
       source:
-        repoURL: {{ print "'{{repoURL}}'" }}
+        repoURL: '{{"{{repoURL}}"}}'
         targetRevision: master
         path: 'helm/rhsso/'
         helm:
           valueFiles:
-            - '{{ print "{{path}}" }}/values.yaml'
+            - '{{"{{path}}"}}/values.yaml'
 #      syncPolicy:
 #        automated:
 #          prune: true
@@ -62,4 +62,4 @@ spec:
 #        syncOptions:
 #          - ApplyOutOfSyncOnly=true
 #          - RespectIgnoreDifferences=true
-{{- end}}
+{{- end }}
