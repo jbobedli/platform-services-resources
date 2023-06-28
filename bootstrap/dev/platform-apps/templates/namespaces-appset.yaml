@@ -1,0 +1,27 @@
+{{- if .Values.namespaces.enabled}}
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: namespaces-appset
+  namespace: openshift-gitops
+spec:
+  template:
+    metadata:
+      name: namespaces-dev
+    spec:
+      #      syncPolicy:
+      #        automated:
+      #          prune: true
+      #          selfHeal: true
+      project: platform-gitops
+      source:
+        repoURL: https://gitlab.pro.portal.ss/migration/argo-platform
+        targetRevision: master
+        path: helm/namespaces/
+        helm:
+          valueFiles:
+            - values-dev.yaml
+      destination:
+        namespace: openshift-gitops
+        server: https://kubernetes.default.svc
+{{- end}}

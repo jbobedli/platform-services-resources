@@ -1,3 +1,4 @@
+{{- if .Values.rhsso.enabled}}
 apiVersion: argoproj.io/v1alpha1
 kind: ApplicationSet
 metadata:
@@ -41,19 +42,19 @@ spec:
 
   template:
     metadata:
-      name: '{{appName}}'
+      name: {{ print "'{{appName}}'" }}
     spec:
       destination:
-        namespace: '{{targetNamespace}}'
-        server: '{{url}}'
-      project: '{{project}}'
+        namespace: {{ print "'{{targetNamespace}}'" }}
+        server: {{ print "'{{url}}'" }}
+      project: {{ print "'{{project}}'" }}
       source:
-        repoURL: '{{repoURL}}'
+        repoURL: {{ print "'{{repoURL}}'" }}
         targetRevision: master
         path: 'helm/rhsso/'
         helm:
           valueFiles:
-            - '{{path}}/values.yaml'
+            - '{{ print "{{path}}" }}/values.yaml'
 #      syncPolicy:
 #        automated:
 #          prune: true
@@ -61,3 +62,4 @@ spec:
 #        syncOptions:
 #          - ApplyOutOfSyncOnly=true
 #          - RespectIgnoreDifferences=true
+{{- end}}

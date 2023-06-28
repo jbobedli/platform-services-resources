@@ -1,0 +1,25 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: optional-operators-appset
+  namespace: openshift-gitops
+spec:
+  template:
+    metadata:
+      name: optional-operators-dev
+    spec:
+      project: platform-gitops
+      source:
+        repoURL: https://gitlab.pro.portal.ss/migration/argo-platform
+        targetRevision: master
+        path: 'operators/operator/'
+        helm:
+          valueFiles:
+            - values-dev.yaml
+      destination:
+        server: https://kubernetes.default.svc
+        namespace: openshift-gitops
+      syncPolicy:
+        syncOptions:
+          - ApplyOutOfSyncOnly=true
+          - RespectIgnoreDifferences=true

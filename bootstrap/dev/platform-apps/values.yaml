@@ -1,0 +1,10 @@
+argocd:
+  enabled: true
+basic:
+  enabled: true
+istio:
+  enabled: true
+namespaces:
+  enabled: true
+rhsso:
+  enabled: true

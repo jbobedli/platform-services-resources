@@ -29,6 +29,9 @@ spec:
         repoURL: '{{"{{repoURL}}"}}'
         targetRevision: master
         path: 'bootstrap/{{"{{cluster}}"}}/{{"{{appName}}"}}'
+        helm:
+          valueFiles:
+            - values.yaml
       destination:
-        server: 'https://kubernetes.default.svc'
+        server: '{{url}}'
 {{- end }}
