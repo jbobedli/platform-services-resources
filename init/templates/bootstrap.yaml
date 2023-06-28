@@ -33,5 +33,5 @@ spec:
           valueFiles:
             - values.yaml
       destination:
-        server: '{{url}}'
+        server: '{{"{{url}}"}}'
 {{- end }}
