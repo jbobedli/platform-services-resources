@@ -5,4 +5,5 @@ policies:
   - name: limit-replicacount
     parameters:
       - ">3"
-    filter: "HA"    
+    filter: 
+      kyverno.filter.apps: "HA"    

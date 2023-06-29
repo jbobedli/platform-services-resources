@@ -20,7 +20,7 @@ metadata:
       defaults will automatically be applied to each Pod based on the LimitRange configuration.
       This policy validates that all containers have something specified for memory and CPU
       requests and memory limits.  
-    dar.kyverno.template/parameters: 'false'
+    dar.kyverno.template/parameters: 'true'
     dar.kyverno.template/filter: 'false'    
         
 spec:
@@ -28,6 +28,16 @@ spec:
   background: {{ default $defaults.background $policy.background }}
   rules:
   - name: validate-resources
+  {{- if $policy.parameters }}
+    exclude:
+      any:
+    {{- range $policy.parameters }}
+      - resources:
+          selector:
+            matchLabels:
+              {{ toYaml . }}
+    {{- end }}
+  {{- end }} 
     match:
       any:
       - resources:
@@ -46,4 +56,5 @@ spec:
                 memory: "?*"
                 cpu: "?*"
   {{- end }}
-{{- end }}
+---
+{{- end }}  

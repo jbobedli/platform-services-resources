@@ -27,13 +27,16 @@ spec:
         - resources:
             kinds:
             - Deployment
+        {{- if $policy.filter }}
             selector:
               matchLabels:
-                kyverno.application.type: "{{ $policy.filter }}"
+                {{ toYaml $policy.filter }}
+        {{- end }}
       validate:
         message: "Deployments of type {{ $policy.filter }} should have {{- first $policy.parameters }} replicas"
         pattern:
           spec:
             replicas: " {{- first $policy.parameters }}"
   {{- end }}
-{{- end }}
+---
+{{- end }}  

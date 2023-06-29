@@ -38,4 +38,5 @@ spec:
         spec:
           =(type): "!NodePort"
   {{- end }}
+---
 {{- end }}          
