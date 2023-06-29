@@ -1,0 +1,40 @@
+{{- if .Values.alerts.enabled}}
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: alerts-appset
+  namespace: openshift-gitops
+spec:
+  generators:
+    - matrix: # matrix generator combines TWO sets of parameters introduced by other types of generators
+        generators:
+          - list:
+              elements:
+                - cluster: dev
+                  repoURL: 'https://gitlab.pro.portal.ss/migration/argo-platform'
+                  url: 'https://kubernetes.default.svc'
+                  project: platform-gitops
+                  appName: alerts
+          - list:
+              elements:
+                - targetNamespace: des-imv
+  template:
+    metadata:
+      name: '{{"{{appName}}"}}-{{"{{targetNamespace}}"}}'
+    spec:
+      #      syncPolicy:
+      #        automated:
+      #          prune: true
+      #          selfHeal: true
+      project: '{{"{{project}}"}}'
+      source:
+        repoURL: '{{"{{repoURL}}"}}'
+        targetRevision: master
+        path: 'helm/{{"{{appName}}"}}/'
+        helm:
+          valueFiles:
+            - values-{{"{{cluster}}"}}.yaml
+      destination:
+        namespace: '{{"{{targetNamespace}}"}}'
+        server: '{{"{{url}}"}}'
+{{- end }}

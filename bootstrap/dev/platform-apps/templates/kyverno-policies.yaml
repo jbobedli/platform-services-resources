@@ -1,0 +1,36 @@
+{{- if .Values.kyverno.policies.enabled}}
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: kyverno-policies
+  namespace: openshift-gitops
+spec:
+  generators:
+    - list:
+        elements:
+          - cluster: dev
+            url: https://kubernetes.default.svc
+            repoURL: 'https://git-codecommit.eu-west-1.amazonaws.com/v1/repos/plataforma'
+            appName: kyverno
+            project: platform-gitops
+            targetNamespace: kyverno
+  template:
+    metadata:
+      name: '{{"{{appName}}"}}-policies-{{"{{cluster}}"}}'
+    spec:
+      #      syncPolicy:
+      #        automated:
+      #          prune: true
+      #          selfHeal: true
+      project: '{{"{{project}}"}}'
+      source:
+        repoURL: '{{"{{repoURL}}"}}'
+        targetRevision: master
+        path: helm/compliance-resources/{{"{{appName}}"}}
+        helm:
+          valueFiles:
+            - values-{{"{{cluster}}"}}.yaml
+      destination:
+        server: '{{"{{url}}"}}'
+        namespace: '{{"{{targetNamespace}}"}}'
+{{- end }}
