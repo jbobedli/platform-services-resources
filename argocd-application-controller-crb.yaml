@@ -1,7 +1,7 @@
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
-  name: argocd-application-controller-crolebinding
+  name: argocd-application-controller-crb
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
