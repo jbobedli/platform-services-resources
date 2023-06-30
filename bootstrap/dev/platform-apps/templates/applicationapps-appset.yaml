@@ -1,8 +1,8 @@
-{{- if .Values.argocd.enabled}}
+{{- if .Values.applicationapps.enabled}}
 apiVersion: argoproj.io/v1alpha1
 kind: ApplicationSet
 metadata:
-  name: argocd-appset
+  name: applicationapps-appset
   namespace: openshift-gitops
 spec:
   generators:
@@ -11,7 +11,7 @@ spec:
           - cluster: dev
             url: https://kubernetes.default.svc
             repoURL: 'https://gitlab.pro.portal.ss/migration/argo-platform'
-            appName: argocd
+            appName: application-apps
             targetNamespace: openshift-gitops
             project: platform-gitops
   template:
