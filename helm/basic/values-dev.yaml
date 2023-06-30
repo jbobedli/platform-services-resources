@@ -5,5 +5,8 @@ sa:
       - istio-system
       - prueba-pipelines
   pipelines:
-    namespaces:
-      - prueba-pipelines
+    - namespace: prueba-pipelines
+      rbacNamespaces:
+        - des-prueba
+        - pre-prueba
+        - uat-prueba
