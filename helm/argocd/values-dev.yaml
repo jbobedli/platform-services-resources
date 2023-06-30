@@ -4,7 +4,7 @@ rbacPolicy:
 
 tenants:
   - name: prueba
-    createApplications: false
+    createApplications: true
     projects:
       - name: prueba-apptoapps
         namespaces:

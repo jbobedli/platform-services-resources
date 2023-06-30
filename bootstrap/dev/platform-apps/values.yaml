@@ -5,7 +5,7 @@ argocd:
 basic:
   enabled: true
 istio:
-  enabled: false
+  enabled: true
 kyverno:
   enabled: false
   policies:
@@ -15,7 +15,7 @@ namespaces:
 networkpolicies:
   enabled: false
 rhsso:
-  enabled: false
+  enabled: true
 sealedsecrets:
   enabled: false
 sonarqube:
