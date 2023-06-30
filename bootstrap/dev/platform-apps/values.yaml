@@ -1,21 +1,21 @@
 alerts:
   enabled: false
 argocd:
-  enabled: true
+  enabled: false
 basic:
   enabled: true
 istio:
-  enabled: true
+  enabled: false
 kyverno:
   enabled: false
   policies:
     enabled: false
 namespaces:
-  enabled: true
+  enabled: false
 networkpolicies:
   enabled: false
 rhsso:
-  enabled: true
+  enabled: false
 sealedsecrets:
   enabled: false
 sonarqube:

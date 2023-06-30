@@ -1,4 +1,3 @@
-{{- if .Values.createPlatformApps }}
 apiVersion: argoproj.io/v1alpha1
 kind: ApplicationSet
 metadata:
@@ -34,4 +33,3 @@ spec:
             - values.yaml
       destination:
         server: '{{"{{url}}"}}'
-{{- end }}
