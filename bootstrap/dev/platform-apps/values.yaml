@@ -8,8 +8,6 @@ kyverno:
   enabled: false
   policies:
     enabled: false
-networkpolicies:
-  enabled: false
 rhsso:
   enabled: true
 sealedsecrets:
