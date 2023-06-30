@@ -1,7 +1,3 @@
-rbacPolicy:
-  projects:
-    - des-prueba
-
 tenants:
   - name: prueba
     createApplications: true

@@ -1,3 +1,8 @@
+#Rbac policy para dar visibilidad a proyectos de argo con los grupos de openshift
+rbacPolicy:
+  projects:
+    - des-prueba
+
 #Cluster role bindings para dar a argo permisos a la carta en ciertas aplicaciones de plataforma
 sa:
   argoCrb:
@@ -8,6 +13,7 @@ sa:
     sealedsecrets: true
     tekton: true
 
+#Services accounts adicionales con sus rolebindings por namespace
   pipelines:
     - namespace: prueba-pipelines
       rbacNamespaces:
