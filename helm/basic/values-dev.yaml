@@ -16,6 +16,7 @@ sa:
   pipelines:
     - namespace: prueba-pipelines
       rbacNamespaces:
+        - prueba-pipelines
         - des-prueba
         - pre-prueba
         - uat-prueba
