@@ -2,6 +2,8 @@ alerts:
   enabled: false
 applicationapps:
   enabled: true
+images:
+  enabled: true
 istio:
   enabled: true
 kyverno:

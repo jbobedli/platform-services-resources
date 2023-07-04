@@ -1,0 +1,43 @@
+{{- if .Values.images.enabled}}
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: images-appset
+  namespace: openshift-gitops
+spec:
+  generators:
+    - matrix: # matrix generator combines TWO sets of parameters introduced by other types of generators
+        generators:
+          - list:
+              elements:
+                - repoURL: 'https://gitlab.pro.portal.ss/migration/custom-images'
+                  url: 'https://kubernetes.default.svc'
+                  project: platform-gitops
+          - list:
+              elements:
+                - appName: maven-with-helm
+                  targetNamespace: prueba-pipelines
+
+  template:
+    metadata:
+      name: '{{"{{appName}}"}}'
+    spec:
+      destination:
+        namespace: '{{"{{targetNamespace}}"}}'
+        server: '{{"{{url}}"}}'
+      project: '{{"{{project}}"}}'
+      source:
+        repoURL: '{{"{{repoURL}}"}}'
+        targetRevision: master
+        path: 'helm/rhsso/'
+        helm:
+          valueFiles:
+            - 'values.yaml'
+#      syncPolicy:
+#        automated:
+#          prune: true
+#          selfHeal: true
+#        syncOptions:
+#          - ApplyOutOfSyncOnly=true
+#          - RespectIgnoreDifferences=true
+{{- end }}
