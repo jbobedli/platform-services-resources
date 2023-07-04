@@ -10,7 +10,8 @@ spec:
         generators:
           - list:
               elements:
-                - repoURL: 'https://gitlab.pro.portal.ss/migration/custom-images'
+                - cluster: dev
+                  repoURL: 'https://gitlab.pro.portal.ss/migration/custom-images'
                   url: 'https://kubernetes.default.svc'
                   project: platform-gitops
           - list:
@@ -33,7 +34,7 @@ spec:
         helm:
           releaseName: '{{"{{appName}}"}}'
           valueFiles:
-            - 'values.yaml'
+            - values-{{"{{cluster}}"}}.yaml
 #      syncPolicy:
 #        automated:
 #          prune: true
