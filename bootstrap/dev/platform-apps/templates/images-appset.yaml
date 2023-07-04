@@ -20,7 +20,7 @@ spec:
 
   template:
     metadata:
-      name: '{{"{{appName}}"}}'
+      name: '{{"{{appName}}"}}-{{"{{targetNamespace}}"}}'
     spec:
       destination:
         namespace: '{{"{{targetNamespace}}"}}'
