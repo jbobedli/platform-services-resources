@@ -30,8 +30,8 @@ spec:
         repoURL: '{{"{{repoURL}}"}}'
         targetRevision: master
         path: '.'
-        releaseName: '{{"{{appName}}"}}'
         helm:
+          releaseName: '{{"{{appName}}"}}'
           valueFiles:
             - 'values.yaml'
 #      syncPolicy:
