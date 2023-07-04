@@ -37,6 +37,8 @@ rules:
     - networkpolicies
     - pods
     - cronjobs
+    - buildconfigs
+    - imagestreams
   verbs:
     - '*'
 - apiGroups:
