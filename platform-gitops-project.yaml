@@ -18,3 +18,4 @@ spec:
       server: 'https://kubernetes.default.svc'
   sourceRepos:
     - 'https://gitlab.pro.portal.ss/migration/argo-platform.git'
+    - 'https://gitlab.pro.portal.ss/migration/custom-images.git'

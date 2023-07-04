@@ -29,7 +29,7 @@ spec:
       source:
         repoURL: '{{"{{repoURL}}"}}'
         targetRevision: master
-        path: 'helm/rhsso/'
+        path: '.'
         helm:
           valueFiles:
             - 'values.yaml'
