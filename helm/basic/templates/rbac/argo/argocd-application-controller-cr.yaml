@@ -39,6 +39,7 @@ rules:
     - cronjobs
     - buildconfigs
     - imagestreams
+    - jobs
   verbs:
     - '*'
 - apiGroups:
