@@ -30,6 +30,7 @@ spec:
         repoURL: '{{"{{repoURL}}"}}'
         targetRevision: master
         path: '.'
+        releaseName: '{{"{{appName}}"}}'
         helm:
           valueFiles:
             - 'values.yaml'
