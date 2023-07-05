@@ -30,6 +30,5 @@ spec:
           valueFiles:
             - values-{{"{{cluster}}"}}.yaml
       destination:
-        namespace: '{{"{{targetNamespace}}"}}'
         server: '{{"{{url}}"}}'
 {{- end }}
