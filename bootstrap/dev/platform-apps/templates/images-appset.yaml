@@ -13,6 +13,7 @@ spec:
             repoURL: 'https://gitlab.pro.portal.ss/migration/argo-platform'
             appName: images
             project: platform-gitops
+            targetNamespace: openshift-gitops
   template:
     metadata:
       name: '{{"{{appName}}"}}-{{"{{cluster}}"}}'
@@ -30,5 +31,6 @@ spec:
           valueFiles:
             - values-{{"{{cluster}}"}}.yaml
       destination:
+        namespace: '{{"{{targetNamespace}}"}}'
         server: '{{"{{url}}"}}'
 {{- end }}
