@@ -18,5 +18,7 @@ rhsso:
   enabled: true
 sealedsecrets:
   enabled: false
+serviceaccounts:
+  enabled: true
 sonarqube:
   enabled: false
