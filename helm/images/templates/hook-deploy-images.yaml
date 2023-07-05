@@ -1,0 +1,23 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  generateName: deploy-images
+  annotations:
+    argocd.argoproj.io/hook: PostSync
+    argocd.argoproj.io/hook-delete-policy: HookSucceeded
+spec:
+  template:
+    spec:
+      #serviceAccountName: {{ .Values.hook.serviceAccountName }}
+      containers:
+        - name: deploy-image
+          image: {{ .Values.hook.image }}
+          command: ["/bin/sh","-c"]
+          args:
+            {{- range $key, $value := .Values.images }}
+            {{- range $namespace := $value.namespaces }}
+            - "oc import-image -n {{ $namespace }} {{ $value.name }}/{{ $value.name }}:{{ $value.version }} --from={{ $value.registry }}/{{ $value.name }}:{{ $value.version }} --confirm"
+            {{- end }}
+            {{- end }}
+      restartPolicy: Never
+  backoffLimit: 2

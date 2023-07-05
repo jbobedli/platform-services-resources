@@ -1,0 +1,18 @@
+#Recorremos las imagenes que queremos importar
+{{- range $key, $value := .Values.images }}
+#Recorremos los namespaces donde vamos a importar las imagenes
+{{- range $namespace := $value.namespaces }}
+apiVersion: image.openshift.io/v1
+kind: ImageStream
+metadata:
+  labels:
+    build: {{ $value.name }}
+    app: {{ $value.name }}
+  name: {{ $value.name }}
+  namespace: {{ $namespace }}
+spec:
+  lookupPolicy:
+    local: false
+---
+{{- end}}
+{{- end}}
