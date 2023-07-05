@@ -12,12 +12,15 @@ spec:
       containers:
         - name: deploy-image
           image: {{ .Values.hook.image }}
-          command: ["/bin/sh","-c"]
+          command: ["/bin/sh"]
           args:
-            {{- range $key, $value := .Values.images }}
-            {{- range $namespace := $value.namespaces }}
-            - "oc import-image {{ $namespace }}/{{ $value.name }}:{{ $value.version }} --from={{ $value.registry }}/{{ $value.name }}:{{ $value.version }} --confirm -n {{ $namespace }}"
-            {{- end }}
-            {{- end }}
+            - -c
+            - >-
+              {{- range $key, $value := .Values.images }}
+              {{- range $namespace := $value.namespaces }}
+              oc import-image {{ $namespace }}/{{ $value.name }}:{{ $value.version }} --from={{ $value.registry }}/{{ $value.name }}:{{ $value.version }} --confirm -n {{ $namespace }} &&
+              {{- end }}
+              {{- end }}
+              sleep 1
       restartPolicy: Never
   backoffLimit: 2
