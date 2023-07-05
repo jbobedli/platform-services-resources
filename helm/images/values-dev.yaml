@@ -1,6 +1,6 @@
 #Imagen y service account para ejecutar el hook, la versión de la imagen tiene que estar alineada con openshift.
 hook:
-  serviceAccountName: pipeline
+  serviceAccountName: openshift-gitops-argocd-application-controller
   image: registry.redhat.io/openshift4/ose-cli-alt-rhel8:v4.10
 
 #Generador a la carta de imágenes y sus respectivas versiones.
