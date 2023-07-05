@@ -2,7 +2,7 @@ alerts:
   enabled: false
 applicationapps:
   enabled: true
-images:
+customimages:
   enabled: true
 istio:
   enabled: true

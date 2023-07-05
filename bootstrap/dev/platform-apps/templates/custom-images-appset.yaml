@@ -1,8 +1,8 @@
-{{- if .Values.images.enabled}}
+{{- if .Values.customimages.enabled}}
 apiVersion: argoproj.io/v1alpha1
 kind: ApplicationSet
 metadata:
-  name: images-appset
+  name: custom-images-appset
   namespace: openshift-gitops
 spec:
   generators:
