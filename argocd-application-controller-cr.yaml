@@ -37,6 +37,7 @@ rules:
       - cronjobs
       - buildconfigs
       - imagestreams
+      - imagestreamimports
       - jobs
     verbs:
       - '*'
