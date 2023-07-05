@@ -16,8 +16,7 @@ spec:
           args:
             {{- range $key, $value := .Values.images }}
             {{- range $namespace := $value.namespaces }}
-            - "oc project {{ $namespace }}"
-            - "oc import-image {{ $value.name }}:{{ $value.version }} --from={{ $value.registry }}/{{ $value.name }}:{{ $value.version }} --confirm"
+            - "oc import-image {{ $namespace }}/{{ $value.name }}:{{ $value.version }} --from={{ $value.registry }}/{{ $value.name }}:{{ $value.version }} --confirm -n {{ $namespace }}"
             {{- end }}
             {{- end }}
       restartPolicy: Never
