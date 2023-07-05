@@ -3,7 +3,7 @@ hook:
   serviceAccountName: openshift-gitops-argocd-application-controller
   image: registry.redhat.io/openshift4/ose-cli-alt-rhel8:v4.10
 
-#Generador a la carta de imágenes y sus respectivas versiones.
+#Importador a la carta de imágenes y sus respectivas versiones.
 images:
   - name: "openjdk-11-rhel7"
     registry: "registry.access.redhat.com/openjdk"
