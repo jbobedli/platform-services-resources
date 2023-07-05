@@ -10,6 +10,10 @@ kyverno:
   enabled: false
   policies:
     enabled: false
+namespaces:
+  enabled: true
+networkpolicies:
+  enabled: true
 rhsso:
   enabled: true
 sealedsecrets:

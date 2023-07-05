@@ -12,11 +12,3 @@ sa:
     rhsso: true
     sealedsecrets: true
     tekton: true
-  #Services accounts adicionales con sus rolebindings por namespace
-  pipelines:
-    - namespace: prueba-pipelines
-      rbacNamespaces:
-        - prueba-pipelines
-        - des-prueba
-        - pre-prueba
-        - uat-prueba

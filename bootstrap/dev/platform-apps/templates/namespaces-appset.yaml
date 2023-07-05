@@ -1,7 +1,8 @@
+{{- if .Values.namespaces.enabled}}
 apiVersion: argoproj.io/v1alpha1
 kind: ApplicationSet
 metadata:
-  name: network-policy-appset
+  name: namespaces-appset
   namespace: openshift-gitops
 spec:
   generators:
@@ -10,7 +11,7 @@ spec:
           - cluster: dev
             url: https://kubernetes.default.svc
             repoURL: 'https://gitlab.pro.portal.ss/migration/argo-platform'
-            appName: network-policy
+            appName: namespaces
             project: platform-gitops
   template:
     metadata:
@@ -29,5 +30,5 @@ spec:
           valueFiles:
             - values-{{"{{cluster}}"}}.yaml
       destination:
-        namespace: '{{"{{targetNamespace}}"}}'
         server: '{{"{{url}}"}}'
+{{- end }}
