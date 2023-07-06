@@ -6,6 +6,10 @@ secret:
     user: QlpDUjY2NTE=
 
 tenants:
+  plataforma:
+    namespaces:
+      - name: kyverno
+        displayName: Entorno de Kyverno
   iam:
     namespaces:
       - name: des-prueba-iam

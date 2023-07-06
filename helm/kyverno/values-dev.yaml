@@ -23,7 +23,7 @@ kyverno:
   existingImagePullSecrets:
     # Define an existing image pull secret
     #existingImagePullSecrets:
-  - harbor-auth
+    # - harbor-auth
     # - other-test-registry
 
   replicaCount: 1
@@ -86,21 +86,16 @@ kyverno:
   config:
     # -- Resource types to be skipped by the Kyverno policy engine.
     webhooks:
-      # Exclude namespaces
+      # Include namespaces
        - namespaceSelector:
            matchExpressions:
            - key: kubernetes.io/metadata.name
-             #operator: NotIn
              operator: In
              values:
-               - des-cudc
-               - val-cudc
-               - pipelines-cudc
-               - pipelines
-               - pipelines-hsum
-               - des-hsum
-               - val-hsum
-               - testing
+               - des-prueba
+               - pre-prueba
+               - uat-prueba
+               - prueba-pipelines
 
     # -- Metrics config.
     metricsConfig:
@@ -108,7 +103,7 @@ kyverno:
       annotations: {}
         # example.com/annotation: foo
       namespaces: {
-        "include": ["des-cudc","val-cudc","pro-cudc","des-hsum","val-hsum","pro-hsum","pipelines-hsum","pipelines-cudc","pipelines"],
+        "include": ["des-prueba","pre-prueba","uat-prueba","prueba-pipelines"],
         "exclude": []
       }
 

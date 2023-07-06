@@ -9,7 +9,7 @@ images:
 istio:
   enabled: true
 kyverno:
-  enabled: false
+  enabled: true
   policies:
     enabled: false
 namespaces:
