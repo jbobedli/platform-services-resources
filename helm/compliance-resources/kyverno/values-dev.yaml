@@ -3,61 +3,28 @@ defaults:
   background: 'false'
 policies:
 - name: disallow-latesttag
-  namespace: des-cudc
-- name: allowed-signedimages
-  namespace: val-hsum
-  validation: enforce
-  parameters:
-  - harbor.cudc.aws.comunidad.madrid*
+  namespace: des-prueba
 - name: disallow-nodeport
-  namespace: des-cudc
+  namespace: des-prueba
   validation: enforce
 - name: require-requestlimit
   validation: enforce
-  namespace: des-cudc
+  namespace: des-prueba
   parameters: 
     - openshift.io/build.name: "*"
     - dar.kyverno/exclude.require.reqlim: 'true'
 - name: require-probes
   validation: enforce
-  namespace: des-cudc
-  parameters: 
-    - openshift.io/build.name: "*"
-    - dar.kyverno/exclude.require.probes: 'true'
-- name: require-requestlimit
-  validation: enforce
-  namespace: val-cudc
-  parameters: 
-    - openshift.io/build.name: "*"
-    - dar.kyverno/exclude.require.reqlim: 'true'
-- name: require-probes
-  validation: enforce
-  namespace: val-cudc
+  namespace: des-prueba
   parameters: 
     - openshift.io/build.name: "*"
     - dar.kyverno/exclude.require.probes: 'true'
 - name: limit-pipelineruns
-  namespace: pipelines-hsum
+  namespace: prueba-pipelines
   validation: enforce
   parameters:
-    - 1  
-- name: limit-pipelineruns
-  namespace: pipelines-cudc
-  validation: enforce
-  parameters:
-    - 3  
-- name: limit-pipelineruns
-  namespace: pipelines
-  validation: enforce
-  parameters:
-    - 3  
+    - 3
 - name: disallow-privilegedpod
-  namespace: des-cudc
+  namespace: des-prueba
 - name: disallow-privilegedpod
-  namespace: val-cudc
-- name: disallow-privilegedpod
-  namespace: pipelines-cudc
-- name: disallow-privilegedpod
-  namespace: pipelines-hsum
-- name: disallow-privilegedpod
-  namespace: pipelines
+  namespace: prueba-pipelines

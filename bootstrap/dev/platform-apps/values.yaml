@@ -11,7 +11,7 @@ istio:
 kyverno:
   enabled: true
   policies:
-    enabled: false
+    enabled: true
 namespaces:
   enabled: true
 networkpolicies:
