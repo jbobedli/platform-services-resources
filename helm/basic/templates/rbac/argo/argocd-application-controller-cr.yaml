@@ -41,6 +41,7 @@ rules:
     - imagestreams
     - imagestreamimports
     - jobs
+    - poddisruptionbudgets
   verbs:
     - '*'
 - apiGroups:
