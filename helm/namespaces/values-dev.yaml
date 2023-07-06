@@ -6,6 +6,12 @@ secret:
     user: QlpDUjY2NTE=
 
 tenants:
+  plataforma:
+    namespaces:
+      - name: kyverno
+        displayName: Entorno de Kyverno
+        labels:
+          openshift.io/cluster-monitoring: 'true'
   iam:
     namespaces:
       - name: des-prueba-iam
