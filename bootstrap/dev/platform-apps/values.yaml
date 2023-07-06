@@ -9,9 +9,9 @@ images:
 istio:
   enabled: true
 kyverno:
-  enabled: true
+  enabled: false
   policies:
-    enabled: true
+    enabled: false
 namespaces:
   enabled: true
 networkpolicies:
