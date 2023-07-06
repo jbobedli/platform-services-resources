@@ -10,8 +10,6 @@ tenants:
     namespaces:
       - name: kyverno
         displayName: Entorno de Kyverno
-      - name: hola
-        displayName: hola
         labels:
           openshift.io/cluster-monitoring: 'true'
   iam:
