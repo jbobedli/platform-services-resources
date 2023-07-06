@@ -184,3 +184,12 @@ kyverno:
       timeoutSeconds: 15
       failureThreshold: 6
       successThreshold: 1
+
+  grafana:
+    # -- Enable grafana dashboard creation.
+    enabled: true
+    # -- Namespace to create the grafana dashboard configmap.
+    # If not set, it will be created in the same namespace where the chart is deployed.
+    namespace: custom-grafana
+    # -- Grafana dashboard configmap annotations.
+    annotations: {}
