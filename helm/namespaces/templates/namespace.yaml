@@ -8,6 +8,8 @@ metadata:
   annotations:
     openshift.io/display-name: {{ $valor.displayName }}
     argocd.argoproj.io/sync-wave: "-10"
+  labels:
+    {{- toYaml $valor.labels | nindent 4 }}
 ---
 {{- end }}
 {{- end }}
