@@ -37,25 +37,6 @@
     "links": [],
     "panels": [
         {
-            "datasource": "${DS_PROMETHEUS_KYVERNO}",
-            "gridPos": {
-                "h": 6,
-                "w": 24,
-                "x": 0,
-                "y": 0
-            },
-            "id": 42,
-            "options": {
-                "content": "# Kyverno\nA Kubernetes-native policy management engine\n\n#### About this dashboard\n\nThis dashboard represents generic insights that can be extracted from a cluster with Kyverno running.\n\n#### For more details around the metrics\n\nCheckout the [official docs of Kyverno metrics](https://kyverno.io/docs/monitoring/)",
-                "mode": "markdown"
-            },
-            "pluginVersion": "8.1.0",
-            "timeFrom": null,
-            "timeShift": null,
-            "transparent": true,
-            "type": "text"
-        },
-        {
             "collapsed": false,
             "datasource": "${DS_PROMETHEUS_KYVERNO}",
             "fieldConfig": {
