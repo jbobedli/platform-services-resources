@@ -1,6 +1,6 @@
 defaults:
   validation: audit
-  background: 'false'
+  background: 'true'
 policies:
 - name: disallow-latesttag
   namespace: des-prueba
