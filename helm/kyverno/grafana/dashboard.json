@@ -5,7 +5,8 @@
             "label": "Prometheus Data Source exposing Kyverno's metrics",
             "description": "Prometheus Data Source exposing Kyverno's metrics",
             "type": "datasource",
-            "pluginId": "prometheus"
+            "pluginId": "prometheus",
+            "pluginName": "prometheus"
         }
     ],
     "annotations": {
