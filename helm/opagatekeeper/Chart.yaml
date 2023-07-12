@@ -1,5 +1,5 @@
 apiVersion: v2
-name: helm-applications
+name: opa-gatekeeper
 description: A Helm chart for Kubernetes
 type: application
 version: v3.13.0

@@ -13,7 +13,7 @@ maintainers:
   name: rjkernick
 - email: tsiddique@live.com
   name: tsiddique
-name: sonarqube
+name: sonarqube-test
 sources:
 - https://github.com/SonarSource/docker-sonarqube
 version: 9.10.1
