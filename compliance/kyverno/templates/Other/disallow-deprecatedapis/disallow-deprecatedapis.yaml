@@ -40,4 +40,5 @@ spec:
       message: "{{ printf "{{ request.object.apiVersion }}/{{ request.object.kind }} is deprecated."| toString }}"
       deny: {}
   {{- end }}
-{{- end }} 
+---
+{{- end }}  

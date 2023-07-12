@@ -2,6 +2,9 @@ defaults:
   validation: audit
   background: false
 policies:
-  - name: require-requestlimit
-    validation: enforce
-    background: true
+- name: require-requestlimit
+  validation: enforce
+  namespace: pro-cudc
+  parameters: 
+    - openshift.io/build.name: "*"
+    - dar.kyverno/exclude.require.reqlim: 'true'

@@ -16,5 +16,5 @@ Por defecto actua sobre Pods unicamente
 
 ## Filtros
 
-No recibe filtros
+Podemos pasarle una etiqueta para filtrar pods a los que NO aplicar la norma. Ejemplo los pods de tipo build de Openshift tienen la etiqueta 'openshift.io/build.name: "*"' y no suelen tener probes porque solo se usan para construcción.
 

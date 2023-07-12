@@ -24,7 +24,7 @@ spec:
         - apiCall:
             jmesPath: 'items[?status.conditions[?reason==''Running'']]'
             urlPath: >-
-              "{{ printf "/apis/tekton.dev/v1beta1/namespaces/{{request.namespace}}/pipelineruns" | toString }}"
+              {{ printf "/apis/tekton.dev/v1beta1/namespaces/{{request.namespace}}/pipelineruns" | toString }}
           name: pr
       match:
         resources:
@@ -33,7 +33,7 @@ spec:
       name: check-pipelinerun-limit
       preconditions:
         all:
-          - key: "{{ printf "{{request.operation || BACKGROUND}}" | toString }}"
+          - key: "{{ printf "{{request.operation || 'BACKGROUND'}}" | toString }}"
             operator: NotEquals
             value: DELETE
       validate:
@@ -45,4 +45,5 @@ spec:
                 value: {{ first $policy.parameters }}
   validationFailureAction: {{ default $defaults.validation $policy.validation }}
   {{- end }}
+---
 {{- end }}  

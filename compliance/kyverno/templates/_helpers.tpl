@@ -49,7 +49,7 @@ If release name contains chart name it will be used as a full name.
     {{- $ns := "namespace" -}}
     {{- $policy := .policy -}}
     {{- $namespace := .policy.namespace -}}
-    {{- $paramns := {{- first $policy.parameters | indent 1 }} }}
+    {{- $paramns := "{{- first $policy.parameters | indent 1 }}" }}
     {{- if $namespace }}
         {{- printf $namespace }}
     {{- else}}

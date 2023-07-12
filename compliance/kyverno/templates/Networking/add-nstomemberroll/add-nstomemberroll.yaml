@@ -33,5 +33,6 @@ spec:
           metadata:
             name: {{ $policy.filter }}
 
-{{- end}}
-{{- end}}
+  {{- end }}
+---
+{{- end }}  

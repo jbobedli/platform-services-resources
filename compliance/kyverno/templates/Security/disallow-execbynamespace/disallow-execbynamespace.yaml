@@ -43,5 +43,6 @@ spec:
             operator: Equals
             value: "{{- template "evaluateNamespace2" (dict "policy" $policy) }}"
             
-{{- end }}
-{{- end }}
+  {{- end }}
+---
+{{- end }}  

@@ -74,6 +74,25 @@ policies:
 ## Example Values
 En la carpeta de cada Policy se ofrece un values de ejemplo, con valores reales que pueden tomar los parámetros.
 Indicar que cada uno de estos ficheros de ejemplo incluyen solamente la inicialización la de Policy que documentan, ofreciendo el bloque "defaults" y dando de alta una Policy en el bloque "policies".
+
+## Default background
+Podemos especificar un valor por defecto para la validación en background. Aunque el campo es un Boolean se recomienda entrecomillarlo, especialmente cuando se utilice 'false' porque la template de helm si no, considera que la propiedad no existe. Ejemplo:
+```
+defaults:
+  background: true
+policies:
+  - background: false
+```
+Esta configuración es engañosa, porque la plantilla utilizará la lógica:
+Si existe policy.background sustituir en plantilla, si no existe utilizar defaults.background. 
+Como policy.background == false, el comparador considera que no existe y utiliza defaults.background. Esto se soluciona poniendo comillas.
+```
+defaults:
+  background: true
+policies:
+  - background: 'false'
+```
+
 # Features
 ## Policy o ClusterPolicy :lock:
 Cada Policy de la librería actua como template, pudiéndose instanciarse como Policy o ClusterPolicy. Si en la lista de "policies" indicamos un namespace, ésta se creará como Policy dentro del namespace indicado, si no como ClusterPolicy
@@ -84,7 +103,7 @@ verifyImages:
   secret_namespace: kyverno 
 defaults:
   validation: enforce
-  background: false
+  background: 'false'
 policies:
   - name: require-qos
     custom_name: require-qos-in-development
@@ -105,7 +124,7 @@ verifyImages:
   secret_namespace: kyverno 
 defaults:
   validation: enforce
-  background: false
+  background: 'false'
 policies:
   - name: require-qos
     custom_name: require-qos-in-development
@@ -124,7 +143,7 @@ verifyImages:
   secret_namespace: desarrollo #OPTIONAL si no se establece se usará el namespace "kyverno" 
 defaults:
   validation: enforce
-  background: false
+  background: 'false'
 policies:
   - name: allowed-signed_images
     validation: audit #Aunque por defecto para el resto de normas se use enforce, para esta puedo establecer audit si lo deseo.
@@ -132,46 +151,13 @@ policies:
     parameters:
       - test.harbor.cudc.aws.comunidad.madrid* #Revisamos todas las imagenes de este repositorio de artefactos. Importante el *
 ```
-### Creación de secret con clave publica:
-Se tiene que añadir la clave publica a la ruta 'publicKeys/allowed-signed_images/cosignpub.txt' es importante mantener el nombre y extensión del fichero.
-Helm creará un secret llamado "cosign-public-key" en el namespace "desarrollo". Luego la Policy utiliza dicho secreto para verificar las firmas.
-Aqui vemos cómo queda la Policy y cómo se enlaza con el secret.
-***template.yaml***
-```yaml
-apiVersion: kyverno.io/v1
-kind: Policy
-metadata:
-  namespace: desarrollo        #---------Namespace donde hemos creado la Policy
-  name: allowed-signed_images
-spec:
-  background: false                 #---------Background por defecto
-  failurePolicy: Fail
-  rules:
-    - match:
-        any:
-              kinds:
-                - Pod
-      name: check-image
-      verifyImages:
-        - attestors:
-            - count: 1
-                - keys:
-                    publicKeys: "k8s://desarrollo/cosign-public-key"   #---------Enlazamos el secret. Namespace indicado para crear el secret 'desarrollo'
-                    signatureAlgorithm: sha256
-          imageReferences:
-            - test.harbor.cudc.aws.comunidad.madrid*      #---------Registry proporcionado por parametro
-          mutateDigest: true
-          verifyDigest: true
-  validationFailureAction: enforce            #---------Validación por defecto
-  webhookTimeoutSeconds: 30
-```
-### Reutilización de secret existente:
-Si no queremos crear un secret desde este chart de Helm y queremos usar uno creado manualmente, el fichero values anterior varía un poco:
+### Secret:
+Debemos crear un secret con el contenido de la public key en el cluster, podemos almacenarlo en el namespace que queramos y con el nombre que queramos siempre que lo indiquemos en el values
 ***values.yaml***
 ```yaml
 verifyImages: 
-  enabled: false #Indicamos que no se cree un secreto nuevo
-  secret_namespace: desarrollo #Indicamos en qué namespace reside el secret creado a mano 
+  secret_name: string (default value "cosign_public ")
+  secret_namespace: string (default value "kyverno ")
 .
 .
 .
@@ -207,25 +193,31 @@ policies:
 
 * **Descripción**: Exige readiness y liveness
 * **Aplica sobre**: Pods
-* **Filtros**:No
-* **Parametros**: No
+* **Filtros**: No
+* **Parametros**: Si (Etiqueta de pods a excluir)
 ```yaml
 policies:
-  - name: require-probes
-    validation: enforce
-    namespace: test 
+- name: require-probes
+  validation: enforce
+  namespace: des-cudc
+  parameters: 
+    - openshift.io/build.name: "*"
+    - dar.kyverno/exclude.require.probes: 'true'
 ```
 ### require-requestlimit
 
 * **Descripción**: Exige la definición de request y limit
 * **Aplica sobre**: Pods
-* **Filtros**:No
-* **Parametros**: No
+* **Filtros**: No
+* **Parametros**: Si (Etiqueta de pods a excluir)
 ```yaml
 policies:
-  - name: require-requestlimit
-    validation: enforce
-    namespace: test 
+- name: require-probes
+  validation: enforce
+  namespace: des-cudc
+  parameters: 
+    - openshift.io/build.name: "*"
+    - dar.kyverno/exclude.require.reqlim: 'true'
 ```
 ## Images
 ### add-imagepullsecret

@@ -33,7 +33,7 @@ spec:
           - Job
           selector:
             matchLabels:
-              kyverno.application/qos: true
+              kyverno.application/qos: "true"
     validate:
       message: "resources.requests.memory must be equal to resources.limits.memory"
       deny:
@@ -50,7 +50,7 @@ spec:
           - Pod
           selector:
             matchLabels:
-              kyverno.application/qos: true
+              kyverno.application/qos: "true"
     validate:
       message: "resources.requests.memory must be equal to resources.limits.memory"
       deny:
@@ -67,7 +67,7 @@ spec:
           - CronJob
           selector:
             matchLabels:
-              kyverno.application/qos: true
+              kyverno.application/qos: "true"
     validate:
       message: "resources.requests.memory must be equal to resources.limits.memory"
       deny:
@@ -77,4 +77,5 @@ spec:
             operator: NotEquals
             value: 0
   {{- end }}
-{{- end }}
+---
+{{- end }}  

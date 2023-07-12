@@ -1,8 +1,9 @@
 {{- $policyname := "allowed-signedimages" }}
 {{- $defaults := .Values.defaults }}
-{{- $secret_ns := .Values.verifyImages.secret_namespace }}
 {{- range $policy := .Values.policies}}
 {{- if (eq $policy.name $policyname) }}
+{{- $secret_ns := default "kyverno" $policy.secret_namespace }}
+{{- $secret_name := default "cosign-public-key" $policy.secret_name }}
 apiVersion: kyverno.io/v1
 kind: {{- template "clusterOrNot" (dict "policy" $policy) }}
 metadata:
@@ -19,7 +20,7 @@ metadata:
       Los pods solamente hacen pull de imagenes que estén firmadas.     
     dar.kyverno.template/parameters: 'true'
     dar.kyverno.template/filter: 'false'  
-     
+    pod-policies.kyverno.io/autogen-controllers: none
 spec:
   background: {{ default $defaults.background $policy.background }}
   failurePolicy: Fail
@@ -35,16 +36,17 @@ spec:
             - count: 1
               entries:
                 - keys:
-                    publicKeys: "k8s://{{ $secret_ns }}/cosign-public-key"
+                    publicKeys: "k8s://{{ $secret_ns }}/{{ $secret_name }}"
                     signatureAlgorithm: sha256
           imageReferences:
           {{- range $policy.parameters }}
             - {{ . }}
           {{- end }}
-          mutateDigest: true
+          mutateDigest: false
           required: true
-          verifyDigest: true
+          verifyDigest: false
   validationFailureAction: {{ default $defaults.validation $policy.validation }}
   webhookTimeoutSeconds: 30
   {{- end }}
+---
 {{- end }}
