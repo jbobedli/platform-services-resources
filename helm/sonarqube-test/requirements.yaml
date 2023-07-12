@@ -1,5 +1,0 @@
-dependencies:
-- name: postgresql
-  version: 8.6.4
-  repository: 'https://gitlab.pro.portal.ss/migration/argo-platform'
-  condition: postgresql.enabled

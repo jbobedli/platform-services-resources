@@ -1,7 +1,0 @@
-{{- if .Values.brokers.manageNamespace | default false}}
-apiVersion: v1
-kind: Namespace
-metadata:
-  name: {{ .Values.brokers.namespace }}
-spec: {}
-{{- end}}
