@@ -1,0 +1,24 @@
+datagrid:
+  enabled: false
+  namespace: bookinfo
+rhsso:
+  enabled: true
+  namespaces:
+    - des-prueba-iam
+pipelines:
+  enabled: false
+  channel: pipelines-1.8
+elasticsearch:
+  enabled: false
+istio:
+  enabled: false
+microcks:
+  enabled: false
+webterminal:
+  enabled: false
+kiali:
+  enabled: false
+jaegger:
+  enabled: false
+global:
+  approvalPlan: Manual

@@ -1,0 +1,21 @@
+apiVersion: argoproj.io/v1alpha1
+kind: AppProject
+metadata:
+  name: platform-gitops
+  namespace: openshift-gitops
+  annotations:
+    "helm.sh/hook-weight": "5"
+spec:
+  clusterResourceWhitelist:
+    - group: '*'
+      kind: '*'
+  description: >-
+    For development/staging scenarios. Applications will have a *NOSYNC*
+    exclude
+  destinations:
+    - name: in-cluster
+      namespace: '*'
+      server: 'https://kubernetes.default.svc'
+  sourceRepos:
+    - 'https://gitlab.pro.portal.ss/migration/argo-platform.git'
+    - 'https://gitlab.pro.portal.ss/migration/custom-images.git'

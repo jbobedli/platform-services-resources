@@ -1,0 +1,35 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: sonarqube-appset
+  namespace: openshift-gitops
+spec:
+  generators:
+    - list:
+        elements:
+          - cluster: pro
+            url: https://kubernetes.default.svc
+            repoURL: 'https://gitlab.pro.portal.ss/migration/argo-platform'
+            targetNamespace: cicd
+            appName: sonarqube
+            project: platform-gitops
+  template:
+    metadata:
+      name: '{{appName}}-{{cluster}}'
+    spec:
+      #      syncPolicy:
+      #        automated:
+      #          prune: true
+      #          selfHeal: true
+      project: '{{project}}'
+      source:
+        repoURL: '{{repoURL}}'
+        targetRevision: master
+        path: 'helm/{{appName}}/'
+        helm:
+          valueFiles:
+            - values-base.yaml
+            - values-{{cluster}}.yaml
+      destination:
+        namespace: '{{targetNamespace}}'
+        server: 'https://kubernetes.default.svc'

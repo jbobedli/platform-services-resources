@@ -1,0 +1,35 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: bootstrap-appset
+  namespace: openshift-gitops
+  annotations:
+    "helm.sh/hook-weight": "15"
+spec:
+  generators:
+    - list:
+        elements:
+          - cluster: {{ printf "%s" .Values.cluster.name }}
+            url: https://kubernetes.default.svc
+            repoURL: {{ printf "%s" .Values.source.repourl }}
+            appName: operators
+            project: platform-gitops
+          - cluster: {{ printf "%s" .Values.cluster.name }}
+            url: https://kubernetes.default.svc
+            repoURL: {{ printf "%s" .Values.source.repourl }}
+            appName: platform-apps
+            project: platform-gitops
+  template:
+    metadata:
+      name: 'boostrap-{{"{{appName}}"}}-{{"{{cluster}}"}}'
+    spec:
+      project: '{{"{{project}}"}}'
+      source:
+        repoURL: '{{"{{repoURL}}"}}'
+        targetRevision: master
+        path: 'bootstrap/{{"{{cluster}}"}}/{{"{{appName}}"}}'
+        helm:
+          valueFiles:
+            - values.yaml
+      destination:
+        server: '{{"{{url}}"}}'
