@@ -1,0 +1,10 @@
+{{- range $nstolog := .Values.namespaces.eventforward }}
+kind: ServiceAccount
+apiVersion: v1
+metadata:
+  annotations:
+    argocd.argoproj.io/sync-wave: "1"
+  name: eventrouter-{{ $nstolog }}
+  namespace: {{ $nstolog }}
+---
+{{- end }}

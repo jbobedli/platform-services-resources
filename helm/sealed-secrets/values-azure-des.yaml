@@ -1,0 +1,9 @@
+podSecurityContext:
+  enabled: false
+  fsGroup:
+
+containerSecurityContext:
+  enabled: false
+  readOnlyRootFilesystem: false
+  runAsNonRoot: false
+  runAsUser:

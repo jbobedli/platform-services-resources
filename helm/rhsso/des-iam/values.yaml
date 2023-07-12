@@ -1,0 +1,16 @@
+keycloak:
+  name: prueba-keycloak
+  app: sso
+  externalAccess: true
+  profile: RHSSO
+  instances: 1
+  env:
+    cacheOwnersCount: 2
+    javaMaxMemRatio: 90
+  resources:
+    limits:
+      cpu: '1'
+      memory: 2Gi
+    requests:
+      cpu: '1'
+      memory: 2Gi

@@ -1,0 +1,45 @@
+secret:
+  name: token-tekton-pipe
+  data:
+    pass: bjgtb3NYZU55QVdQXzI0eWFmcVg=
+    token: QlpDUjY2NTE6bjgtb3NYZU55QVdQXzI0eWFmcVg=
+    user: QlpDUjY2NTE=
+
+tenants:
+  plataforma:
+    namespaces:
+      - name: kyverno
+        displayName: Entorno de Kyverno
+        labels:
+          openshift.io/cluster-monitoring: 'true'
+  iam:
+    namespaces:
+      - name: des-prueba-iam
+        displayName: Entorno de DES IAM prueba
+      - name: pre-prueba-iam
+        displayName: Entorno de PRE IAM prueba
+      - name: uat-prueba-iam
+        displayName: Entorno de UAT IAM prueba
+  prueba:
+    namespaces:
+      - name: des-prueba
+        displayName: Entorno de DES prueba
+        limitRange:
+          enabled: true
+          limits:
+            - type: Container
+              max:
+                cpu: '7'
+                memory: 50Gi
+              default:
+                cpu: 300m
+                memory: 400Mi
+              defaultRequest:
+                cpu: 300m
+                memory: 400Mi
+      - name: pre-prueba
+        displayName: Entorno de PRE prueba
+      - name: uat-prueba
+        displayName: Entorno de UAT prueba
+      - name: prueba-pipelines
+        displayName: Pipelines para el entorno de prueba

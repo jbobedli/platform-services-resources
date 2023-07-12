@@ -1,0 +1,26 @@
+{{- if or .Values.project.enabled.des .Values.project.enabled.pro }}
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  labels:
+    monitoring-key: middleware
+    prometheus: application-monitoring
+    role: alert-rules
+  name: {{ $.Values.project.name }}-containercpu-usage-alert
+  namespace: {{ $.Values.project.name }}
+spec:
+  groups:
+  - name: containercpuusage.rules
+    rules:
+    - alert: ContainerCpuUsage
+      annotations:
+        description: |-
+          {{` Container CPU usage is above 90%
+            VALUE = {{ $value }}
+            LABELS: {{ $labels }} `}}
+        summary: {{` Container CPU usage (instance {{ $labels.instance }}) `}}
+      expr: (sum(rate(container_cpu_usage_seconds_total[3m])) BY (instance, name) * 100) > 25
+      for: 2m
+      labels:
+        severity: warning-custom
+{{- end }}

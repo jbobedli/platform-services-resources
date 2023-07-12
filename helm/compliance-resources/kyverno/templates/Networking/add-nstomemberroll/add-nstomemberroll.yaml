@@ -1,0 +1,38 @@
+{{- $policyname := "add-nstomemberroll" }}
+{{- $defaults := .Values.defaults }}
+{{- range $policy := .Values.policies}}
+{{- if (eq $policy.name $policyname) }}
+apiVersion: kyverno.io/v1
+kind: ClusterPolicy
+metadata:
+  name: {{ default $policyname $policy.custom_name }}
+  annotations:
+    dar.kyverno.template/file: {{$policyname}}
+    dar.kyverno.policy/suitableforproduction: 'false'
+    dar.kyverno.policy/category: Networking
+    kyverno.io/minversion: 1.6.0
+    dar.kyverno.policy/subject: Service
+    dar.kyverno.policy/description: >-
+      Añade automaticamente un nuevo namespace al memberroll de Istio, solamente los namespaces que empiezan por un prefijo.
+    dar.kyverno.template/parameters: 'false'
+    dar.kyverno.template/filter: 'true'
+     
+spec:
+  background: {{ default $defaults.background $policy.background }}
+  validationFailureAction: {{ default $defaults.validation $policy.validation }}
+  rules:
+    - match:
+        resources:
+          kinds:
+            - Namespace
+      mutate: {}
+      name: add-namespace-rule
+      validate:
+        message: Namespace must be added to ServiceMeshMemberRoll
+        pattern:
+          metadata:
+            name: {{ $policy.filter }}
+
+  {{- end }}
+---
+{{- end }}  

@@ -1,0 +1,25 @@
+# Recorremos primero los tenants
+{{- range $key, $value := .Values.tenants }}
+# Por cada tenant, recorremos sus ns
+{{- range $clave, $valor := $value.namespaces }}
+kind: PeerAuthentication
+apiVersion: security.istio.io/v1beta1
+metadata:
+  name: {{ $key  }}-istio-peers
+  namespace: {{ $valor.name }}
+  labels:
+    app.kubernetes.io/instance: istio-dev
+spec:
+  selector:
+    matchLabels:
+      {{- range $k,$v := $value.peerauth.matchLabels }}
+      {{ $k }}: {{ $v }}
+      {{- end }}
+  mtls:
+    mode: {{ $value.peerauth.mtlsmode}}
+  portLevelMtls:
+    '8081':
+      mode: DISABLE
+---
+{{- end}}
+{{- end}}

@@ -1,0 +1,38 @@
+#image:
+#  repository: harbor..mir.es/images/custom-images/sonar
+#  tag: latest
+#  pullPolicy: IfNotPresent
+
+gateway:
+  host: services.apps.oca.5huu.p1.openshiftapps.com
+
+environment: pro
+
+serviceAccount:
+  create: true
+OpenShift:
+  enabled: true
+postgresql:
+  serviceAccount:
+    enabled: true
+  securityContext:
+    enabled: false
+  volumePermissions:
+    enabled: true
+    securityContext:
+      runAsUser: auto
+
+ #persistence: #esto al nivel de postgresql
+  #  storageClass: ocs-storagecluster-ceph-rbd
+
+#persistence:
+#  storageClass: ocs-storagecluster-cephfs
+
+#jvmOpts: "-Xms1Gi -XmX2Gi" para cuando haya que afinar app java
+resources:
+  requests:
+    memory: 2Gi
+    cpu: 200m
+  limits:
+    cpu: 800m
+    memory: 2.5Gi

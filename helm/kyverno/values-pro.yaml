@@ -1,0 +1,181 @@
+##Version resumida de values que se sobreescriben
+kyverno:
+  image:
+    # -- Image registry
+    registry:
+    # If you want to manage the registry you should remove it from the repository
+    # registry: ghcr.io
+    # repository: kyverno/kyverno
+    # -- Image repository
+    repository: ghcr.io/kyverno/kyverno  # kyverno: replaced in e2e tests
+    # -- Image tag
+    # Defaults to appVersion in Chart.yaml if omitted
+    tag:  # replaced in e2e tests
+    # -- Image pull policy
+    pullPolicy: IfNotPresent
+    # -- Image pull secrets
+    pullSecrets: []
+    # - secretName
+
+
+  # -- Existing Image pull secrets for image verify and imageData policies.
+  # This will define the `--imagePullSecrets` Kyverno argument.
+  existingImagePullSecrets:
+    # Define an existing image pull secret
+    #existingImagePullSecrets:
+  - harbor-auth
+    # - other-test-registry
+
+  replicaCount: 3
+  resources:
+    # -- Pod resource limits
+    limits:
+      memory: 2Gi
+    # -- Pod resource requests
+    requests:
+      cpu: 100m
+      memory: 128Mi
+
+  # -- Startup probe.
+  # The block is directly forwarded into the deployment, so you can use whatever startupProbes configuration you want.
+  # ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/
+  # @default -- See [values.yaml](values.yaml)
+  startupProbe:
+    httpGet:
+      path: /health/liveness
+      port: 9443
+      scheme: HTTPS
+    failureThreshold: 60
+    initialDelaySeconds: 6
+    periodSeconds: 120
+
+  # -- Liveness probe.
+  # The block is directly forwarded into the deployment, so you can use whatever livenessProbe configuration you want.
+  # ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/
+  # @default -- See [values.yaml](values.yaml)
+  livenessProbe:
+    httpGet:
+      path: /health/liveness
+      port: 9443
+      scheme: HTTPS
+    initialDelaySeconds: 30
+    periodSeconds: 120
+    timeoutSeconds: 10
+    failureThreshold: 2
+    successThreshold: 1
+
+  # -- Readiness Probe.
+  # The block is directly forwarded into the deployment, so you can use whatever readinessProbe configuration you want.
+  # ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/
+  # @default -- See [values.yaml](values.yaml)
+  readinessProbe:
+    httpGet:
+      path: /health/readiness
+      port: 9443
+      scheme: HTTPS
+    initialDelaySeconds: 10
+    periodSeconds: 20
+    timeoutSeconds: 120
+    failureThreshold: 6
+    successThreshold: 1
+
+  config:
+    # -- Resource types to be skipped by the Kyverno policy engine.
+    webhooks:
+      # Exclude namespaces
+       - namespaceSelector:
+           matchExpressions:
+           - key: kubernetes.io/metadata.name
+             #operator: NotIn
+             operator: In
+             values:
+               - pro-cudc
+               - pro-hsum
+
+    # -- Metrics config.
+    metricsConfig:
+      # -- Additional annotations to add to the metricsconfigmap
+      annotations: {}
+        # example.com/annotation: foo
+      namespaces: {
+        "include": ["pro-cudc","pro-hsum"],
+        "exclude": []
+      }
+
+  cleanupController:
+
+    # -- Enable cleanup controller.
+    enabled: true
+
+    image:
+      # -- Image registry
+      registry:
+      # If you want to manage the registry you should remove it from the repository
+      # registry: ghcr.io
+      # repository: kyverno/kyverno
+      # -- Image repository
+      repository: ghcr.io/kyverno/cleanup-controller  # kyverno: replaced in e2e tests
+      # -- Image tag
+      # Defaults to appVersion in Chart.yaml if omitted
+      tag:  # replaced in e2e tests
+      # -- Image pull policy
+      pullPolicy: IfNotPresent
+      # -- Image pull secrets
+      pullSecrets: []
+      # - secretName
+
+    # -- (int) Desired number of pods
+    replicas: 2
+
+
+    resources:
+      # -- Pod resource limits
+      limits:
+        memory: 256Mi
+      # -- Pod resource requests
+      requests:
+        cpu: 100m
+        memory: 64Mi
+
+    # -- Startup probe.
+    # The block is directly forwarded into the deployment, so you can use whatever startupProbes configuration you want.
+    # ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/
+    # @default -- See [values.yaml](values.yaml)
+    startupProbe:
+      httpGet:
+        path: /health/liveness
+        port: 9443
+        scheme: HTTPS
+      failureThreshold: 20
+      initialDelaySeconds: 2
+      periodSeconds: 6
+
+    # -- Liveness probe.
+    # The block is directly forwarded into the deployment, so you can use whatever livenessProbe configuration you want.
+    # ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/
+    # @default -- See [values.yaml](values.yaml)
+    livenessProbe:
+      httpGet:
+        path: /health/liveness
+        port: 9443
+        scheme: HTTPS
+      initialDelaySeconds: 30
+      periodSeconds: 60
+      timeoutSeconds: 15
+      failureThreshold: 4
+      successThreshold: 1
+
+    # -- Readiness Probe.
+    # The block is directly forwarded into the deployment, so you can use whatever readinessProbe configuration you want.
+    # ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/
+    # @default -- See [values.yaml](values.yaml)
+    readinessProbe:
+      httpGet:
+        path: /health/readiness
+        port: 9443
+        scheme: HTTPS
+      initialDelaySeconds: 5
+      periodSeconds: 10
+      timeoutSeconds: 15
+      failureThreshold: 6
+      successThreshold: 1

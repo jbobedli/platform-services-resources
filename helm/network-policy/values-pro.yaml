@@ -1,0 +1,4 @@
+general:
+  namespaces:
+    - pro-cudc
+    - cicd

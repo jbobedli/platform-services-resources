@@ -1,0 +1,42 @@
+{{- $policyname := "disallow-loadbalancer" }}
+{{- $defaults := .Values.defaults }}
+{{- range $policy := .Values.policies}}
+{{- if (eq $policy.name $policyname) }}
+apiVersion: kyverno.io/v1
+kind: {{- template "clusterOrNot" (dict "policy" $policy) }}
+metadata:
+{{- template "getNamespace" (dict "policy" $policy) }}
+  name: {{ default $policyname $policy.custom_name }}
+  annotations:
+    dar.kyverno.template/file: {{$policyname}}
+    dar.kyverno.policy/category: Networking
+    dar.kyverno.policy/suitableforproduction: 'true'
+    dar.kyverno.policy/subject: Service
+    kyverno.io/minversion: 1.6.0
+    dar.kyverno.policy/description: >-
+      Especially in cloud provider environments, a Service having type LoadBalancer will cause the
+      provider to respond by creating a load balancer somewhere in the customer account. This adds
+      cost and complexity to a deployment. Without restricting this ability, users may easily
+      overrun established budgets and security practices set by the organization. This policy restricts
+      use of the Service type LoadBalancer.    
+    dar.kyverno.template/parameters: 'false'
+    dar.kyverno.template/filter: 'false'  
+     
+spec:
+  validationFailureAction: {{ default $defaults.validation $policy.validation }}
+  background: {{ default $defaults.background $policy.background }}
+  rules:
+  - name: no-LoadBalancer
+    match:
+      any:
+      - resources:
+          kinds:
+          - Service
+    validate:
+      message: "Service of type LoadBalancer is not allowed."
+      pattern:
+        spec:
+          type: "!LoadBalancer"
+  {{- end }}
+---
+{{- end }}  

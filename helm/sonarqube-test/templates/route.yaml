@@ -1,0 +1,18 @@
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  annotations:
+    maistra.io/original-host: {{ $.Values.namespace }}-{{ $.Values.gateway.host }}
+  labels:
+    maistra.io/gateway-name: cudc-gateway
+    maistra.io/gateway-namespace: {{ $.Values.namespace }}
+  name: {{ $.Values.namespace }}-sonarqube-route
+  namespace: {{ $.Values.namespace }}
+spec:
+  host: {{ $.Values.namespace }}-{{ $.Values.gateway.host }}
+  port:
+    targetPort: http
+  to:
+    kind: Service
+    name: sonarqube-test-{{ $.Values.environment }}-sonarqube
+  wildcardPolicy: None

@@ -1,0 +1,14 @@
+# image:
+#   registry: harbor.dgp.mir.es
+#   repository: images/custom-images/sealed-secrets
+#   tag: v1.0
+
+podSecurityContext:
+  enabled: false
+  fsGroup:
+
+containerSecurityContext:
+  enabled: false
+  readOnlyRootFilesystem: false
+  runAsNonRoot: false
+  runAsUser:

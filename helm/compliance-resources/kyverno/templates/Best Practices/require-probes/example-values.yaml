@@ -1,0 +1,10 @@
+defaults:
+  validation: audit
+  background: false
+policies:
+- name: require-probes
+  validation: enforce
+  namespace: des-cudc
+  parameters: 
+    - openshift.io/build.name: "*"
+    - dar.kyverno/exclude.require.probes: 'true'

@@ -1,0 +1,29 @@
+{{- if .Values.realm }}
+apiVersion: keycloak.org/v1alpha1
+kind: KeycloakRealm
+metadata:
+  annotations:
+    argocd.argoproj.io/sync-wave: "2"
+  finalizers:
+    - realm.cleanup
+  name: {{ .Values.realm.name }}
+  labels:
+    tenant: {{ .Values.realm.name }}
+spec:
+  instanceSelector:
+    matchLabels:
+      app: {{ .Values.selectorApp }}
+  realm:
+    displayName: {{ .Values.realm.displayName }}
+    enabled: {{ .Values.realm.enabled }}
+    id: {{ .Values.realm.id }}
+    realm: {{ .Values.realm.name }}
+    {{- if .Values.realm.roles }}
+    roles:
+      realm:
+    {{- range .Values.realm.roles }}
+        - name: {{ .name }}
+          description: {{ .description }}
+    {{- end }}
+    {{- end }}
+{{- end }}

@@ -1,0 +1,15 @@
+{{- range $nstolog := .Values.namespaces.eventforward }}
+kind: ConfigMap 
+apiVersion: v1
+metadata:
+  annotations:
+    argocd.argoproj.io/sync-wave: "1"
+  name: eventrouter-{{ $nstolog }}
+  namespace: {{ $nstolog }}
+data:
+  config.json: |-
+    {
+      "sink": "stdout"
+    }
+---
+{{- end}}

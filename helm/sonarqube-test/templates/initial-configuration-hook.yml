@@ -1,0 +1,19 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  generateName: sonarqube-configuration
+  namespace: {{ .Values.namespace }}
+  annotations:
+    argocd.argoproj.io/hook: PostSync
+    argocd.argoproj.io/hook-delete-policy: HookSucceeded
+spec:
+  template:
+    spec:
+      containers:
+      - name: sonarqube-configuration-job
+        image: harbor.cudc.aws.comunidad.madrid/library/sonar-postsync-configuration:latest
+        imagePullSecrets:
+        - name: harbor-auth-pipelines
+        command: ["/bin/bash", "configure-sonarqube.sh"]
+      restartPolicy: Never
+  backoffLimit: 2

@@ -1,0 +1,42 @@
+{{- $policyname := "limit-replicacount" }}
+{{- $defaults := .Values.defaults }}
+{{- range $policy := .Values.policies}}
+{{- if (eq $policy.name $policyname) }}
+apiVersion: kyverno.io/v1
+kind: {{- template "clusterOrNot" (dict "policy" $policy) }}
+metadata:
+{{- template "getNamespace" (dict "policy" $policy) }}
+  name: {{ default $policyname $policy.custom_name }}
+  annotations:
+    dar.kyverno.template/file: {{$policyname}}
+    dar.kyverno.policy/suitableforproduction: 'true'
+    dar.kyverno.policy/category: Other
+    dar.kyverno.policy/subject: Deployment
+    kyverno.io/minversion: 1.6.0
+    dar.kyverno.template/filter: 'true'
+    dar.kyverno.template/parameters: 'true'
+     
+    dar.kyverno.policy/description: Sirve para condicionar la cantidad de replicas de un deployment, solo para aquellos con la etiqueta kyverno.application.type con determinado valor.     
+spec:
+  validationFailureAction: {{ default $defaults.validation $policy.validation }}
+  background: false
+  rules:
+    - name: deployment-has-multiple-replicas
+      match:
+        any:
+        - resources:
+            kinds:
+            - Deployment
+        {{- if $policy.filter }}
+            selector:
+              matchLabels:
+                {{ toYaml $policy.filter }}
+        {{- end }}
+      validate:
+        message: "Deployments of type {{ $policy.filter }} should have {{- first $policy.parameters }} replicas"
+        pattern:
+          spec:
+            replicas: " {{- first $policy.parameters }}"
+  {{- end }}
+---
+{{- end }}  

@@ -1,0 +1,46 @@
+{{- $policyname := "disallow-externalips" }}
+{{- $defaults := .Values.defaults }}
+{{- range $policy := .Values.policies}}
+{{- if (eq $policy.name $policyname) }}
+apiVersion: kyverno.io/v1
+kind: {{- template "clusterOrNot" (dict "policy" $policy) }}
+metadata:
+{{- template "getNamespace" (dict "policy" $policy) }}
+  name: {{ default $policyname $policy.custom_name }}
+  annotations:
+    dar.kyverno.template/file: {{$policyname}}
+    dar.kyverno.suitableforproduction: 'true'
+    dar.kyverno.policy/category: Networking
+    kyverno.io/minversion: 1.6.0
+    dar.kyverno.policy/subject: Service
+    dar.kyverno.policy/description: >-
+      Service externalIPs can be used for a MITM attack (CVE-2020-8554).
+      Restrict externalIPs or limit to a known set of addresses.
+      See: https://github.com/kyverno/kyverno/issues/1367. This policy validates
+      that the `externalIPs` field is not set on a Service.  
+    dar.kyverno.template/parameters: 'true'
+    dar.kyverno.template/filter: 'false'    
+     
+spec:
+  validationFailureAction: {{ default $defaults.validation $policy.validation }}
+  background: {{ default $defaults.background $policy.background }}
+  rules:
+  - name: check-ips
+    match:
+      any:
+      - resources:
+          kinds:
+          - Service
+    validate:
+      message: "externalIPs are not allowed."
+      pattern:
+        spec:
+          #Podemos crear una whitelist de ips
+          {{- if $policy.parameters }}
+          {{- template "whitelistsparser" (dict "policy" $policy) }}
+          {{- else}}
+          X(externalIPs): "null"
+          {{- end }}
+  {{- end }}
+---
+{{- end }}  

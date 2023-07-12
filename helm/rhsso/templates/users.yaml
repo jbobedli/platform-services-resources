@@ -1,0 +1,36 @@
+{{- if .Values.users }}
+{{- range .Values.users }}
+apiVersion: keycloak.org/v1alpha1
+kind: KeycloakUser
+metadata:
+  annotations:
+    argocd.argoproj.io/sync-wave: "4"
+  name: {{ .username }}
+spec:
+  realmSelector:
+    matchLabels:
+      tenant: {{ $.Values.realm.name }}
+  user:
+    username: {{ .username }}
+    {{- if .attributes }}
+    attributes:
+      {{- range $key, $value := .attributes }}
+      {{ $key }}:
+      {{- toYaml $value | nindent 8 }}
+      {{- end }}
+      {{- end }}
+    credentials:
+      - type: {{ .credentials.type }}
+        value: {{ .credentials.value }}
+        temporary: {{ .credentials.temporary }}
+    emailVerified: {{ .emailVerified }}
+    enabled: {{ .enabled }}
+    {{- if .roles }}
+    realmRoles:
+    {{- range .roles }}
+      - {{ . }}
+    {{- end }}
+    {{- end }}
+---
+{{- end}}
+{{- end}}

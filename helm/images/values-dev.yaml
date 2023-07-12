@@ -1,0 +1,28 @@
+#Imagen y service account para ejecutar el hook, la versión de la imagen tiene que estar alineada con openshift.
+hook:
+  serviceAccountName: openshift-gitops-argocd-application-controller
+  image: registry.redhat.io/openshift4/ose-cli-alt-rhel8:v4.10
+
+#Importador a la carta de imágenes y sus respectivas versiones.
+images:
+  - name: "openjdk-11-rhel7"
+    registry: "registry.access.redhat.com/openjdk"
+    version: "1.12-1.1652304496"
+    namespaces:
+      - des-prueba
+      - pre-prueba
+      - uat-prueba
+  - name: "nodejs-14"
+    registry: "registry.access.redhat.com/ubi8"
+    version: "1-72"
+    namespaces:
+      - des-prueba
+      - pre-prueba
+      - uat-prueba
+  - name: "nodejs-16"
+    registry: "registry.access.redhat.com/ubi8"
+    version: "1-32"
+    namespaces:
+      - des-prueba
+      - pre-prueba
+      - uat-prueba

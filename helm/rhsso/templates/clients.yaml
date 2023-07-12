@@ -1,0 +1,79 @@
+{{- if .Values.clients }}
+{{- range .Values.clients }}
+apiVersion: keycloak.org/v1alpha1
+kind: KeycloakClient
+metadata:
+  annotations:
+    argocd.argoproj.io/sync-wave: "3"
+  name: {{ .name }}
+spec:
+  realmSelector:
+    matchLabels:
+      tenant: {{ $.Values.realm.name }}
+  client:
+      clientId: {{ .clientId }}
+      name: {{ .name }}
+      rootUrl: {{ .rootUrl }}
+      baseUrl: {{ .baseUrl }}
+      surrogateAuthRequired: {{ .surrogateAuthRequired }}
+      enabled: {{ .enabled }}
+      clientAuthenticatorType: {{ .clientAuthenticatorType }}
+      secret: {{ .secret }}
+      {{- if .redirectUris }}
+      redirectUris:
+      {{- range $uri := .redirectUris }}
+      - {{ $uri }}
+      {{- end }}
+      {{- end }}
+      {{- if .webOrigins }}
+      webOrigins:
+      {{- range $origin := .webOrigins }}
+      - {{ $origin }}
+      {{- end }}
+      {{- end }}
+      notBefore: {{ .notBefore }}
+      bearerOnly: {{ .bearerOnly }}
+      consentRequired: {{ .consentRequired }}
+      standardFlowEnabled: {{ .standardFlowEnabled }}
+      implicitFlowEnabled: {{ .implicitFlowEnabled }}
+      directAccessGrantsEnabled: {{ .directAccessGrantsEnabled }}
+      serviceAccountsEnabled: {{ .serviceAccountsEnabled }}
+      publicClient: {{ .publicClient }}
+      frontchannelLogout: {{ .frontchannelLogout }}
+      protocol: {{ .protocol }}
+      {{- if .attributes }}
+      attributes:
+      {{- range $key, $value := .attributes }}
+        {{ $key }}: {{ $value }}
+        {{- end }}
+      {{- end }}
+      fullScopeAllowed: {{ .fullScopeAllowed }}
+      nodeReRegistrationTimeout: {{ .nodeReRegistrationTimeout }}
+      {{- if .protocolMappers }}
+      protocolMappers:
+      {{- range $index, $mapper := .protocolMappers }}
+      - name: {{ $mapper.name }}
+        #id: {{ $mapper.id }}
+        protocol: {{ $mapper.protocol }}
+        protocolMapper: {{ $mapper.protocolMapper }}
+        config:
+          {{- range $key, $value := $mapper.config }}
+          {{ $key }}: {{ $value }}
+          {{- end }}
+      {{- end }}
+      {{- end }}
+      {{- if .defaultClientScopes }}
+      defaultClientScopes:
+      {{- range $scope := .defaultClientScopes }}
+      - {{ $scope }}
+      {{- end }}
+      {{- end }}
+      {{- if .optionalClientScopes }}
+      optionalClientScopes:
+      {{- range $scope := .optionalClientScopes }}
+      - {{ $scope }}
+      {{- end }}
+      {{- end }}
+---
+{{- end }}
+{{- end }}

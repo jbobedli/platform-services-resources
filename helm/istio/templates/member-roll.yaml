@@ -1,0 +1,14 @@
+{{- if .Values.controlplane.enabled -}}
+kind: ServiceMeshMemberRoll
+apiVersion: maistra.io/v1
+metadata:
+  name: {{ .Values.controlplane.memberroll.name }}
+  namespace: {{ .Values.controlplane.namespace }}
+spec:
+  members:
+{{- range $key, $value := .Values.tenants }}
+{{- range $clave, $valor := $value.namespaces }}
+    - {{ $valor.name }}
+{{- end}}
+{{- end}}
+{{- end}}

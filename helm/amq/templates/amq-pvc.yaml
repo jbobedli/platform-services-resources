@@ -1,0 +1,31 @@
+{{- $rep := .Values.brokers.replicaCount | int }}
+{{- $appName := .Values.appName }}
+{{- $namespace := .Values.namespace }}
+{{- $pvcsize := .Values.pvcs.size }}
+{{- $index := 0 | int }}
+apiVersion: v1
+kind: List
+items:
+  {{- range untilStep 0 $rep 1 }}
+- apiVersion: v1
+  kind: PersistentVolumeClaim
+  metadata:
+    finalizers:
+      - kubernetes.io/pvc-protection
+    labels:
+      ActiveMQArtemis: {{ $appName }}
+      application: {{ $appName }}
+    name: {{ $appName }}-{{ $appName }}-ss-{{ $index }}
+    namespace: {{ $namespace }}
+  spec:
+    accessModes:
+      - ReadWriteOnce
+    resources:
+      requests:
+        storage: {{ $pvcsize }}
+    volumeMode: Filesystem
+{{ $index = add1 $index }}
+{{- end }}
+
+
+

@@ -1,0 +1,10 @@
+# Solamente hace falta cambiar la key del entorno a activar, si no existe, por defecto es false.
+# OJO!!!! se necesita que el padre del 'key: value' que se evalua en el if SÍ que exista,
+# por eso se crea un 'projectEnabled', porque si se hace con 'pro.enabled: true',
+# al evaluar los templates de, por ejemplo, val, no será capaz de introducir false por
+# defecto ya que 'val.enabled: true' no tiene ningún padre que exista.
+# Ref: https://github.com/helm/helm/issues/8026#issuecomment-677851638
+project:
+  name: pro-cudc
+  enabled:
+    pro: true
