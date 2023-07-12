@@ -1,4 +1,0 @@
-external-provider/node_cosign_provider/node_modules
-*.log
-cert
-.env
