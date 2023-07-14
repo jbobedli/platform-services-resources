@@ -1,5 +1,5 @@
 dependencies:
 - name: postgresql
   version: 8.6.4
-  repository: 'https://gitlab.pro.portal.ss/migration/argo-platform'
+  repository: 'https://github.com/NTTData-HybridCloud/platform-services'
   condition: postgresql.enabled

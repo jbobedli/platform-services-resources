@@ -19,7 +19,7 @@ spec:
       server: 'https://kubernetes.default.svc'
 {{- end }}
   sourceRepos:
-  - 'https://gitlab.pro.portal.ss/migration/argo-applications.git'
+  - 'https://github.com/NTTData-HybridCloud/gitops-apps'
 ---
 {{- end }}
 {{- end }}
