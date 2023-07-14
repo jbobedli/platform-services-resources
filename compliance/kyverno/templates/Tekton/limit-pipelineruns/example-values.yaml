@@ -1,8 +1,0 @@
-defaults:
-  validation: audit
-  background: false
-policies:
-  - name: limit-pipelineruns
-    validation: enforce
-    parameters:
-      - 3   

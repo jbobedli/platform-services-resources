@@ -1,9 +1,0 @@
-defaults:
-  validation: audit
-  background: false
-policies:
-  - name: add-imagepullsecret
-    validation: enforce
-    parameters:
-      - secretoharbor
-    filter: "registryconcreto/*"    
