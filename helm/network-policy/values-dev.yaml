@@ -1,0 +1,5 @@
+general:
+  namespaces:
+    - des-prueba
+    - pre-prueba
+    - uat-prueba

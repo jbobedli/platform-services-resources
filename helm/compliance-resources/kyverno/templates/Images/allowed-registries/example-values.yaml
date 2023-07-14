@@ -1,0 +1,9 @@
+defaults:
+  validation: audit
+  background: false
+policies:
+  - name: allowed-registries
+    validation: enforce
+    parameters:
+      - registryconcreto/*
+ 

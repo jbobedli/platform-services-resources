@@ -1,0 +1,11 @@
+tenants:
+  - name: prueba
+    createApplications: true
+    projects:
+      - name: prueba-apptoapps
+        namespaces:
+          - des-prueba
+        apps:
+          - name: des-prueba-apps
+            folder: prueba/des/
+            namespace: des-prueba

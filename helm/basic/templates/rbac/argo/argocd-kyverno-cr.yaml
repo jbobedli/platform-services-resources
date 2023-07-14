@@ -1,0 +1,18 @@
+kind: ClusterRole
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: argocd-kyverno-cr
+rules:
+  - apiGroups:
+      - kyverno.io
+    verbs:
+      - get
+      - watch
+      - list
+      - create
+      - patch
+      - delete
+      - update
+    resources:
+      - policies
+      - clusterpolicies

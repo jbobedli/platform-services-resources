@@ -1,0 +1,41 @@
+{{- if .Values.controlplane.enabled -}}
+apiVersion: maistra.io/v2
+kind: ServiceMeshControlPlane
+metadata:
+  name: {{ .Values.controlplane.name }}
+  namespace: {{ .Values.controlplane.namespace }}
+spec:
+  gateways:
+    {{- toYaml .Values.controlplane.gateways | nindent 4 }}
+  proxy:
+    logging:
+      level:  {{ .Values.controlplane.loglevel }}
+  security:
+    # mtls is set to permissive in red hat operator by default => tls where available # when set to true this changes to STRICT mode, and only with PeerAuthentication Objects can this be overriden
+    controlPlane:
+      mtls: {{ .Values.controlplane.mtls }}
+    dataPlane:
+      mtls: {{ .Values.controlplane.mtls }}
+    identity:
+      type: ThirdParty
+  tracing:
+    type: Jaeger
+    sampling: {{ .Values.controlplane.jaegertracing }} #number of traces in 0.1 increment. 10000-> 100% 100-> 1%
+  policy:
+    type: Istiod
+  addons:
+    {{- toYaml .Values.controlplane.addons | nindent 4 }}
+  runtime:
+    components:
+      pilot:
+        container: {}
+        deployment:
+          replicas: {{ .Values.controlplane.replicas }}
+    defaults:
+      container:
+        resources:
+          {{- toYaml .Values.controlplane.resources | nindent 10 }}
+  telemetry:
+    type: Istiod
+  version: {{ .Values.controlplane.version }}
+{{- end}}

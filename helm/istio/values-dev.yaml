@@ -1,0 +1,106 @@
+tenants:
+  prueba:
+    name: prueba
+    peerauth:
+      mtlsmode: STRICT
+      matchLabels:
+        app: prueba
+    namespaces:
+      - name: des-prueba
+        gateways:
+          - namePrefix: api-gateway
+            host: services-prueba-des.pub.imv-dev.giss-inss.local
+            credentialname: router-certs-public
+          - namePrefix: private-api-gateway
+            host: services-prueba-des.pri.imv-dev.giss-inss.local
+            credentialname: router-certs-private
+          - namePrefix: front-gateway
+            host: prueba-des.pub.imv-dev.giss-inss.local
+            credentialname: router-certs-public
+        requestAuth:
+          enabled: true
+          name: jwt-prueba
+          jwtRules:
+            issuer: https://keycloak-des-iam.apps.imv-dev.giss-inss.local/auth/realms/iam
+            jwks: '{"keys":[{"kid":"S5a0Xbva748aB_0ScvK7FJw7i-8GePxQ_0CcKHqk5Lo","kty":"RSA","alg":"RSA-OAEP","use":"enc","n":"rqU2hs2gMbl3qCsMayc6ON0qDaTLcoNU9Qiaor5mNgIV9zMVl5y56YxgGHixgAFyJhHqP5L4WcN70u_5t97ptETOneHFXOxwFWI6_0ud-xC2i1IrI91PR-Pc9LJIok_DO5GKYaJO5bavP3z3wi2ucgOT0JEKM8wxNScOs1K_sG5rJqVf-cMkFXJ5sWHG9FRk6Jg67NT6C_Ud4k9MfIfyUILvItTa6NIAK0AeMZ-W8J-M7shtvj4y7aQkGAH5mxFfvbpRuktxAVTuiHUkPaxARiLeBA2Y2e-2kKHqg47pdsxbOfl01Dfol384-Roe-2GCYRAH67OCi2C_X1TYwUmgYw","e":"AQAB","x5c":["MIIClTCCAX0CBgGHI9py9jANBgkqhkiG9w0BAQsFADAOMQwwCgYDVQQDDANpYW0wHhcNMjMwMzI3MTYxMzUxWhcNMzMwMzI3MTYxNTMxWjAOMQwwCgYDVQQDDANpYW0wggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCupTaGzaAxuXeoKwxrJzo43SoNpMtyg1T1CJqivmY2AhX3MxWXnLnpjGAYeLGAAXImEeo/kvhZw3vS7/m33um0RM6d4cVc7HAVYjr/S537ELaLUisj3U9H49z0skiiT8M7kYphok7ltq8/fPfCLa5yA5PQkQozzDE1Jw6zUr+wbmsmpV/5wyQVcnmxYcb0VGTomDrs1PoL9R3iT0x8h/JQgu8i1Nro0gArQB4xn5bwn4zuyG2+PjLtpCQYAfmbEV+9ulG6S3EBVO6IdSQ9rEBGIt4EDZjZ77aQoeqDjul2zFs5+XTUN+iXfzj5Gh77YYJhEAfrs4KLYL9fVNjBSaBjAgMBAAEwDQYJKoZIhvcNAQELBQADggEBACUhIs6WnxvR8B8GQ8BRzjMMLGd40UXGG/KbUZFyULvdGCxOPUKoh/hROxYLDTG+P0UohOp1HyZh46qx9o/dsAbP1SxZbUcuh5lA14oZC0mvhP8jxuSercEQ1d0tInqR3ftasfy+j84mIEGiCcBd6XUMSNwEKLROPr5v5Rx8aEKYKUGSC9BvnH7sSHNO22L4ufSBE3ORuu3pMciZOy7WzfsewtrUiqiOToK+O2sIb85ethrEmk/IOS/TZk7lcjKJvM+q//ED9UpJ9+VEY30jgBTCU4rQ6xvVyfMOYIY8WmsqxgmjDJ5bXGsP/C/KUkqNvPpe+ym4OKRZFLFnKHgNvRo="],"x5t":"a_IBabww5pgpQozsRgfcAa0xkw4","x5t#S256":"kXkuRrSSS0SqvLbJ2fdrVJUvTbPlv1KNkv472_rS9kg"},{"kid":"xRdaqQibfC1z2CKsDTmkB6_sr82cTTbpBb6rU8hTbqc","kty":"RSA","alg":"RS256","use":"sig","n":"oawIHklKtFfGOOM2mlwSYO-glwmuXgt0fA3I3OOnbhQvr2hiIL_Lx4ZSdrwD7l4UfE7Hhizrk-2wctmbgFN689ZmA1Em-IUp8t2iogAiyCKlsUWYm-723hMRuILvi3ac5Uf_5UU-EY6twg0jlWbzxWwMQritMddPJT2KHzMZgeTCcxuZiETzzpNg7BREO9Z2nG0kCvQrvoxOOO9DTs0uOZl9XWbn9MaimBbBGby9rXnX5ONWSsjIzGsFhPD0woToZ7Ag4ILIEiwAP1QHMEctp-3HvKdCcvqCR7G7ldHY-WwySuKqKvlNtAnNtWRJnPzZtxTufV7ayOjm-EaplDoQWQ","e":"AQAB","x5c":["MIIClTCCAX0CBgGHI9pyGDANBgkqhkiG9w0BAQsFADAOMQwwCgYDVQQDDANpYW0wHhcNMjMwMzI3MTYxMzUxWhcNMzMwMzI3MTYxNTMxWjAOMQwwCgYDVQQDDANpYW0wggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQChrAgeSUq0V8Y44zaaXBJg76CXCa5eC3R8Dcjc46duFC+vaGIgv8vHhlJ2vAPuXhR8TseGLOuT7bBy2ZuAU3rz1mYDUSb4hSny3aKiACLIIqWxRZib7vbeExG4gu+LdpzlR//lRT4Rjq3CDSOVZvPFbAxCuK0x108lPYofMxmB5MJzG5mIRPPOk2DsFEQ71nacbSQK9Cu+jE4470NOzS45mX1dZuf0xqKYFsEZvL2tedfk41ZKyMjMawWE8PTChOhnsCDggsgSLAA/VAcwRy2n7ce8p0Jy+oJHsbuV0dj5bDJK4qoq+U20Cc21ZEmc/Nm3FO59XtrI6Ob4RqmUOhBZAgMBAAEwDQYJKoZIhvcNAQELBQADggEBAGfqjthj1ohyaF46MUkMripvB/X/vxA+M2DU3KAXUHZdURFvdvmYGJd1/78nXWs794Luzf/DKGdHl5gZ1Cj/S2fK1hMcVyc5NB97PfIYuIJgsOoGlqyfOZJ3N7UwnbO6HjFmu2JKxN2jiWvAmsLQsXMg6EtIGYPcrE2V7uVvG2kclSTI9wEu/h5bxfbOSTVC7liVGBt7lUbWqstpV6SANk7P2SvbayMAcdVC9DTukeJ2+MmtlIQ+Yjtv4ujtI7ImtNr1iRrf1uG8bWy3qo3SDagvn934jxi7s4g180iJEWuGvSzdAhQ+tWkcAeq+t31IVMPjyyMYNHIM6kER26c7mNE="],"x5t":"sWHIJH2Q4E_Z7nvlth5wmq_iGGU","x5t#S256":"zJGdE7uDD4R6bE7inWZRi7pqTJ_uN-G8ntLnP2Fd8M4"}]}'
+          matchLabels:
+            app: prueba
+      - name: pre-prueba
+        gateways:
+          - namePrefix: api-gateway
+            host: services-prueba-pre.pub.imv-dev.giss-inss.local
+            credentialname: router-certs-public
+          - namePrefix: private-api-gateway
+            host: services-prueba-pre.pri.imv-dev.giss-inss.local
+            credentialname: router-certs-private
+          - namePrefix: front-gateway
+            host: prueba-pre.pub.imv-dev.giss-inss.local
+            credentialname: router-certs-public
+        requestAuth:
+          enabled: true
+          name: jwt-prueba
+          jwtRules:
+            issuer: https://keycloak-pre-iam.apps.imv-dev.giss-inss.local/auth/realms/iam
+            jwks: '{"keys":[{"kid":"1qdotHGg_lHVmzOG8SY1kJlKpw7ew20-nRuI529TGto","kty":"RSA","alg":"RS256","use":"sig","n":"rWkP-tWA430_Lfnu6veok3uX-FPo1VEaJw64pcdBX1fZ2trZZbF4zQzMHiygksyZClKFVm6jUKL_lPUci4cRVF0pBt-q92AdCf_x3HqxMfTwQ_U03ZObSJbLLkg5J-BFH4J3Gt5OsWQx78-LGDSIbfQbF0McsumnQlknz_OH_Vz7jpFkVx7DPI2ozC-y3gG9V6T0dlezKuyxRhRFaftXK21fs9a3a87ncUFsmiAMxKOoFB8NG2WZi_CMfys9ENCM22ww5Hucs_KbtucHjlI0N2t8ITZv8M_P7BD-ZCxR3Ai-sQIQmlyTv-UTw5lcJnCm6YNPfv-YGp9J_gLVlz3KgQ","e":"AQAB","x5c":["MIIClTCCAX0CBgGHnlpvijANBgkqhkiG9w0BAQsFADAOMQwwCgYDVQQDDANpYW0wHhcNMjMwNDIwMTEwNzE5WhcNMzMwNDIwMTEwODU5WjAOMQwwCgYDVQQDDANpYW0wggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCtaQ/61YDjfT8t+e7q96iTe5f4U+jVURonDrilx0FfV9na2tllsXjNDMweLKCSzJkKUoVWbqNQov+U9RyLhxFUXSkG36r3YB0J//HcerEx9PBD9TTdk5tIlssuSDkn4EUfgnca3k6xZDHvz4sYNIht9BsXQxyy6adCWSfP84f9XPuOkWRXHsM8jajML7LeAb1XpPR2V7Mq7LFGFEVp+1crbV+z1rdrzudxQWyaIAzEo6gUHw0bZZmL8Ix/Kz0Q0IzbbDDke5yz8pu25weOUjQ3a3whNm/wz8/sEP5kLFHcCL6xAhCaXJO/5RPDmVwmcKbpg09+/5gan0n+AtWXPcqBAgMBAAEwDQYJKoZIhvcNAQELBQADggEBADSdUTBUXfczVhCr6QPLl7Tg98TNmO591V71VtdVADUJHY8pXB1/h+dT5CY1Ftn8QvLIJVsQiHnPZ0KKtiyvC7NO4A2xFKcJ2O8V8peCMrSzfFcsvwAiBSoI3p79CLAHgL9DkruzDn1/4dJyYnVvSB03BckIF6plJqHnUBIJetHpFctj44E+sCi1xCFn5D4nN5RlNMD5E9U4jv9Suhn7xvY+xIh5MgAlVo0oIKeny/5R2OaXPhq92risxLbb6khu5M97h/ejXD9k7orBZ2EpxEsFocI25L3q2z7xFHTUyswBOQoq2vSDftg0bo7HtgUFHBjzV9M6jHL2dSgAqywSBPE="],"x5t":"J-rJLw95Pu3oj8Z8hwPqaYV8laI","x5t#S256":"HRZNouoobqKLQVT3I7MP9pxyRF1-lDbOy9bYw_ovyss"},{"kid":"JVzLL9y6U4kkzjdbAVQShIuakrZcq3KanrIMwWkOB4g","kty":"RSA","alg":"RSA-OAEP","use":"enc","n":"rfSFGUgVed6RGKcgzXFsk6BxT-d2HcWgrvrY4riAcEoZNXCXRyUf7fPREHyXEe0udz8ZYw_ur_bki_PZIKymUrbGs60143BRMhLQXLfFt0fbeRWQrShavp7H2dj_fjjMNkpR2cRNqrjC_PHUcLSxjt7V23gDrs_8-sksBJmMIbbbrLyR9m8GtnmVsa8bXLk7uNiWyX87vIZ_-RYg35WoLNXyNy7raPg7E_gTYrBBQ0mJhHOh4HtKOMgKR2Fz5c3XMr5tDPBJhTTpgOHJRC00_ikLPwNqD8hKUwYIK9Atsyms9kcq8e1NBeUayh8PWdtospGgWTLHeKUNebnpXxHajQ","e":"AQAB","x5c":["MIIClTCCAX0CBgGHnlpxFDANBgkqhkiG9w0BAQsFADAOMQwwCgYDVQQDDANpYW0wHhcNMjMwNDIwMTEwNzIwWhcNMzMwNDIwMTEwOTAwWjAOMQwwCgYDVQQDDANpYW0wggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCt9IUZSBV53pEYpyDNcWyToHFP53YdxaCu+tjiuIBwShk1cJdHJR/t89EQfJcR7S53PxljD+6v9uSL89kgrKZStsazrTXjcFEyEtBct8W3R9t5FZCtKFq+nsfZ2P9+OMw2SlHZxE2quML88dRwtLGO3tXbeAOuz/z6ySwEmYwhttusvJH2bwa2eZWxrxtcuTu42JbJfzu8hn/5FiDflags1fI3Luto+DsT+BNisEFDSYmEc6Hge0o4yApHYXPlzdcyvm0M8EmFNOmA4clELTT+KQs/A2oPyEpTBggr0C2zKaz2Ryrx7U0F5RrKHw9Z22iykaBZMsd4pQ15uelfEdqNAgMBAAEwDQYJKoZIhvcNAQELBQADggEBAD9XXH676uNgoi4v9Pd22XTsV8LNYH9koS4BP2RDILTXD/wIKL3e45bV0N3U1pG/mwhB2L5Qm5vWTCQ6bSypwWCKsRp21DRnWUHhDHGGEtfCimW7QR0s6FERm2Kj/l7/s+cu4JzyqrLK9tTv3A2WVwoUGvp8oRvQ1gR1oshf2xPcGj/4bcTV09ATNkc+lNKzKRA/5DBGY6W9kzyA+YyuBu2q2kBct+uJqjs8Jwx+sFxupP5H/S0sRFp9Rnosmj6cUAXFvPgJ4GmJkGTK9WEpo9ofLpXnFNaPOhk5eRFL+GTXL0UhbPePPLXUZYI2qQ5KfsSAd9n3jJPcS2rhDSOm+3I="],"x5t":"fTgPlWwsA7PhXh3hngm59ulgDHI","x5t#S256":"Bpawt6dDrYFO8A5Rm9KpuxczvfuDv2jXP6e8o39jkek"}]}'
+          matchLabels:
+            app: prueba
+      - name: uat-prueba
+        gateways:
+          - namePrefix: api-gateway
+            host: services-prueba-uat.pub.imv-dev.giss-inss.local
+            credentialname: router-certs-public
+          - namePrefix: private-api-gateway
+            host: services-prueba-uat.pri.imv-dev.giss-inss.local
+            credentialname: router-certs-private
+          - namePrefix: front-gateway
+            host: prueba-uat.pub.imv-dev.giss-inss.local
+            credentialname: router-certs-public
+        requestAuth:
+          enabled: true
+          name: jwt-prueba
+          jwtRules:
+            issuer: https://keycloak-uat-iam.apps.imv-dev.giss-inss.local/auth/realms/iam
+            jwks: '{"keys":[{"kid":"tQg8YUxaGDyHipMNDWG5VtfeNzMP71Ons2ctZuu9Nu0","kty":"RSA","alg":"RSA-OAEP","use":"enc","n":"rTEtXu2LBwx9sYrWXLSpllVe0dJikM_KUdsnMDsEg1RpP3PwLTh_H-4kIaQVsXRoyD88lTeSN9de8tKgJqxluspJj9M_t12IpTRri27JvBNgS-zxnPzfDHbxBpcL-mKckPb1sf5uKdvMYi9uA7wHVjakCipX_pZRnWBLkGeDfh0wetT8-b3Cfd4d1LX_mIxtoS1jLAN3up7N8H4g2CaDbGXbOlrGp8ofc1S4xE0m3Le-jS_bEJ8Q0g3y6pT21_tugRLN45SkXWiNWem8BH4eu8cI4Wx-M50z_119H5C4jh5nD_r2xV4-dlMsaoiZ5GN9-rdNbmvRtvivWeJOTW5G8w","e":"AQAB","x5c":["MIIClTCCAX0CBgGHnwBKMDANBgkqhkiG9w0BAQsFADAOMQwwCgYDVQQDDANpYW0wHhcNMjMwNDIwMTQwODI5WhcNMzMwNDIwMTQxMDA5WjAOMQwwCgYDVQQDDANpYW0wggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCtMS1e7YsHDH2xitZctKmWVV7R0mKQz8pR2ycwOwSDVGk/c/AtOH8f7iQhpBWxdGjIPzyVN5I3117y0qAmrGW6ykmP0z+3XYilNGuLbsm8E2BL7PGc/N8MdvEGlwv6YpyQ9vWx/m4p28xiL24DvAdWNqQKKlf+llGdYEuQZ4N+HTB61Pz5vcJ93h3Utf+YjG2hLWMsA3e6ns3wfiDYJoNsZds6Wsanyh9zVLjETSbct76NL9sQnxDSDfLqlPbX+26BEs3jlKRdaI1Z6bwEfh67xwjhbH4znTP/XX0fkLiOHmcP+vbFXj52UyxqiJnkY336t01ua9G2+K9Z4k5NbkbzAgMBAAEwDQYJKoZIhvcNAQELBQADggEBAHC4zuR3R+DRAAjt5eG2uvKThL6cY3uAO5MlcL9pE+MDp+cIepHJwCY6CA492lDDV5w0NJb2edkfEBUKxzYTlqJC0z/Fxfg0oNaFqETPGSoMb1PMGWklZnA0KN0IrgmBELCnJcDqfLLZ2RgoLKBCqdBUwKkAG7FF1LS0GexGFTu/zm87Y4XQcwRNVyfR5xZczJQq9lhRiyiiM61pEPxvztpO4jFJ6fYGvFFuf/E5BpRSND7Nj3SJu+ql1m6ccQNni5iqkumt+tJDx9oyDh5U/LV1rQo94i+0rp1qlNl+qPRs1x/W01vH37WkGdWkA4vKe43c2zp2QLJo9UuAzOmH2ns="],"x5t":"4Bog-fXr8_iOzGIDGbNeZcxp7Yc","x5t#S256":"GgfMdY6MyVcE7U1368F28ld-s3U1aaX94d03f2OYuSM"},{"kid":"OtRaz7x3jeRCUPwmctvYyKdJT0LwBMHZjaIrCF5SvVw","kty":"RSA","alg":"RS256","use":"sig","n":"lw0pm5KRjAr4IK3IKDxmKWKpAkkuOlLMLu2U_lhjaqCMcVo1iF7jIF2aUNDZhAOuN1QZhQ3pHQB1A0yKCKrLC-YR-NkMQAuaGNsEJ7KRWcm7JolQ74Tch8qEvoyZfLxfLNmVcx0bV10qVi2O32nc5mHc-VGYZFsLrYNrKf_DkhEA31EjPiDQdVaupgtk3Iuc_trRXOcg0Gim0owto2fNxfb53mpx5pgwLgW7R7nlAbk8-zYDos4U_XH1_kgovobq7g8FPdM1GXebMo3acf4-d_RNbAXzlf13LtFVpyr2VYrKPxLYOVj2jlfRWCXnPnmvT5xkegk6KsC498fPKxgRLw","e":"AQAB","x5c":["MIIClTCCAX0CBgGHnwBJRzANBgkqhkiG9w0BAQsFADAOMQwwCgYDVQQDDANpYW0wHhcNMjMwNDIwMTQwODI4WhcNMzMwNDIwMTQxMDA4WjAOMQwwCgYDVQQDDANpYW0wggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCXDSmbkpGMCvggrcgoPGYpYqkCSS46Uswu7ZT+WGNqoIxxWjWIXuMgXZpQ0NmEA643VBmFDekdAHUDTIoIqssL5hH42QxAC5oY2wQnspFZybsmiVDvhNyHyoS+jJl8vF8s2ZVzHRtXXSpWLY7fadzmYdz5UZhkWwutg2sp/8OSEQDfUSM+INB1Vq6mC2Tci5z+2tFc5yDQaKbSjC2jZ83F9vneanHmmDAuBbtHueUBuTz7NgOizhT9cfX+SCi+huruDwU90zUZd5syjdpx/j539E1sBfOV/Xcu0VWnKvZViso/Etg5WPaOV9FYJec+ea9PnGR6CToqwLj3x88rGBEvAgMBAAEwDQYJKoZIhvcNAQELBQADggEBAH5/8q190vokHHckVBjlmh2sSElOttAq/XJnEqew+ks8gta4M9953gUm6WpVwl9VOfGqcTxuCkm8QgaKxvsGMU1MYRDCrZAAqhQZ7+zVt0DvvsEevhHljG9s/09bOYm9bosh6sNy6ZE9aNPFyeH6U1WBYnS/sh0n8YHE5Ppt2AshnbFdGCe0bF8TRz4hv/SgF08DkBbcGO5zwekTKCWtMO/dfKiI3WtarW3TA5HTuwJ7l3P8Y+R1XfpzTi6F7fcuwHTrhOEIuhLWzzXE9Nmg1u2dSD86eljuWAIwC6Yi/+PlBIxdBLkFeXaFz4UxiyZSXNjHPCjUrCT+qjj/3rn2w8c="],"x5t":"_vXSIgi7Ysv_D6QADrk6afclO2M","x5t#S256":"wIz-w-f8zKgn421YQpM9mxbn0_4HXw7AYNK1CmnYtPo"}]}'
+          matchLabels:
+            app: prueba
+
+controlplane:
+  enabled: false
+  memberroll:
+    name: default
+  namespace: istio-system
+  name: mesh-cudc-cp
+  loglevel: warn
+  mtls: true
+  jaegertracing: 10000 # cambiar este valor en otros entornos. Es el porcentaje en enteros de 0.01% de trazas analizadas
+  addons:
+    grafana:
+      enabled: true
+    jaeger:
+      install:
+        storage:
+          type: Memory
+    kiali:
+      enabled: true
+    prometheus:
+      enabled: true
+  gateways:
+    egress:
+      enabled: false
+      runtime:
+        deployment:
+          replicas: 0
+    ingress:
+      enabled: true
+      runtime:
+        deployment:
+          replicas: 2
+  replicas: 2
+  resources:
+    requests:
+      cpu: 10m
+      memory: 128Mi
+    limits:
+      cpu: 2000m
+      memory: 1024Mi
+  version: v2.3

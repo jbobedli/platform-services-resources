@@ -1,0 +1,60 @@
+{{- $policyname := "require-requestlimit" }}
+{{- $defaults := .Values.defaults }}
+{{- range $policy := .Values.policies}}
+{{- if (eq $policy.name $policyname) }}
+apiVersion: kyverno.io/v1
+kind: {{- template "clusterOrNot" (dict "policy" $policy) }}
+metadata:
+{{- template "getNamespace" (dict "policy" $policy) }}
+  name: {{ default $policyname $policy.custom_name }}
+  annotations:
+    dar.kyverno.template/file: {{$policyname}}
+    dar.kyverno.policy/suitableforproduction: 'true'
+    dar.kyverno.policy/category: Best Practices
+    dar.kyverno.policy/subject: Pod
+    kyverno.io/minversion: 1.6.0
+    dar.kyverno.policy/description: >-
+      As application workloads share cluster resources, it is important to limit resources
+      requested and consumed by each Pod. It is recommended to require resource requests and
+      limits per Pod, especially for memory and CPU. If a Namespace level request or limit is specified,
+      defaults will automatically be applied to each Pod based on the LimitRange configuration.
+      This policy validates that all containers have something specified for memory and CPU
+      requests and memory limits.  
+    dar.kyverno.template/parameters: 'true'
+    dar.kyverno.template/filter: 'false'    
+        
+spec:
+  validationFailureAction: {{ default $defaults.validation $policy.validation }}
+  background: {{ default $defaults.background $policy.background }}
+  rules:
+  - name: validate-resources
+  {{- if $policy.parameters }}
+    exclude:
+      any:
+    {{- range $policy.parameters }}
+      - resources:
+          selector:
+            matchLabels:
+              {{ toYaml . }}
+    {{- end }}
+  {{- end }} 
+    match:
+      any:
+      - resources:
+          kinds:
+          - Pod
+    validate:
+      message: "CPU and memory resource requests and limits are required."
+      pattern:
+        spec:
+          containers:
+          - resources:
+              requests:
+                memory: "?*"
+                cpu: "?*"
+              limits:
+                memory: "?*"
+                cpu: "?*"
+  {{- end }}
+---
+{{- end }}  

@@ -1,0 +1,4 @@
+project:
+  name: pro-cudc
+  enabled:
+    pro: true

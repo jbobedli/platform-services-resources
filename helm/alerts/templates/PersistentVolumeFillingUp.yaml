@@ -1,0 +1,26 @@
+{{- if or .Values.project.enabled.des .Values.project.enabled.pro }}
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  labels:
+    monitoring-key: middleware
+    prometheus: application-monitoring
+    role: alert-rules
+  name: {{ $.Values.project.name }}-persistentvolumefillingup-alert
+  namespace: {{ $.Values.project.name }}
+spec:
+  groups:
+  - name: persistentvolumefillingup.rules
+    rules:
+    - alert: PersistentVolumeFillingUp
+      annotations:
+        description: {{` The PersistentVolume claimed by {{ $labels.persistentvolumeclaim
+          }} in Namespace {{ $labels.namespace }} is at 80% or higher. `}}
+        summary: {{` PersistentVolumeClaim {{ $labels.persistentvolumeclaim }} is filling up. `}}
+      expr: (kubelet_volume_stats_used_bytes{job="kubelet",metrics_path="/metrics",namespace="{{ $.Values.project.name }}"}
+        / kubelet_volume_stats_capacity_bytes{job="kubelet",metrics_path="/metrics",namespace="{{ $.Values.project.name }}"})
+        * 100 >= 80 and kubelet_volume_stats_used_bytes{job="kubelet",metrics_path="/metrics",namespace="{{ $.Values.project.name }}"} > 0
+      for: 1m
+      labels:
+        severity: critical
+{{- end }}
