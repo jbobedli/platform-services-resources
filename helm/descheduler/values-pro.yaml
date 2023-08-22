@@ -1,0 +1,3 @@
+appName: cluster
+namespace: openshift-kube-descheduler-operator
+mode: Predictive

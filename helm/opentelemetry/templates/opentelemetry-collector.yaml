@@ -1,0 +1,19 @@
+{{- range $namespace := .Values.collectors.namespaces }}
+apiVersion: opentelemetry.io/v1alpha1
+kind: OpenTelemetryCollector
+metadata:
+  labels:
+    app.kubernetes.io/managed-by: opentelemetry-operator
+  name: otel
+  namespace: {{ $namespace.name }}
+spec:
+  config: {{ $namespace.config }}
+  ingress:
+    route: {}
+  mode: {{ default  "deployment" $namespace.mode }}
+  replicas: {{ default  1 $namespace.replicas }}
+  resources: {}
+  targetAllocator:
+    prometheusCR: {}
+  upgradeStrategy: none
+{{- end }}
