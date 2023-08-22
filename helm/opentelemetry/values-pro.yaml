@@ -1,0 +1,30 @@
+collectors:
+- namespace: distributed-tracing
+  name: otel-custom
+  #mode: deployment
+  #replicas: 1
+  config: |
+    receivers:
+      otlp:
+        protocols:
+          grpc:
+          http:
+
+      exporters:
+        jaeger:
+          endpoint: http://jaeger-collector.istio-system:14250
+          tls:
+            insecure: true
+        logging:
+        otlp:
+          endpoint: http://jaeger-collector.istio-system:4317
+          tls:
+            insecure: true
+        #zipkin:
+        #  endpoint: http://jaeger-collector.istio-system:9411/api/v2/spans
+
+      service:
+        pipelines:
+          traces:
+            receivers: [otlp]
+            exporters: [otlp]

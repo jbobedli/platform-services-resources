@@ -12,6 +12,9 @@ tenants:
         displayName: Entorno de Kyverno
         labels:
           openshift.io/cluster-monitoring: 'true'
+      - name: distributed-tracing
+        displayName: Entorno de opentelemetry
+
   iam:
     namespaces:
       - name: des-prueba-iam
