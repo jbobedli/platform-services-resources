@@ -70,6 +70,7 @@ spec:
       g, frontend, role:role-develop
       g, framework, role:role-develop
       g, arquitectura, role:admin
+      g, cluster-admins, role:admin
     scopes: '[groups]'
   repo:
     resources:
