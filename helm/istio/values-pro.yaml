@@ -86,3 +86,26 @@ controlplane:
       cpu: 2000m
       memory: 1024Mi
   version: v2.3
+
+serviceentry:
+  - name: amq
+    namespace: 
+      - des-tenant-1
+      - des-tenant-2
+    hosts:
+      - amq-namespace-des.amq-broker
+    port: 5672
+  - name: amq
+    namespace: 
+      - pre-tenant-1
+      - pre-tenant-2
+    hosts:
+      - amq-namespace-pre.amq-broker
+    port: 5672
+
+  - name: keycloak
+      - des-tenant-1
+      - pre-tenant-2
+    hosts:
+      - keycloak.iam
+    port: 8443
