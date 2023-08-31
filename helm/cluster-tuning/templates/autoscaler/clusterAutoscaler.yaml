@@ -1,0 +1,28 @@
+{{- if .Values.autoscalers.enabled }}
+apiVersion: "autoscaling.openshift.io/v1"
+kind: "ClusterAutoscaler"
+metadata:
+  # Solamente admite el nombre default, sino salta un error 
+  # "Error from server (Name "clusterautoscaler" is invalid, only "default" is allowed)"
+  name: "default"
+spec:
+  podPriorityThreshold: {{ .Values.autoscalers.clusterAutoscaler.podPriorityThreshold }} 
+  resourceLimits:
+    maxNodesTotal: {{ .Values.autoscalers.clusterAutoscaler.maxNodesTotal }} 
+    # Los valores de CPU, memoria... se cogen de todos los nodos, no solamente de los 
+    # que controla el autoscaler. por lo que si el master usa 10cpu y un worker 2,
+    # se considera que en total hay 12 en uso. por lo que si el maximo es 20, se podran ampliar
+    # hasta 8 cpu más
+    cores:
+      min: {{ .Values.autoscalers.clusterAutoscaler.cores.min }}  
+      max: {{ .Values.autoscalers.clusterAutoscaler.cores.max }}
+    memory:
+      min: {{ .Values.autoscalers.clusterAutoscaler.memory.min }}
+      max: {{ .Values.autoscalers.clusterAutoscaler.memory.max }}
+  scaleDown: 
+    enabled: true 
+    delayAfterAdd: 10m 
+    delayAfterDelete: 5m 
+    delayAfterFailure: 30s 
+    unneededTime: 5m 
+{{- end }}

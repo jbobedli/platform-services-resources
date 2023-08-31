@@ -1,0 +1,58 @@
+{{- if .Values.tuned.global.enabled}}
+{{- if .Values.tuned.default.enabled}}
+# Este tuned profile se saca  con  oc get Tuned/default -o yaml -n openshift-cluster-node-tuning-operator
+# No puede ser editado (es gestionado por operador). Sin embargo se usa como plantilla
+apiVersion: tuned.openshift.io/v1
+kind: Tuned
+metadata:
+  name: default
+  namespace: openshift-cluster-node-tuning-operator
+spec:
+#para incluir modificaciones a nivel de sistem (fichero /etc/tuned.conf en imagenes rhel) hay que crear otras instancias de tipo Tuned
+#crear nuevos profiles (usando de base con include otros existentes y añadir las reglas de aplicacion
+#de menor a mayor priority, se aplica al nodo el perfil que primero aplique las reglas de match
+
+#  profile:
+#    - data: |
+#        [main]
+#        summary=Custom OpenShift node profile for HPC compute workloads
+#        include=openshift-node,hpc-compute
+#      name: openshift-node-hpc-compute
+
+  recommend:
+    - match:
+        - label: node-role.kubernetes.io/master
+        - label: node-role.kubernetes.io/infra
+      operand:
+        debug: false
+      priority: 30
+      profile: openshift-control-plane
+    - operand:
+        debug: false
+      priority: 40
+      profile: openshift-node
+
+#plugins de tunedd a añadir en -data
+#  audio
+#  cpu
+#  disk
+#  eeepc_she
+#  modules
+#  mounts
+#  net
+#  scheduler
+#  scsi_host
+#  selinux
+#  sysctl
+#  sysfs
+#  usb
+#  video
+#  vm
+#
+#  - no soportados
+#  bootloader
+#  script
+#  systemd
+
+{{- end}}
+{{- end}}

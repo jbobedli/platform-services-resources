@@ -1,0 +1,13 @@
+kind: ClusterRole
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: clusterautoscaler
+rules:
+  - verbs:
+      - create
+      - patch
+      - delete
+    apiGroups:
+      - autoscaling.openshift.io
+    resources:
+      - clusterautoscalers

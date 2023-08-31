@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: List
+items:
+  {{- range $namespace, $limitrangeval := .Values.limitrange.namespaces }}
+  - apiVersion: v1
+    kind: LimitRange
+    metadata:
+      name: {{ $namespace }}-limitrange
+      namespace: {{ $namespace }}
+    spec:
+{{- toYaml $limitrangeval | nindent 6 }}
+  {{- end }}
+
+
+
+
+

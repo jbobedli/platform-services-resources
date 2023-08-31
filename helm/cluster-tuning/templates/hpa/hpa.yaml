@@ -1,0 +1,50 @@
+{{- if .Values.hpa.enabled }}
+{{- range $hpaDefinition := .Values.hpa.hpaDefinition }}
+apiVersion: "autoscaling/v2beta2"
+kind: "HorizontalPodAutoscaler"
+metadata:
+  name: hpa-{{ $hpaDefinition.deploymentName }}
+  namespace: {{ $hpaDefinition.namespace }}
+spec:
+  maxReplicas: {{ $hpaDefinition.maxReplicas }}
+  minReplicas: {{ $hpaDefinition.minReplicas }}
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: deployment
+    name: {{ $hpaDefinition.deploymentName }}
+  metrics:
+    - type: Resource
+      resource:
+        name: memory
+        target:
+          type: Utilization
+          averageUtilization: {{ $hpaDefinition.memory.averageUtilization }}
+    - type: Resource
+      resource:
+        name: cpu
+        target:
+          type: Utilization
+          averageUtilization: {{ $hpaDefinition.cpu.averageUtilization }}
+  behavior:
+    scaleDown:
+      stabilizationWindowSeconds: 300
+      policies:
+      - type: Pods
+        value: {{ $hpaDefinition.scaleDown.podValue }}
+        periodSeconds: 60
+      - type: Percent
+        value: {{ $hpaDefinition.scaleDown.percentValue }}
+        periodSeconds: 60
+      selectPolicy: Max
+    scaleUp:
+      stabilizationWindowSeconds: 300
+      policies:
+      - type: Pods
+        value: {{ $hpaDefinition.scaleUp.podValue }}
+        periodSeconds: 60
+      - type: Percent
+        value: {{ $hpaDefinition.scaleUp.percentValue }}
+        periodSeconds: 60
+      selectPolicy: Max
+{{- end }}
+{{- end }}

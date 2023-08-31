@@ -1,0 +1,38 @@
+{{- if .Values.kubelet.workers.enabled}}
+apiVersion: machineconfiguration.openshift.io/v1
+kind: KubeletConfig
+metadata:
+  name: {{ .Values.kubelet.workers.appName }}
+spec:
+  #autoSizingReserved: true
+#  kubeletConfig:
+  machineConfigPoolSelector:
+    matchLabels:
+      pools.operator.machineconfiguration.openshift.io/worker: ""
+  kubeletConfig:
+    systemReserved:
+      cpu: 550m
+      memory: 1250Mi
+    evictionSoft:
+      memory.available: "350Mi"
+#      nodefs.available: "10%"
+#      nodefs.inodesFree: "5%"
+      imagefs.available: "15%"
+      imagefs.inodesFree: "10%"
+    evictionSoftGracePeriod:
+      memory.available: "2m30s"
+      nodefs.available: "2m30s"
+      nodefs.inodesFree: "2m30s"
+      imagefs.available: "2m30s"
+      imagefs.inodesFree: "2m30s"
+    evictionHard:
+      memory.available: "250Mi"
+      nodefs.available: "5%"
+      nodefs.inodesFree: "4%"
+      imagefs.available: "10%"
+      imagefs.inodesFree: "5%"
+    evictionPressureTransitionPeriod: 0s
+    imageMinimumGCAge: 5m
+    imageGCHighThresholdPercent: 80
+    imageGCLowThresholdPercent: 75
+{{- end }}

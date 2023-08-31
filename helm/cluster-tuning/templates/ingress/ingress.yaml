@@ -1,0 +1,9 @@
+{{- if .Values.ingress }}
+apiVersion: config.openshift.io/v1
+kind: Ingress
+metadata:
+  name: {{ .Values.ingress.name }}
+spec:
+  appsDomain: {{ .Values.ingress.appsDomain }}
+  domain: {{ .Values.ingress.domain }}
+{{- end }}

@@ -1,0 +1,100 @@
+kubelet:
+  workers:
+    appName: workers-kubelet-config
+    enabled: true
+  masters:
+    appName: masters-kubelet-config
+    enabled: false
+limitrange:
+  appName: limitrange
+  namespaces:
+    pipelines-platform:
+      limits:
+        - type: Container
+          default:
+            memory: 512Mi
+          defaultRequest:
+            memory: 128Mi
+    pipelines-ees:
+      limits:
+        - type: Container
+          default:
+            memory: 4Gi
+          defaultRequest:
+            memory: 512Mi
+    pro-ees:
+      limits:
+        - type: Container
+          default:
+            memory: 3Gi
+          defaultRequest:
+            memory: 512Mi
+
+platform:
+  namespace: pipelines-platform
+  suspend: false
+  expression: "*/15 * * * *"
+  serviceAccount: pipeline
+  serviceAccountName: pipeline
+  
+tuned:
+  global:
+    enabled: false
+  default:
+    enabled: false
+  example:
+    enabled: false
+
+hpa:
+  enabled: false
+  hpaDefinition:
+    - deploymentName: administration-pro
+      namespace: tenant-des
+      minReplicas: 1
+      maxReplicas: 5
+      scaleDown:
+        podValue: 1
+        percentValue: 10
+      scaleUp:
+        podValue: 1
+        percentValue: 10
+      memory:
+        averageUtilization: 70
+      cpu:
+        averageUtilization: 70
+
+autoscalers:
+  enabled: true
+  machinesets:
+    - autoscaler:
+        min: 4 
+        max: 8 
+        name: name-machineset-worker
+  clusterAutoscaler:
+    # Los pods con una prioridad menor que esta, no provocan que se autoescale,
+    # ni tampoco previene que se elimine un nodo para hacer scale down.
+    # si es mayor si que autoescalará si es necesario y hará que el nodo no se pueda eliminar
+    # si no se puede asignar el pod a otro nodo correctamente.
+    podPriorityThreshold: -10
+    # 3 Nodos master, 3 nodos logging 3 nodos odf y cada worker (mediante machineautoscaler) estan entre 4 y 8
+    maxNodesTotal: 17
+    # Los valores de CPU, memoria... se cogen de todos los nodos, no solamente de los 
+    # que controla el autoscaler. por lo que si el master usa 10cpu y un worker 2,
+    # se considera que en total hay 12 en uso. por lo que si el maximo es 20, se podran ampliar
+    # hasta 8 cpu más
+    # 3 nodos masters son 8 cores y 32GiB (policia)
+    # 4-8 nodos workers 8 cores y 32GiB (policia)
+    # 3 nodos loggin 8 cores y 32GiB (policia)
+    # 3 nodos odf 8 cores y 32GiB (policia)
+    cores:
+      min: 104 # (3+3+3+4) * 8
+      max: 136 # (3+3+3+8) * 8
+    memory:
+      min: 416 # (3+3+3+4) * 32
+      max: 544 # (3+3+3+8) * 32
+
+#CONFIG INGRESS
+ingress:
+  name: cluster
+  appsDomain: dominio.ingress.es
+  domain: apps.ocp.tenant.local

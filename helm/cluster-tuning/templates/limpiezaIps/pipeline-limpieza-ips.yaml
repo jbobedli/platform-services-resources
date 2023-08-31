@@ -1,0 +1,96 @@
+apiVersion: tekton.dev/v1beta1
+kind: Pipeline
+metadata:
+  name: limpieza-ips
+  namespace: {{ .Values.projectPlatform.namespace }}
+spec:
+  workspaces:
+    - name: shared-workspace
+  tasks:
+    - name: limpieza-ips
+      taskRef: 
+        name: openshift-client-generic
+      params:
+        - name: registry-url
+          value: "{{ .Values.url.harbor.imagesCustom }}" 
+        - name: SCRIPT
+          value: |
+                for ippool_file in $(oc get ippool -n openshift-multus --no-headers | cut -d' ' -f1)
+                do
+                    array_coincidencias=()
+                    oc get ippool/$ippool_file -n openshift-multus -o json | jq '.spec.allocations | keys | .[]' > ippool_ids.txt
+                    #Elimina el retorno de carro para que la variable se lea correctamente
+                    #DESCOMENTAR PARA WINDOWS WSL
+                    # cat ippool_ids.txt | tr -d '\r' > ippool_ids.txt
+
+                    for overlapping_file in $(oc get OverlappingRangeIPReservation -n openshift-multus --no-headers | cut -d' ' -f1)
+                    do
+                        overlapping_id=$(oc get OverlappingRangeIPReservation/$overlapping_file -n openshift-multus -o json | jq '.spec.containerid')
+                        overlapping_id=$(echo "$overlapping_id" | tr -d '"')
+                        while read id
+                        do
+                            ippool_id=$(oc get ippool/$ippool_file -n openshift-multus -o json | jq -r ".spec.allocations.$id.id")
+                            if [[ "$overlapping_id" == "$ippool_id" ]]
+                            then
+                                # Si hay coincidencia, no hay que hacer nada. overlapping_file y ippool_id hay que mantenerlos
+                                id=$(echo "$id" | tr -d '"')
+                                array_coincidencias+=($id)
+                                break
+                            fi
+
+                        #Coge los ids de todos los ippool pra que los almacene en 'id' en el while
+                        done < ippool_ids.txt
+                    done
+
+                    #Se eliminan las comillas para comparar directamente los numeros
+                    #En openshift no funciona si se hace sobre el mismo fichero
+                    cat ippool_ids.txt | tr -d '\"' > ippool_ids2.txt
+
+                    while read id
+                    do
+                        eliminar=true
+                        for id_coincidente in "${array_coincidencias[@]}"
+                        do
+                            #Hay que recorrer todo el bucle y solamente si no hubo coincidencias, habrá que eliminarlo de ippool
+                            if [[ "$id_coincidente" -eq "$id" ]]
+                            then
+                                eliminar=false
+                                break
+                            fi
+                        done
+
+                        if [[ $eliminar == true ]]
+                        then
+                            echo "$id no tiene ninguna coincidencia y hay que eliminar su entrada en ippool"
+                            oc patch ippool/$ippool_file -n openshift-multus --type=merge -p '{"spec":{"allocations":{"'"$id"'":null}}}'
+                        fi
+                    done < ippool_ids2.txt
+                done
+
+                #Segundo hace el proceso contrario, mira los overlappingRangeIp y borra aquellos que no están en ningun ippool
+                #Guarda todos los ippools en un mismo fichero para comprobar posteriormente si el id en overlappingRangeIp se encuentra en alguno de ellos.
+                #Si no se encuentra en ninguno, hay que borrar el objeto overlappingRangeIp
+                > ippools_concatenados.txt
+                for ippool_file in $(oc get ippool -n openshift-multus --no-headers | cut -d' ' -f1)
+                do
+                    oc get ippool/$ippool_file -n openshift-multus -o yaml >> ippools_concatenados.txt
+                done
+
+
+                for overlapping_file in $(oc get OverlappingRangeIPReservation -n openshift-multus --no-headers | cut -d' ' -f1)
+                do
+                    overlapping_id=$(oc get OverlappingRangeIPReservation/$overlapping_file -n openshift-multus -o json | jq '.spec.containerid')
+                    overlapping_id=$(echo "$overlapping_id" | tr -d '"')
+                    overlapping_id=$(echo "$overlapping_id" | tr -d '\r')
+                    
+                    if ! grep -q "$overlapping_id" ippools_concatenados.txt
+                    then
+                        echo "El id $overlapping_id de $overlapping_file no se encuentra en ningun objeto IPPool"
+                        oc delete OverlappingRangeIPReservation/$overlapping_file -n openshift-multus
+                    fi
+                done
+
+      workspaces:
+        - name: output
+          workspace: shared-workspace
+

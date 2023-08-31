@@ -1,0 +1,12 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: limitrange-admin
+rules:
+  - apiGroups: [""]
+    resources:
+      - "limitranges"
+    verbs:
+      - get
+      - create
+      - delete

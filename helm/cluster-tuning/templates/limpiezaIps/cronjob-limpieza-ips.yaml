@@ -1,0 +1,39 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: cronjob-limpieza-ips
+  namespace: {{ .Values.platform.namespace }}
+spec:
+  concurrencyPolicy: Replace
+  jobTemplate:
+    metadata:
+    spec:
+      template:
+        spec:
+          containers:
+          - args:
+            - -c
+            - tkn p start limpieza-ips -s pipeline -w name=shared-workspace,emptyDir=
+            command:
+            - /bin/bash
+            # Cambiar la url por una imagen con tekton-cli
+            image: REGISTRY.IMAGES.CHANGEME/images/openshift-pipelines/pipelines-cli-tkn-rhel8:0.19.0
+            imagePullPolicy: IfNotPresent
+            name: cronjob-limpieza-ips
+            resources: {}
+            terminationMessagePath: /dev/termination-log
+            terminationMessagePolicy: File
+            securityContext: 
+              allowPrivilegeEscalation: false
+          dnsPolicy: ClusterFirst
+          restartPolicy: OnFailure
+          schedulerName: default-scheduler
+          securityContext: {}
+          serviceAccount: {{ .Values.platform.serviceAccount }}
+          serviceAccountName: {{ .Values.platform.serviceAccount }}
+          terminationGracePeriodSeconds: 300
+  schedule: "{{ .Values.platform.expression }}"
+  startingDeadlineSeconds: 200
+  successfulJobsHistoryLimit: 2
+  failedJobsHistoryLimit: 1
+  suspend: {{ .Values.platform.suspend }}
