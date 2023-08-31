@@ -1,0 +1,18 @@
+nad:
+  name: service-cni
+  namespaces:
+    - des-tenant1
+    - pre-tenant1
+    - des-tenant2
+    - pre-tenant2
+    - des-tenant3
+    - pre-tenant3
+  device: ens256
+  range: 1.2.3.4-5.6.7.8/22
+  routes:
+    '[
+      {
+        "dst": "1.2.0.0/22",
+        "gw": "1.2.3.10"
+      }
+    ]'
