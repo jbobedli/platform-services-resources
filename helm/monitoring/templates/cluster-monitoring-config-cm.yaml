@@ -1,0 +1,103 @@
+﻿apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: cluster-monitoring-config
+  namespace: openshift-monitoring
+data:
+  config.yaml: |
+      enableUserWorkload: true
+      prometheusK8s:
+        logLevel: {{ .Values.cm.prometheusK8s.logLevel }}
+        retention: {{ .Values.cm.prometheusK8s.retention }}
+        {{- if .Values.nodeinfra.enabled }}
+        nodeSelector:
+          node-role.kubernetes.io/infra-others: ""
+        tolerations:
+        - effect: NoExecute
+          key: infra-others
+          operator: Exists
+        {{- end }}
+        volumeClaimTemplate:
+          metadata:
+            name: ocs-prometheus-claim
+          spec:
+            storageClassName: {{ .Values.cm.prometheusK8s.storageClassName }}
+            resources:
+              requests:
+                cpu: {{ .Values.cm.prometheusK8s.requests.cpu }}
+                memory: {{ .Values.cm.prometheusK8s.requests.memory }}
+                storage: {{ .Values.cm.prometheusK8s.storage }}
+              limits:
+                cpu: {{ .Values.cm.prometheusK8s.limits.cpu }}
+                memory: {{ .Values.cm.prometheusK8s.limits.memory }}
+      alertmanagerMain:
+        {{- if .Values.nodeinfra.enabled }}
+        nodeSelector:
+          node-role.kubernetes.io/infra-others: ""
+        tolerations:
+        - effect: NoExecute
+          key: infra-others
+          operator: Exists
+        {{- end }}
+        volumeClaimTemplate:
+          metadata:
+            name: ocs-alertmanager-claim
+          spec:
+            storageClassName: {{ .Values.cm.alertmanager.storageClassName }}
+            resources:
+              requests:
+                storage: {{ .Values.cm.alertmanager.storage }}
+      prometheusOperator:
+        {{- if .Values.nodeinfra.enabled }}
+        nodeSelector:
+          node-role.kubernetes.io/infra-others: ""
+        tolerations:
+        - effect: NoExecute
+          key: infra-others
+          operator: Exists
+        {{- end }}
+      grafana:
+        {{- if .Values.nodeinfra.enabled }}
+        nodeSelector:
+          node-role.kubernetes.io/infra-others: ""
+        tolerations:
+        - effect: NoExecute
+          key: infra-others
+          operator: Exists
+        {{- end }}
+      k8sPrometheusAdapter:
+        {{- if .Values.nodeinfra.enabled }}
+        nodeSelector:
+          node-role.kubernetes.io/infra-others: ""
+        tolerations:
+        - effect: NoExecute
+          key: infra-others
+          operator: Exists
+        {{- end }}
+      kubeStateMetrics:
+        {{- if .Values.nodeinfra.enabled }}
+        nodeSelector:
+          node-role.kubernetes.io/infra-others: ""
+        tolerations:
+        - effect: NoExecute
+          key: infra-others
+          operator: Exists
+        {{- end }}
+      openshiftStateMetrics:
+        {{- if .Values.nodeinfra.enabled }}
+        nodeSelector:
+          node-role.kubernetes.io/infra-others: ""
+        tolerations:
+        - effect: NoExecute
+          key: infra-others
+          operator: Exists
+        {{- end }}
+      thanosQuerier:
+        {{- if .Values.nodeinfra.enabled }}
+        nodeSelector:
+          node-role.kubernetes.io/infra-others: ""
+        tolerations:
+        - effect: NoExecute
+          key: infra-others
+          operator: Exists
+        {{- end }}

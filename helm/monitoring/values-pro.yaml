@@ -1,0 +1,204 @@
+alerts:
+#alertas de amq-broker
+  - name: amq-broker-alerts
+    namespace: amq-broker
+    groups:
+    - name: amq-broker-alert-group
+      rules:
+        - alert: ContainerVolumeUsage
+          annotations:
+            description: |-
+              Container Volume usage is above 80%
+                VALUE = {{ $value }}
+                LABELS: {{ $labels }}
+            summary: Container Volume usage (instance {{ $labels.instance }})
+          expr: (1 - (sum(container_fs_inodes_free) BY (instance) / sum(container_fs_inodes_total)
+            BY (instance))) * 100 > 80
+          for: 2m
+          labels:
+            severity: warning
+#alertas de cicd
+  - name: cicd-alerts
+    namespace: cicd
+    groups:
+    - name: cicd-alert-group
+      rules:
+        - alert: ContainerVolumeUsage
+          annotations:
+            description: |-
+              Container Volume usage is above 80%
+                VALUE = {{ $value }}
+                LABELS: {{ $labels }}
+            summary: Container Volume usage (instance {{ $labels.instance }})
+          expr: (1 - (sum(container_fs_inodes_free) BY (instance) / sum(container_fs_inodes_total)
+            BY (instance))) * 100 > 80
+          for: 2m
+          labels:
+            severity: warning
+#  alertas de TENANT-PRO
+  - name: TENANT-alerts-pro
+    namespace: TENANT-PRO
+    groups:
+    - name: ees-alerts
+      rules:
+        - alert: KubernetesPodCrashLooping
+          expr: increase(kube_pod_container_status_restarts_total[1m]) > 3
+          for: 2m
+          labels:
+            severity: warning
+          annotations:
+            summary: "Kubernetes pod crash looping (instance {{ $labels.instance }})"
+            description: "[{{ .Values.namespace }}] - Pod {{ $labels.pod }} is crash looping\n  VALUE = {{ $value }}\n  LABELS: {{ $labels }}"
+        - alert: ContainerCpuUsage
+          expr: (sum(rate(container_cpu_usage_seconds_total[3m])) BY (instance, name) * 100) > 80
+          for: 2m
+          labels:
+            severity: warning
+          annotations:
+            summary: "Container CPU usage (instance {{ $labels.instance }})"
+            description: "[{{ .Values.namespace }}] -Container CPU usage is above 80%\n  VALUE = {{ $value }}\n  LABELS: {{ $labels }}"
+        - alert: ContainerMemoryUsage
+          expr: (sum(container_memory_working_set_bytes) BY (instance, name) / sum(container_spec_memory_limit_bytes > 0) BY (instance, name) * 100) > 80
+          for: 2m
+          labels:
+            severity: warning
+          annotations:
+            summary: "Container Memory usage (instance {{ $labels.instance }})"
+            description: "[{{ .Values.namespace }}] Container Memory usage is above 80%\n  VALUE = {{ $value }}\n  LABELS: {{ $labels }}"
+        - alert: ContainerRestart
+          annotations:
+            description: |-
+              Pod {{$labels.namespace}}/{{$labels.pod}} restarting more than once times during last 5 minutes.
+                VALUE = {{ $value }}
+                LABELS: {{ $labels }}
+            summary: Container {{ $labels.container }} in Pod {{$labels.namespace}}/{{$labels.pod}}
+              restarting more than once times during last 5 minutes.
+          expr: increase(kube_pod_container_status_restarts_total[5m]) > 1
+          for: 1m
+          labels:
+            severity: warning
+        - alert: PersistentVolumeFillingUp
+          annotations:
+            description: The PersistentVolume claimed by {{ $labels.persistentvolumeclaim
+              }} in Namespace {{ $labels.namespace }} is at 80% or higher.
+            summary: PersistentVolumeClaim {{ $labels.persistentvolumeclaim }} is filling
+              up.
+          expr: (kubelet_volume_stats_used_bytes{job="kubelet",metrics_path="/metrics",namespace="TENANT-PRO"}
+            / kubelet_volume_stats_capacity_bytes{job="kubelet",metrics_path="/metrics",namespace="TENANT-PRO"})
+            * 100 >= 80 and kubelet_volume_stats_used_bytes{job="kubelet",metrics_path="/metrics",namespace="TENANT-PRO"}
+            > 0
+          for: 1m
+          labels:
+            severity: critical
+
+  - name: keycloak-custom
+    namespace: iam
+    groups:
+    - name: general.rules
+      rules:
+      - alert: KeycloakJavaNonHeapThresholdExceeded
+        annotations:
+          message: '{{ printf "%0.0f" $value }}% nonheap usage of {{ $labels.area
+            }} in pod {{ $labels.pod }}, namespace {{ $labels.namespace }}.'
+        expr: 100 * jvm_memory_bytes_used{area="nonheap",namespace="iam"} / jvm_memory_bytes_max{area="nonheap",namespace="iam"}
+          > 90
+        for: 1m
+        labels:
+          severity: critical
+      - alert: KeycloakJavaGCTimePerMinuteScavenge
+        annotations:
+          message: Amount of time per minute spent on garbage collection of {{ $labels.area
+            }} in pod {{ $labels.pod }}, namespace {{ $labels.namespace }} exceeds
+            90%. This could indicate that the available heap memory is insufficient.
+        expr: increase(jvm_gc_collection_seconds_sum{gc="PS Scavenge",namespace="iam"}[1m])
+          > 1 * 60 * 0.9
+        for: 1m
+        labels:
+          severity: critical
+      - alert: KeycloakJavaGCTimePerMinuteMarkSweep
+        annotations:
+          message: Amount of time per minute spent on garbage collection of {{ $labels.area
+            }} in pod {{ $labels.pod }}, namespace {{ $labels.namespace }} exceeds
+            90%. This could indicate that the available heap memory is insufficient.
+        expr: increase(jvm_gc_collection_seconds_sum{gc="PS MarkSweep",namespace="iam"}[1m])
+          > 1 * 60 * 0.9
+        for: 1m
+        labels:
+          severity: critical
+      - alert: KeycloakJavaDeadlockedThreads
+        annotations:
+          message: Number of threads in deadlock state of {{ $labels.area }} in pod
+            {{ $labels.pod }}, namespace {{ $labels.namespace }}
+        expr: jvm_threads_deadlocked{namespace="iam"} > 0
+        for: 1m
+        labels:
+          severity: critical
+      - alert: KeycloakLoginFailedThresholdExceeded
+        annotations:
+          message: More than 50 failed login attempts for realm {{ $labels.realm }},
+            provider {{ $labels.provider }}, namespace {{ $labels.namespace }} over
+            the last 5 minutes. (Rate of {{ printf "%0f" $value }})
+        expr: rate(keycloak_failed_login_attempts{namespace="iam"}[5m]) * 300
+          > 50
+        for: 5m
+        labels:
+          severity: critical
+      - alert: KeycloakInstanceNotAvailable
+        annotations:
+          message: Keycloak instance in namespace {{ $labels.namespace }} has not
+            been available for the last 5 minutes.
+        expr: (1 - absent(kube_pod_status_ready{namespace="iam", condition="true"}
+          * on (pod) group_left (label_component) kube_pod_labels{label_component="keycloak",
+          namespace="iam"})) == 0
+        for: 5m
+        labels:
+          severity: critical
+      - alert: KeycloakAPIRequestDuration90PercThresholdExceeded
+        annotations:
+          message: More than 10% the RH SSO API endpoints in namespace {{ $labels.namespace
+            }} are taking longer than 1s for the last 5 minutes.
+        expr: (sum(rate(keycloak_request_duration_bucket{le="1000.0", namespace="iam"}[5m]))
+          by (job) / sum(rate(keycloak_request_duration_count{namespace="iam"}[5m]))
+          by (job)) < 0.90
+        for: 5m
+        labels:
+          severity: critical
+      - alert: KeycloakAPIRequestDuration99.5PercThresholdExceeded
+        annotations:
+          message: More than 0.5% of the RH SSO API endpoints in namespace {{ $labels.namespace
+            }} are taking longer than 10s for the last 5 minutes.
+        expr: (sum(rate(keycloak_request_duration_bucket{le="10000.0", namespace="iam"}[5m]))
+          by (job) / sum(rate(keycloak_request_duration_count{namespace="iam"}[5m]))
+          by (job)) < 0.995
+        for: 5m
+        labels:
+          severity: critical
+      - alert: KeycloakDatabaseNotAvailable
+        annotations:
+          message: RH SSO database in namespace {{ $labels.namespace }} is not available
+            for the last 5 minutes.
+        expr: '(1 - absent(kube_pod_status_ready{namespace="iam", condition="true"}
+          * on (pod) group_left (label_component) kube_pod_labels{label_component="database",
+          namespace="iam"})) == 0 '
+        for: 5m
+        labels:
+          severity: critical
+
+cm:
+  alertmanager:
+    storage: 30Gi
+    storageClassName: infra-thin
+  prometheusK8s:
+    requests:
+      memory: 10Gi
+      cpu: 1
+    limits:
+      memory: 20Gi
+      cpu: 2
+    logLevel: info
+    retention: 15d
+    storage: 100Gi
+    storageClassName: infra-thin
+
+nodeinfra:
+  enabled: true

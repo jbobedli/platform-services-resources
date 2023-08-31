@@ -1,0 +1,165 @@
+alerts:
+#alertas de amq-broker
+  - name: amq-broker-alerts
+    namespace: amq-broker
+    groups:
+    - name: amq-broker-alert-group
+      rules:
+        - alert: ContainerVolumeUsage
+          annotations:
+            description: |-
+              Container Volume usage is above 80%
+                VALUE = {{ $value }}
+                LABELS: {{ $labels }}
+            summary: Container Volume usage (instance {{ $labels.instance }})
+          expr: (1 - (sum(container_fs_inodes_free) BY (instance) / sum(container_fs_inodes_total)
+            BY (instance))) * 100 > 80
+          for: 2m
+          labels:
+            severity: warning
+#alertas de cicd
+  - name: cicd-alerts
+    namespace: cicd
+    groups:
+    - name: cicd-alert-group
+      rules:
+        - alert: ContainerVolumeUsage
+          annotations:
+            description: |-
+              Container Volume usage is above 80%
+                VALUE = {{ $value }}
+                LABELS: {{ $labels }}
+            summary: Container Volume usage (instance {{ $labels.instance }})
+          expr: (1 - (sum(container_fs_inodes_free) BY (instance) / sum(container_fs_inodes_total)
+            BY (instance))) * 100 > 80
+          for: 2m
+          labels:
+            severity: warning
+#  alertas de TENANT1
+  - name: TENANT-alerts-dev
+    namespace: TENANT1
+    groups:
+    - name: TENANT-alerts
+      rules:
+        - alert: KubernetesPodCrashLooping
+          expr: increase(kube_pod_container_status_restarts_total[1m]) > 3
+          for: 2m
+          labels:
+            severity: warning
+          annotations:
+            summary: "Kubernetes pod crash looping (instance {{ $labels.instance }})"
+            description: "[{{ .Values.namespace }}] - Pod {{ $labels.pod }} is crash looping\n  VALUE = {{ $value }}\n  LABELS: {{ $labels }}"
+        - alert: ContainerCpuUsage
+          expr: (sum(rate(container_cpu_usage_seconds_total[3m])) BY (instance, name) * 100) > 80
+          for: 2m
+          labels:
+            severity: warning
+          annotations:
+            summary: "Container CPU usage (instance {{ $labels.instance }})"
+            description: "[{{ .Values.namespace }}] -Container CPU usage is above 80%\n  VALUE = {{ $value }}\n  LABELS: {{ $labels }}"
+        - alert: ContainerMemoryUsage
+          expr: (sum(container_memory_working_set_bytes) BY (instance, name) / sum(container_spec_memory_limit_bytes > 0) BY (instance, name) * 100) > 80
+          for: 2m
+          labels:
+            severity: warning
+          annotations:
+            summary: "Container Memory usage (instance {{ $labels.instance }})"
+            description: "[{{ .Values.namespace }}] Container Memory usage is above 80%\n  VALUE = {{ $value }}\n  LABELS: {{ $labels }}"
+        - alert: ContainerRestart
+          annotations:
+            description: |-
+              Pod {{$labels.namespace}}/{{$labels.pod}} restarting more than once times during last 5 minutes.
+                VALUE = {{ $value }}
+                LABELS: {{ $labels }}
+            summary: Container {{ $labels.container }} in Pod {{$labels.namespace}}/{{$labels.pod}}
+              restarting more than once times during last 5 minutes.
+          expr: increase(kube_pod_container_status_restarts_total[5m]) > 1
+          for: 1m
+          labels:
+            severity: warning
+        - alert: PersistentVolumeFillingUp
+          annotations:
+            description: The PersistentVolume claimed by {{ $labels.persistentvolumeclaim
+              }} in Namespace {{ $labels.namespace }} is at 80% or higher.
+            summary: PersistentVolumeClaim {{ $labels.persistentvolumeclaim }} is filling
+              up.
+          expr: (kubelet_volume_stats_used_bytes{job="kubelet",metrics_path="/metrics",namespace="TENANT1"}
+            / kubelet_volume_stats_capacity_bytes{job="kubelet",metrics_path="/metrics",namespace="TENANT1"})
+            * 100 >= 80 and kubelet_volume_stats_used_bytes{job="kubelet",metrics_path="/metrics",namespace="TENANT1"}
+            > 0
+          for: 1m
+          labels:
+            severity: critical
+#  alertas de TENANT2
+  - name: TENANT2-alerts-pre
+    namespace: TENANT2
+    groups:
+    - name: TENANT2-alerts
+      rules:
+        - alert: KubernetesPodCrashLooping
+          expr: increase(kube_pod_container_status_restarts_total[1m]) > 3
+          for: 2m
+          labels:
+            severity: warning
+          annotations:
+            summary: "Kubernetes pod crash looping (instance {{ $labels.instance }})"
+            description: "[{{ .Values.namespace }}] - Pod {{ $labels.pod }} is crash looping\n  VALUE = {{ $value }}\n  LABELS: {{ $labels }}"
+        - alert: ContainerCpuUsage
+          expr: (sum(rate(container_cpu_usage_seconds_total[3m])) BY (instance, name) * 100) > 80
+          for: 2m
+          labels:
+            severity: warning
+          annotations:
+            summary: "Container CPU usage (instance {{ $labels.instance }})"
+            description: "[{{ .Values.namespace }}] -Container CPU usage is above 80%\n  VALUE = {{ $value }}\n  LABELS: {{ $labels }}"
+        - alert: ContainerMemoryUsage
+          expr: (sum(container_memory_working_set_bytes) BY (instance, name) / sum(container_spec_memory_limit_bytes > 0) BY (instance, name) * 100) > 80
+          for: 2m
+          labels:
+            severity: warning
+          annotations:
+            summary: "Container Memory usage (instance {{ $labels.instance }})"
+            description: "[{{ .Values.namespace }}] Container Memory usage is above 80%\n  VALUE = {{ $value }}\n  LABELS: {{ $labels }}"
+        - alert: ContainerRestart
+          annotations:
+            description: |-
+              Pod {{$labels.namespace}}/{{$labels.pod}} restarting more than once times during last 5 minutes.
+                VALUE = {{ $value }}
+                LABELS: {{ $labels }}
+            summary: Container {{ $labels.container }} in Pod {{$labels.namespace}}/{{$labels.pod}}
+              restarting more than once times during last 5 minutes.
+          expr: increase(kube_pod_container_status_restarts_total[5m]) > 1
+          for: 1m
+          labels:
+            severity: warning
+        - alert: PersistentVolumeFillingUp
+          annotations:
+            description: The PersistentVolume claimed by {{ $labels.persistentvolumeclaim
+              }} in Namespace {{ $labels.namespace }} is at 80% or higher.
+            summary: PersistentVolumeClaim {{ $labels.persistentvolumeclaim }} is filling
+              up.
+          expr: (kubelet_volume_stats_used_bytes{job="kubelet",metrics_path="/metrics",namespace="TENANT2"}
+            / kubelet_volume_stats_capacity_bytes{job="kubelet",metrics_path="/metrics",namespace="TENANT2"})
+            * 100 >= 80 and kubelet_volume_stats_used_bytes{job="kubelet",metrics_path="/metrics",namespace="TENANT2"}
+            > 0
+          for: 1m
+          labels:
+            severity: critical
+cm:
+  alertmanager:
+    storage: 30Gi
+    storageClassName: infra-thin
+  prometheusK8s:
+    requests:
+      memory: 10Gi
+      cpu: 1
+    limits:
+      memory: 20Gi
+      cpu: 2
+    logLevel: info
+    retention: 5d
+    storage: 100Gi
+    storageClassName: infra-thin
+
+nodeinfra:
+  enabled: true
