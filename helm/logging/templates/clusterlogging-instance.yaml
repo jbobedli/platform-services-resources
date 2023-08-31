@@ -1,0 +1,52 @@
+apiVersion: logging.openshift.io/v1
+kind: ClusterLogging
+metadata:
+  name: instance
+  namespace: openshift-logging
+spec:
+  collection:
+    logs:
+      fluentd:
+        tolerations:
+          - effect: NoExecute
+            key: logging
+            operator: Exists
+          - effect: NoSchedule
+            key: node.ocs.openshift.io/storage
+            value: 'true'
+          # CAMBIAR POR OTRA KEY PARA QUE SE UTILICE EN NODOS DEDICADOS PERSONALIZADOS
+          - effect: NoExecute
+            key: infra-others
+            operator: Exists
+      type: fluentd
+  logStore:
+    elasticsearch:
+      nodeCount: {{ .Values.elasticsearch.nodeCount }}
+      nodeSelector:
+        node-role.kubernetes.io/logging: ''
+      redundancyPolicy: SingleRedundancy
+      resources:
+        {{- toYaml .Values.elasticsearch.resources | nindent 8 }}
+      storage:
+        size: {{ .Values.elasticsearch.pvcsize }}
+        {{- if .Values.elasticsearch.storageClassName }}
+        storageClassName: {{ .Values.elasticsearch.storageClassName }}
+        {{- end }}
+      tolerations:
+        - effect: NoExecute
+          key: logging
+          operator: Exists
+    retentionPolicy:
+      {{- toYaml .Values.elasticsearch.retentionPolicy | nindent 6 }}
+    type: elasticsearch
+  managementState: Managed
+  visualization:
+    kibana:
+      nodeSelector:
+       node-role.kubernetes.io/logging: ''
+      replicas: 1
+      tolerations:
+       - effect: NoExecute
+         key: logging
+         operator: Exists
+    type: kibana

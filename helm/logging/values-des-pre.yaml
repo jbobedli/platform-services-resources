@@ -1,0 +1,26 @@
+elasticsearch:
+  nodeCount: 3
+  pvcsize: 200G
+  retentionPolicy:
+    application:
+      maxAge: 7d
+    infra:
+      maxAge: 3d
+    audit:
+      maxAge: 3d
+  resources:
+    limits:
+      cpu: 3500m
+      memory: 16Gi
+    requests:
+      cpu: 500m
+      memory: 16Gi
+  storageClassName: infra-thin
+logs:
+  resources:
+    limits:
+      cpu: 500m
+      memory: 1024Mi
+    requests:
+      cpu: 300m
+      memory: 500Mi
