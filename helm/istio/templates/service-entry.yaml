@@ -1,0 +1,20 @@
+{{- range $serviceEntry := .Values.serviceentry }}
+{{- range $namespace := $serviceEntry.namespace}}
+apiVersion: networking.istio.io/v1beta1
+kind: ServiceEntry
+metadata:
+  name: {{ $serviceEntry.name }}-{{ $namespace }}
+  namespace: {{ $namespace }}
+spec:
+  hosts:
+  {{- range $host := $serviceEntry.hosts }}
+    - {{ $host }}
+  {{- end}}
+  location: MESH_EXTERNAL
+  ports:
+    - name: https
+      number: {{ $serviceEntry.port }}
+  resolution: DNS
+---
+{{- end}}
+{{- end}}
