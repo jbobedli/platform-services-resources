@@ -1,0 +1,22 @@
+node:
+  prefix: c1-ocp-fcpld
+  server: server.es
+  datacenter: datacenterName
+  datastore: Workers1
+  resourcePool: RP
+  cpu: 8
+  memory: 32768
+  replicas: 3
+  taints:
+    enabled: true
+    data:
+      - effect: NoExecute
+        key: infra-others
+  network:
+    devices:
+      - networkName: DPortGroup
+  type: infra-others
+  infra:
+    enabled: true
+    labels:
+      node-role.kubernetes.io/infra: ""

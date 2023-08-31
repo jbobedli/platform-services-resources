@@ -1,0 +1,63 @@
+apiVersion: machine.openshift.io/v1beta1
+kind: MachineSet
+metadata:
+  annotations:
+    machine.openshift.io/memoryMb: "{{ .Values.node.memory }}"
+    machine.openshift.io/vCPU: "{{ .Values.node.cpu }}"
+  labels:
+    machine.openshift.io/cluster-api-cluster: {{ .Values.node.prefix }}
+  name: {{ .Values.node.prefix }}-{{ .Values.node.type }}
+  namespace: openshift-machine-api
+spec:
+  replicas: {{ .Values.node.replicas }}
+  selector:
+    matchLabels:
+      machine.openshift.io/cluster-api-cluster: {{ .Values.node.prefix }}
+      machine.openshift.io/cluster-api-machineset: {{ .Values.node.prefix }}-{{ .Values.node.type }}
+  template:
+    metadata:
+      labels:
+        machine.openshift.io/cluster-api-cluster: {{ .Values.node.prefix }}
+        machine.openshift.io/cluster-api-machine-role: {{ .Values.node.type }}
+        machine.openshift.io/cluster-api-machine-type: {{ .Values.node.type }}
+        machine.openshift.io/cluster-api-machineset: {{ .Values.node.prefix }}-{{ .Values.node.type }}
+    spec:
+      lifecycleHooks: {}
+      metadata:
+        labels:
+          {{- if eq .Values.node.type "odf" }}
+          cluster.ocs.openshift.io/openshift-storage: ""
+          {{- end}}
+          node-role.kubernetes.io/{{ .Values.node.type }}: ""
+          {{- if .Values.node.infra.enabled }}
+          {{- toYaml .Values.node.infra.labels | nindent 10 }}
+          {{- end}}
+      {{- if .Values.node.taints.enabled }}
+      taints:
+        {{- toYaml .Values.node.taints.data | nindent 8 }}
+      {{- end}}
+      providerSpec:
+        value:
+          apiVersion: machine.openshift.io/v1beta1
+          credentialsSecret:
+            name: vsphere-cloud-credentials
+          diskGiB: 100
+          kind: VSphereMachineProviderSpec
+          memoryMiB: 32768
+          metadata:
+            creationTimestamp: null
+          network:
+            devices:
+              {{- toYaml .Values.node.network.devices | nindent 14 }}
+          numCPUs: 8
+          numCoresPerSocket: 2
+          snapshot: ""
+          template: {{ .Values.node.prefix }}-rhcos
+          userDataSecret:
+            name: worker-user-data
+          workspace:
+            datacenter: {{ .Values.node.datacenter }}
+            datastore: {{ .Values.node.datastore }}
+            folder: /{{ .Values.node.datacenter }}/vm/{{ .Values.node.prefix }}
+            resourcePool: /{{ .Values.node.datacenter }}/host/{{ .Values.node.resourcePool }}/Resources
+            server: {{ .Values.node.server }}

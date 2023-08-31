@@ -1,0 +1,19 @@
+node:
+  prefix: c1-ocp-fcpld
+  server: server.es
+  datacenter: datacenterName
+  datastore: Workers1
+  resourcePool: RP
+  cpu: 8
+  memory: 32768
+  replicas: 5
+  taints:
+    enabled: false
+  network:
+    devices:
+      - networkName: DPortGroup
+      - networkName: DPortGroup-OpShift
+      - networkName: DPortGroup-BBDD
+  type: worker
+  infra:
+    enabled: false
