@@ -1,0 +1,10 @@
+etcdbackup:
+  devopsns:
+    name: pipelines #ns donde se lanzan las pipes en oc
+  debugpod:
+    namespace: backup-etcd #clusteradmin for backup-etcd:default SA
+  masternode:
+    label: node-role.kubernetes.io/master
+  s3: 
+    name: md-aw-we-des-s3-ro-backup-001
+    secret: aws-s3-credentials
