@@ -127,3 +127,7 @@ serviceentry:
     hosts:
       - keycloak.iam
     port: 8443
+
+# Crea los recursos para que el operador de monitoring coja las métricas de istio-system y crear alertas
+monitoring:
+  enabled: true
