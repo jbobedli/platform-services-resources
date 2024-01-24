@@ -1,0 +1,26 @@
+influxdb: 
+  name: influxdb2
+  image:
+    repository: registry
+    tag: 2.7-alpine
+    pullPolicy: IfNotPresent
+
+  persistence:
+    enabled: true
+    accessMode: ReadWriteOnce
+    size: 10Gi
+    mountPath: /root/influxdb2/data
+    configPath: /root/influxdb2-configs
+    claimName: influxdb-pvc
+    configClaimName: influxdb-config
+
+  initMode: setup
+  initUsername: admin
+  initPassword: password
+  initOrg: "ORG"
+  initBucket: "bucket"
+  initRetention: "30d"
+  initConfigPath: "/root/influxdb2/config.toml"
+  initBoltPath: "/root/influxdb2/influxdb.bolt"
+  initEnginePath: "/root/influxdb2/engine"
+

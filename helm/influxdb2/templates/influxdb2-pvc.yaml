@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: influxdb-pvc
+  labels:
+    app: {{ .Values.influxdb.name }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+spec:
+  accessModes:
+    - {{ .Values.influxdb.persistence.accessMode }}
+  resources:
+    requests:
+      storage: {{ .Values.influxdb.persistence.size }}
+

@@ -1,0 +1,57 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: influxdb-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: influxdb2
+  template:
+    metadata:
+      labels:
+        app: influxdb2
+    spec:
+      serviceAccountName: influxdb-root
+      containers:
+      - name: influxdb2
+        image: {{ .Values.influxdb.image.repository }}:{{ .Values.influxdb.image.tag }}
+        ports:
+        - containerPort: 8086
+        volumeMounts:
+        - name: influxdb2-data
+          mountPath: {{ .Values.influxdb.persistence.mountPath }}
+        - name: influxdb2-config
+          mountPath: {{ .Values.influxdb.persistence.configPath }}
+        env:
+        - name: DOCKER_INFLUXDB_INIT_MODE
+          value: {{ .Values.influxdb.initMode }}
+        - name: DOCKER_INFLUXDB_INIT_USERNAME
+          value: {{ .Values.influxdb.initUsername }}
+        - name: DOCKER_INFLUXDB_INIT_PASSWORD
+          value: {{ .Values.influxdb.initPassword }}
+        - name: DOCKER_INFLUXDB_INIT_ORG
+          value: {{ .Values.influxdb.initOrg }}
+        - name: DOCKER_INFLUXDB_INIT_BUCKET
+          value: {{ .Values.influxdb.initBucket }}
+        - name: DOCKER_INFLUXDB_INIT_RETENTION
+          value: {{ .Values.influxdb.initRetention }}
+        - name: DOCKER_INFLUXDB_CONFIG_PATH
+          value: {{ .Values.influxdb.initConfigPath }}
+        - name: DOCKER_INFLUXDB_BOLT_PATH
+          value: {{ .Values.influxdb.initBoltPath }}
+        - name: DOCKER_INFLUXDB_ENGINE_PATH
+          value: {{ .Values.influxdb.initEnginePath }}
+      volumes:
+      - name: influxdb2-data
+        persistentVolumeClaim:
+          claimName: {{ .Values.influxdb.persistence.claimName }}
+      - name: influxdb2-config
+        configMap:
+          name: {{ .Values.influxdb.persistence.configClaimName }}
+
+
+
+
+
+
