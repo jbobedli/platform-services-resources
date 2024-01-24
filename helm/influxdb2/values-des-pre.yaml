@@ -15,7 +15,7 @@ influxdb:
     configClaimName: influxdb-config
 
   initMode: setup
-  initUsername: admin
+  initUsername: user
   initPassword: password
   initOrg: "ORG"
   initBucket: "bucket"
