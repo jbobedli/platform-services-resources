@@ -19,7 +19,7 @@ spec:
       server: 'https://kubernetes.default.svc'
 {{- end }}
   sourceRepos:
-  - 'https://github.com/NTTData-HybridCloud/gitops-apps'
+  - 'https://github.com/jbobedli/gitops-apps'
 ---
 {{- end }}
 {{- end }}

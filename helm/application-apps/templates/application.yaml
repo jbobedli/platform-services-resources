@@ -11,7 +11,7 @@ metadata:
 spec:
   project: {{ $valor.name }}
   source:
-    repoURL: 'https://github.com/NTTData-HybridCloud/gitops-apps'
+    repoURL: 'https://github.com/jbobedli/gitops-apps'
     targetRevision: master
     path: '{{ $appValue.folder }}'
   destination:
